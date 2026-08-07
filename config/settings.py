@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'accounts',
     "rest_framework_simplejwt.token_blacklist",
     "common",
-    "medicine"
+    "medicine",
+    "django_filters",
+     "prescriptions",
 ]
 
 MIDDLEWARE = [
