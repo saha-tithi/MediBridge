@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "medicine",
     "django_filters",
      "prescriptions",
+     "ai_engine",
+     "cart",
 ]
 
 MIDDLEWARE = [
