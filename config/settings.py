@@ -48,6 +48,7 @@ INSTALLED_APPS = [
      "prescriptions",
      "ai_engine",
      "cart",
+     "orders",
 ]
 
 MIDDLEWARE = [
