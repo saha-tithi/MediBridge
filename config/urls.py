@@ -27,6 +27,7 @@ urlpatterns = [
     path("api/v1/medicine/",include("medicine.urls"),),
     path("api/v1/prescriptions/",include("prescriptions.urls"),),
     path("api/v1/cart/",include("cart.urls"),),
+    path("api/v1/orders/",include("orders.urls"),),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT,)
