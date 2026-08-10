@@ -7,6 +7,7 @@ from .models import Order
 from .serializers import (CreateOrderSerializer,OrderSerializer,)
 from .services import create_order,process_order, update_order_status
 from .permissions import IsPharmacistOrAdmin
+from .emails import send_order_placed_email,send_order_delivered_email
 
 
 class CreateOrderAPIView(APIView):
@@ -19,6 +20,7 @@ class CreateOrderAPIView(APIView):
 
         try:
             order = create_order(customer=request.user,shipping_address=serializer.validated_data["shipping_address"],)
+            send_order_placed_email(order)
 
         except ValueError as error:
             return Response(
@@ -159,6 +161,8 @@ class PharmacistUpdateOrderStatusAPIView(APIView):
 
         try:
             order = update_order_status(order,new_status,)
+            if new_status == Order.Status.DELIVERED:
+              send_order_delivered_email(order)
 
         except ValueError as error:
             return Response(
