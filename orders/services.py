@@ -40,3 +40,65 @@ def create_order(customer, shipping_address):
     cart_items.delete()
 
     return order
+
+
+@transaction.atomic
+def process_order(order):
+    if order.status != Order.Status.PLACED:
+        raise ValueError("Only placed orders can be processed.")
+
+    for item in order.items.select_related("medicine","prescription",).all():
+
+        inventory = (
+            item.medicine.inventories
+            .filter(
+                is_available=True,
+                stock__gte=item.quantity,
+            )
+            .order_by("expiry_date")
+            .first()
+        )
+
+        if inventory is None:
+            raise ValueError(f"{item.medicine.brand_name} is out of stock.")
+
+        if item.is_prescription_item:
+            if item.prescription is None:
+                raise ValueError(
+                    f"Prescription is missing for "
+                    f"{item.medicine.brand_name}."
+                )
+
+    order.status = Order.Status.PACKED
+
+    order.save(
+        update_fields=["status","updated_at",]
+    )
+    return order
+
+@transaction.atomic
+def update_order_status(order, new_status):
+
+    allowed_transitions = {
+        Order.Status.PACKED: [Order.Status.SHIPPED,],Order.Status.SHIPPED: [Order.Status.DELIVERED,],
+    }
+
+    current_status = order.status
+
+    if current_status not in allowed_transitions:
+        raise ValueError(
+            f"Order cannot be moved from "
+            f"{current_status}."
+        )
+
+    if new_status not in allowed_transitions[current_status]:
+        raise ValueError(
+            f"Cannot move order from "
+            f"{current_status} to {new_status}."
+        )
+
+    order.status = new_status
+
+    order.save(update_fields=["status","updated_at",])
+
+    return order
