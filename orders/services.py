@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.db import transaction
 from cart.models import Cart
 from orders.models import Order, OrderItem
+from prescriptions.models import Prescription
 
 
 @transaction.atomic
@@ -61,12 +62,20 @@ def process_order(order):
 
         if inventory is None:
             raise ValueError(f"{item.medicine.brand_name} is out of stock.")
+        inventory.stock -= item.quantity
+        inventory.save(update_fields=["stock"])
 
         if item.is_prescription_item:
             if item.prescription is None:
                 raise ValueError(
                     f"Prescription is missing for "
                     f"{item.medicine.brand_name}."
+                )
+            if item.prescription.status != Prescription.Status.VERIFIED:
+                raise ValueError(
+                    f"Prescription for "
+                    f"{item.medicine.brand_name} "
+                    f"has not been verified by the pharmacist."
                 )
 
     order.status = Order.Status.PACKED
