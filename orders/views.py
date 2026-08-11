@@ -19,7 +19,7 @@ class CreateOrderAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         try:
-            order = create_order(customer=request.user,shipping_address=serializer.validated_data["shipping_address"],)
+            order = create_order(customer=request.user,shipping_address=serializer.validated_data["shipping_address"], payment_method=serializer.validated_data["payment_method"])
             send_order_placed_email(order)
 
         except ValueError as error:
@@ -179,6 +179,51 @@ class PharmacistUpdateOrderStatusAPIView(APIView):
             {
                 "success": True,
                 "message": "Order status updated successfully.",
+                "data": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class OrderPaymentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        order = get_object_or_404(Order,id=pk,customer=request.user,)
+
+        if order.payment_method != Order.PaymentMethod.ONLINE:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Payment is not required for COD orders.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if order.payment_status != Order.PaymentStatus.PENDING:
+            return Response(
+                {
+                    "success": False,
+                    "message": "Payment cannot be updated for this order.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        order.payment_status = Order.PaymentStatus.PAID
+
+        order.save(
+            update_fields=[
+                "payment_status",
+                "updated_at",
+            ]
+        )
+
+        serializer = OrderSerializer(order)
+
+        return Response(
+            {
+                "success": True,
+                "message": "Payment marked as successful.",
                 "data": serializer.data,
             },
             status=status.HTTP_200_OK,

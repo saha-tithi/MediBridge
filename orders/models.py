@@ -19,6 +19,10 @@ class Order(models.Model):
         PENDING = "PENDING", "Pending"
         PAID = "PAID", "Paid"
         FAILED = "FAILED", "Failed"
+    class PaymentMethod(models.TextChoices):
+        ONLINE = "ONLINE", "Online"
+        COD = "COD", "Cash on Delivery"
+    
 
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False,)
     customer = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.PROTECT,related_name="orders",)
@@ -26,7 +30,8 @@ class Order(models.Model):
     status = models.CharField(max_length=20,choices=Status.choices,default=Status.PLACED,)
 
     payment_status = models.CharField(max_length=20,choices=PaymentStatus.choices,default=PaymentStatus.PENDING,)
-
+    payment_method = models.CharField(max_length=20,choices=PaymentMethod.choices,default=PaymentMethod.COD,
+)
     total_amount = models.DecimalField(max_digits=10,decimal_places=2,)
 
     shipping_address = models.TextField()

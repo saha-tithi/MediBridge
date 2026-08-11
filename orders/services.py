@@ -6,7 +6,7 @@ from prescriptions.models import Prescription
 
 
 @transaction.atomic
-def create_order(customer, shipping_address):
+def create_order(customer, shipping_address,payment_method):
 
     try:
         cart = Cart.objects.get(customer=customer)
@@ -24,7 +24,7 @@ def create_order(customer, shipping_address):
         total_amount += cart_item.subtotal
 
    
-    order = Order.objects.create(customer=customer,status=Order.Status.PLACED,payment_status=Order.PaymentStatus.PENDING,total_amount=total_amount,shipping_address=shipping_address,)
+    order = Order.objects.create(customer=customer,status=Order.Status.PLACED,payment_status=Order.PaymentStatus.PENDING,payment_method=payment_method,total_amount=total_amount,shipping_address=shipping_address,)
 
     for cart_item in cart_items:
         OrderItem.objects.create(
@@ -48,22 +48,15 @@ def process_order(order):
     if order.status != Order.Status.PLACED:
         raise ValueError("Only placed orders can be processed.")
 
-    for item in order.items.select_related("medicine","prescription",).all():
-
-        inventory = (
-            item.medicine.inventories
-            .filter(
-                is_available=True,
-                stock__gte=item.quantity,
-            )
-            .order_by("expiry_date")
-            .first()
+    if (
+        order.payment_method == Order.PaymentMethod.ONLINE
+        and order.payment_status != Order.PaymentStatus.PAID
+    ):
+        raise ValueError(
+            "Online payment must be completed before the order can be processed."
         )
 
-        if inventory is None:
-            raise ValueError(f"{item.medicine.brand_name} is out of stock.")
-        inventory.stock -= item.quantity
-        inventory.save(update_fields=["stock"])
+    for item in order.items.select_related("medicine","prescription",).all():
 
         if item.is_prescription_item:
             if item.prescription is None:
@@ -71,6 +64,7 @@ def process_order(order):
                     f"Prescription is missing for "
                     f"{item.medicine.brand_name}."
                 )
+
             if item.prescription.status != Prescription.Status.VERIFIED:
                 raise ValueError(
                     f"Prescription for "
@@ -78,12 +72,26 @@ def process_order(order):
                     f"has not been verified by the pharmacist."
                 )
 
+        inventory = (item.medicine.inventories.filter(is_available=True,stock__gte=item.quantity,).order_by("expiry_date").first())
+
+        if inventory is None:
+            raise ValueError(
+                f"{item.medicine.brand_name} is out of stock."
+            )
+
+        inventory.stock -= item.quantityinventory.save(update_fields=["stock"])
+
     order.status = Order.Status.PACKED
 
     order.save(
-        update_fields=["status","updated_at",]
+        update_fields=[
+            "status",
+            "updated_at",
+        ]
     )
+
     return order
+
 
 @transaction.atomic
 def update_order_status(order, new_status):

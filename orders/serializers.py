@@ -4,6 +4,12 @@ from .models import Order, OrderItem
 
 class CreateOrderSerializer(serializers.Serializer):
     shipping_address = serializers.CharField(max_length=500)
+    payment_method = serializers.ChoiceField(
+        choices=[
+            Order.PaymentMethod.ONLINE,
+            Order.PaymentMethod.COD,
+        ]
+    )
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -31,6 +37,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "id",
             "status",
             "payment_status",
+            "payment_method",
             "total_amount",
             "shipping_address",
             "items",
