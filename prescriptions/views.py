@@ -75,3 +75,20 @@ class PharmacistPrescriptionVerifyAPIView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+class PharmacistPrescriptionDetailAPIView(APIView):
+    permission_classes = [IsPharmacistOrAdmin]
+
+    def get(self, request, pk):
+        prescription = generics.get_object_or_404(Prescription,pk=pk,)
+
+        serializer = PrescriptionDetailSerializer(prescription)
+
+        return Response(
+            {
+                "success": True,
+                "message": "Prescription fetched successfully.",
+                "data": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
