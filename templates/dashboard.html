@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Dashboard | MediBridge
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<main class="dashboard-page">
+
+    <section class="dashboard-content">
+
+        <p class="welcome-text">Welcome back</p>
+
+        <h1 id="userName">MediBridge</h1>
+
+        <p class="dashboard-subtitle">
+            Your medicines, prescriptions and orders — all in one place.
+        </p>
+
+        <button id="logoutButton">
+            Logout
+        </button>
+
+    </section>
+
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

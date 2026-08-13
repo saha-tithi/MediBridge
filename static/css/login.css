@@ -1,0 +1,234 @@
+/* =========================
+   MediBridge Login Page
+   ========================= */
+
+.login-page {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(67, 143, 137, 0.12), transparent 30%),
+        radial-gradient(circle at 85% 80%, rgba(67, 143, 137, 0.10), transparent 30%),
+        #f4f8f7;
+}
+
+
+/* Login Card */
+
+.login-card {
+    width: 100%;
+    max-width: 400px;   
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(67, 143, 137, 0.12);
+    border-radius: 22px;
+    padding: 38px 40px 34px;  
+    box-shadow:
+        0 20px 50px rgba(31, 66, 63, 0.10),
+        0 4px 15px rgba(31, 66, 63, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Decorative top line */
+
+.login-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(
+        90deg,
+        #347d78,
+        #4c9991,
+        #70b2aa
+    );
+}
+
+
+/* Brand */
+
+.login-brand {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.login-brand h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #347d78;
+}
+
+.login-brand p {
+    margin: 8px 0 0;
+    font-size: 15px;
+    color: #78908d;
+    letter-spacing: 0.4px;
+}
+
+
+/* Content */
+
+.login-content {
+    width: 100%;
+}
+
+.welcome-text {
+    text-align: center;
+    margin: 0 0 28px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #263b39;
+}
+
+
+/* Form */
+
+#loginForm {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #304441;
+}
+
+
+/* Inputs */
+
+.form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 17px;
+    border: 1.5px solid #d8e5e2;
+    border-radius: 12px;
+    background: #fbfdfc;
+    color: #263b39;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.form-group input::placeholder {
+    color: #a2b2af;
+}
+
+.form-group input:hover {
+    border-color: #b8d2cd;
+}
+
+.form-group input:focus {
+    border-color: #438f89;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(67, 143, 137, 0.10);
+}
+
+
+/* Login Button */
+
+#loginButton {
+    width: 100%;
+    margin-top: 8px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(
+        135deg,
+        #347d78,
+        #4a938c
+    );
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(52, 125, 120, 0.20);
+    transition: all 0.25s ease;
+}
+
+#loginButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 11px 24px rgba(52, 125, 120, 0.27);
+}
+
+#loginButton:active {
+    transform: translateY(0);
+}
+
+#loginButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* Login Message */
+
+.login-message {
+    min-height: 20px;
+    margin: 4px 0 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #d05b5b;
+}
+
+
+/* Register Link */
+
+.register-link {
+    margin: 28px 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: #81918f;
+}
+
+.register-link a {
+    color: #347d78;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.register-link a:hover {
+    color: #245f5b;
+    text-decoration: underline;
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .login-page {
+        min-height: calc(100vh - 50px);
+        padding: 25px 15px;
+    }
+
+    .login-card {
+        padding: 38px 25px 32px;
+        border-radius: 20px;
+    }
+
+    .login-brand h1 {
+        font-size: 32px;
+    }
+
+    .welcome-text {
+        font-size: 20px;
+    }
+}

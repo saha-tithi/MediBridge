@@ -1,0 +1,26 @@
+.dashboard-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4f8f7;
+}
+
+.dashboard-content {
+    text-align: center;
+}
+
+.welcome-text {
+    color: #6e817d;
+}
+
+.dashboard-subtitle {
+    color: #81908d;
+}
+
+#logoutButton {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
