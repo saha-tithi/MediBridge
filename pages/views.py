@@ -5,8 +5,9 @@ from common.news import get_health_articles
 def login_page(request):
     return render(request, "login.html")
 
-def login_page(request):
-    return render(request, "login.html")
+
+def register_page(request):
+    return render(request, "register.html")
 
 
 def dashboard_page(request):

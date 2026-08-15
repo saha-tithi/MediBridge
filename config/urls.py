@@ -22,6 +22,7 @@ from medicine.views import medicine_list_page
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("pages.urls")),

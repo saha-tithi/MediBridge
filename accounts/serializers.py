@@ -77,36 +77,36 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        identifier = attrs.get("identifier")
-        password = attrs.get("password")
+        identifier = attrs["identifier"].strip()
+        password = attrs["password"]
 
-        user = None
+        # First try username
+        user = authenticate(
+            username=identifier,
+            password=password,
+        )
 
-        if "@" in identifier:
+        # If username authentication fails,
+        # try email
+        if user is None:
             try:
-                user = User.objects.get(email__iexact=identifier)
-            except User.DoesNotExist:
-                raise serializers.ValidationError(
-                    {
-                        "identifier": "Invalid email/username or password."
-                    }
+                account = User.objects.get(
+                    email__iexact=identifier
                 )
+            except User.DoesNotExist:
+                account = None
 
-            user = authenticate(
-                username=user.username,
-                password=password,
-            )
-
-        else:
-            user = authenticate(
-                username=identifier,
-                password=password,
-            )
+            if account is not None:
+                user = authenticate(
+                    username=account.username,
+                    password=password,
+                )
 
         if user is None:
             raise serializers.ValidationError(
                 {
-                    "identifier": "Invalid email/username or password."
+                    "identifier":
+                    "Invalid email/username or password."
                 }
             )
 
@@ -117,8 +117,6 @@ class LoginSerializer(serializers.Serializer):
             "access": str(refresh.access_token),
             "refresh": str(refresh),
         }
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

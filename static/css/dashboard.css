@@ -1,11 +1,3 @@
-/* ========================================
-   MediBridge Dashboard
-======================================== */
-
-
-/* ========================================
-   Dashboard Page
-======================================== */
 
 .dashboard-page {
     min-height: 100vh;
@@ -14,11 +6,6 @@
 
     color: #263d3a;
 }
-
-
-/* ========================================
-   Dashboard Header
-======================================== */
 
 .dashboard-header {
     height: 78px;
@@ -35,8 +22,6 @@
 }
 
 
-/* Header User */
-
 .header-user {
     display: flex;
     align-items: center;
@@ -51,8 +36,6 @@
     font-weight: 600;
 }
 
-
-/* Logout */
 
 #logoutButton {
     padding: 9px 18px;
@@ -70,7 +53,7 @@
     cursor: pointer;
 
     transition:
-        background 0.2s ease,
+        background- 0.2s ease,
         border-color 0.2s ease,
         color 0.2s ease;
 }
@@ -82,12 +65,6 @@
 
     color: #ffffff;
 }
-
-
-/* ========================================
-   Main Dashboard Container
-======================================== */
-
 .dashboard-main {
     width: 100%;
     max-width: 1180px;
@@ -96,12 +73,6 @@
 
     padding: 58px 30px 80px;
 }
-
-
-/* ========================================
-   Welcome Section
-======================================== */
-
 .welcome-section {
     position: relative;
 
@@ -116,9 +87,6 @@
 
     overflow: hidden;
 }
-
-
-/* Teal Accent */
 
 .welcome-section::before {
     content: "";
@@ -136,9 +104,6 @@
     border-radius: 0 4px 4px 0;
 }
 
-
-/* Welcome Label */
-
 .welcome-label {
     margin: 0 0 8px 5px;
 
@@ -148,8 +113,6 @@
     font-weight: 600;
 }
 
-
-/* Welcome Heading */
 
 .welcome-section h1 {
     margin: 0 0 9px 5px;
@@ -162,9 +125,6 @@
     letter-spacing: -1px;
 }
 
-
-/* Welcome Description */
-
 .welcome-section > p:last-child {
     margin: 0 0 0 5px;
 
@@ -175,10 +135,6 @@
 }
 
 
-/* ========================================
-   Quick Actions
-======================================== */
-
 .quick-actions h2 {
     margin: 0 0 20px;
 
@@ -188,9 +144,6 @@
     font-weight: 700;
 }
 
-
-/* Action Grid */
-
 .action-grid {
     display: grid;
 
@@ -198,12 +151,6 @@
 
     gap: 18px;
 }
-
-
-/* ========================================
-   Action Cards
-======================================== */
-
 .action-card {
     min-height: 180px;
 
@@ -237,9 +184,6 @@
     transform: translateY(-3px);
 }
 
-
-/* Action Icon */
-
 .action-icon {
     width: 48px;
     height: 48px;
@@ -257,9 +201,6 @@
     font-size: 23px;
 }
 
-
-/* Action Heading */
-
 .action-card h3 {
     margin: 0 0 7px;
 
@@ -269,9 +210,6 @@
     font-weight: 700;
 }
 
-
-/* Action Description */
-
 .action-card p {
     margin: 0;
 
@@ -280,20 +218,11 @@
     font-size: 13.5px;
     line-height: 1.55;
 }
-
-
-/* ========================================
-   Health Feed
-======================================== */
-
 .health-feed {
     margin-top: 55px;
 
     padding-bottom: 40px;
 }
-
-
-/* Feed Heading */
 
 .feed-heading {
     margin-bottom: 24px;
@@ -305,9 +234,6 @@
     gap: 25px;
 }
 
-
-/* Feed Label */
-
 .feed-label {
     margin: 0 0 6px;
 
@@ -316,9 +242,6 @@
     font-size: 13px;
     font-weight: 600;
 }
-
-
-/* Feed Heading */
 
 .feed-heading h2 {
     margin: 0 0 7px;
@@ -329,9 +252,6 @@
     font-weight: 650;
 }
 
-
-/* Feed Description */
-
 .feed-heading > div > p:last-child {
     margin: 0;
 
@@ -340,9 +260,6 @@
     font-size: 13px;
     line-height: 1.5;
 }
-
-
-/* Feed Status */
 
 .feed-status {
     padding: 7px 12px;
@@ -358,22 +275,12 @@
     white-space: nowrap;
 }
 
-
-/* ========================================
-   Article List
-======================================== */
-
 .article-list {
     display: flex;
     flex-direction: column;
 
     gap: 16px;
 }
-
-
-/* ========================================
-   Article Card
-======================================== */
 
 .health-feed .article-card {
     width: 100%;
@@ -405,11 +312,6 @@
         0 8px 22px rgba(35, 70, 65, 0.08);
 }
 
-
-/* ========================================
-   Article Image
-======================================== */
-
 .health-feed .article-image {
     position: relative;
 
@@ -423,9 +325,6 @@
     background: #e9f3f1;
 }
 
-
-/* Actual Image */
-
 .health-feed .article-image img {
     display: block;
 
@@ -435,8 +334,6 @@
     object-fit: cover;
 }
 
-
-/* Image Placeholder */
 
 .health-feed .article-image-placeholder {
     width: 100%;
@@ -456,8 +353,6 @@
 }
 
 
-/* Placeholder Label */
-
 .health-feed .article-image-placeholder span {
     padding: 5px 9px;
 
@@ -470,9 +365,6 @@
     font-size: 11px;
     font-weight: 600;
 }
-
-
-/* Category */
 
 .health-feed .article-category {
     position: absolute;
@@ -493,10 +385,6 @@
 }
 
 
-/* ========================================
-   Article Content
-======================================== */
-
 .health-feed .article-content {
     flex: 1;
 
@@ -508,9 +396,6 @@
     flex-direction: column;
 }
 
-
-/* Source */
-
 .health-feed .article-source {
     margin: 0 0 6px;
 
@@ -520,8 +405,6 @@
     font-weight: 600;
 }
 
-
-/* Title */
 
 .health-feed .article-content h3 {
     margin: 0 0 7px;
@@ -538,10 +421,6 @@
 
     overflow: hidden;
 }
-
-
-/* Description */
-
 .health-feed .article-description {
     margin: 0;
 
@@ -559,10 +438,6 @@
 }
 
 
-/* ========================================
-   Article Footer
-======================================== */
-
 .health-feed .article-footer {
     margin-top: auto;
 
@@ -576,8 +451,6 @@
 }
 
 
-/* Date */
-
 .health-feed .article-date {
     color: #9aa6a3;
 
@@ -585,7 +458,6 @@
 }
 
 
-/* Read Article */
 
 .health-feed .read-article {
     color: #3f8179;
@@ -601,11 +473,6 @@
 .health-feed .read-article:hover {
     text-decoration: underline;
 }
-
-
-/* ========================================
-   No Articles
-======================================== */
 
 .no-articles {
     padding: 35px;
@@ -634,22 +501,12 @@
     font-size: 13px;
 }
 
-
-/* ========================================
-   Tablet
-======================================== */
-
 @media (max-width: 1050px) {
 
     .action-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
-
-/* ========================================
-   Mobile
-======================================== */
 
 @media (max-width: 700px) {
 
@@ -686,11 +543,6 @@
         font-size: 15px;
     }
 }
-
-
-/* ========================================
-   Small Mobile
-======================================== */
 
 @media (max-width: 650px) {
 

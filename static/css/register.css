@@ -1,5 +1,8 @@
+/* =========================
+   MediBridge Register Page
+   ========================= */
 
-.login-page {
+.register-page {
     min-height: 100vh;
 
     display: flex;
@@ -7,6 +10,8 @@
     align-items: center;
 
     padding: 40px 20px;
+
+    box-sizing: border-box;
 
     background:
         radial-gradient(
@@ -22,27 +27,40 @@
         #f4f8f7;
 }
 
-.login-card {
-    position: relative;
 
+/* =========================
+   Register Card
+   ========================= */
+
+.register-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 430px;
 
     padding: 38px 40px 34px;
 
-    background: rgba(255, 255, 255, 0.96);
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.97);
 
     border: 1px solid rgba(67, 143, 137, 0.12);
+
     border-radius: 22px;
 
     box-shadow:
         0 20px 50px rgba(31, 66, 63, 0.10),
         0 4px 15px rgba(31, 66, 63, 0.05);
 
+    position: relative;
+
     overflow: hidden;
 }
 
-.login-card::before {
+
+/* =========================
+   Decorative Top Line
+   ========================= */
+
+.register-card::before {
     content: "";
 
     position: absolute;
@@ -61,13 +79,18 @@
     );
 }
 
-.login-brand {
-    margin-bottom: 35px;
 
+/* =========================
+   Brand
+   ========================= */
+
+.register-brand {
     text-align: center;
+
+    margin-bottom: 28px;
 }
 
-.login-brand h1 {
+.register-brand h1 {
     margin: 0;
 
     color: #347d78;
@@ -78,43 +101,53 @@
     letter-spacing: -1px;
 }
 
-.login-brand p {
+.register-brand p {
     margin: 8px 0 0;
 
     color: #78908d;
 
     font-size: 15px;
-    letter-spacing: 0.4px;
+
+    letter-spacing: 0.3px;
 }
 
 
-.login-content {
+/* =========================
+   Content
+   ========================= */
+
+.register-content {
     width: 100%;
 }
 
-.welcome-text {
-    margin: 0 0 28px;
+.register-welcome {
+    margin: 0 0 24px;
+
+    text-align: center;
 
     color: #263b39;
 
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 600;
-
-    text-align: center;
 }
 
-#loginForm {
+
+/* =========================
+   Form
+   ========================= */
+
+#registerForm {
     width: 100%;
 }
 
 .form-group {
-    margin-bottom: 22px;
+    margin-bottom: 17px;
 }
 
 .form-group label {
     display: block;
 
-    margin-bottom: 9px;
+    margin-bottom: 8px;
 
     color: #304441;
 
@@ -122,19 +155,27 @@
     font-weight: 600;
 }
 
+
+/* =========================
+   Inputs
+   ========================= */
+
 .form-group input {
     width: 100%;
 
-    padding: 15px 17px;
+    padding: 13px 15px;
+
+    box-sizing: border-box;
 
     border: 1.5px solid #d8e5e2;
-    border-radius: 12px;
+
+    border-radius: 11px;
 
     background: #fbfdfc;
 
     color: #263b39;
 
-    font-size: 15px;
+    font-size: 14px;
 
     outline: none;
 
@@ -144,13 +185,16 @@
         box-shadow 0.25s ease;
 }
 
+
 .form-group input::placeholder {
     color: #a2b2af;
 }
 
+
 .form-group input:hover {
     border-color: #b8d2cd;
 }
+
 
 .form-group input:focus {
     border-color: #438f89;
@@ -161,14 +205,21 @@
         0 0 0 4px rgba(67, 143, 137, 0.10);
 }
 
-#loginButton {
+
+/* =========================
+   Register Button
+   ========================= */
+
+#registerButton {
     width: 100%;
 
-    margin-top: 8px;
+    margin-top: 5px;
 
-    padding: 15px;
+    padding: 14px 15px;
 
-    border-radius: 12px;
+    border: none;
+
+    border-radius: 11px;
 
     background: linear-gradient(
         135deg,
@@ -178,10 +229,12 @@
 
     color: #ffffff;
 
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
 
     letter-spacing: 0.2px;
+
+    cursor: pointer;
 
     box-shadow:
         0 8px 18px rgba(52, 125, 120, 0.20);
@@ -192,18 +245,21 @@
         opacity 0.25s ease;
 }
 
-#loginButton:hover {
+
+#registerButton:hover {
     transform: translateY(-2px);
 
     box-shadow:
         0 11px 24px rgba(52, 125, 120, 0.27);
 }
 
-#loginButton:active {
+
+#registerButton:active {
     transform: translateY(0);
 }
 
-#loginButton:disabled {
+
+#registerButton:disabled {
     opacity: 0.7;
 
     cursor: not-allowed;
@@ -211,60 +267,81 @@
     transform: none;
 }
 
-.login-message {
+
+/* =========================
+   Register Message
+   ========================= */
+
+.register-message {
     min-height: 20px;
 
-    margin: 4px 0 8px;
+    margin: 2px 0 8px;
+
+    text-align: center;
 
     color: #d05b5b;
 
-    font-size: 14px;
+    font-size: 13px;
 
-    text-align: center;
+    line-height: 1.4;
 }
 
 
-.register-link {
-    margin: 28px 0 0;
+/* =========================
+   Login Link
+   ========================= */
+
+.login-link {
+    margin: 23px 0 0;
+
+    text-align: center;
 
     color: #81918f;
 
     font-size: 14px;
-
-    text-align: center;
 }
 
-.register-link a {
+
+.login-link a {
     color: #347d78;
 
     font-weight: 600;
 
+    text-decoration: none;
+
     transition: color 0.2s ease;
 }
 
-.register-link a:hover {
+
+.login-link a:hover {
     color: #245f5b;
 
     text-decoration: underline;
 }
 
+
+/* =========================
+   Responsive
+   ========================= */
+
 @media (max-width: 600px) {
 
-    .login-page {
+    .register-page {
         padding: 25px 15px;
     }
 
-    .login-card {
-        padding: 38px 25px 32px;
+    .register-card {
+        padding: 35px 25px 30px;
 
         border-radius: 20px;
     }
 
-    .login-brand h1 {
+    .register-brand h1 {
         font-size: 32px;
     }
 
-    .welcome-text {
+    .register-welcome {
         font-size: 20px;
     }
+
 }
