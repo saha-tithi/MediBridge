@@ -5,29 +5,44 @@
 Dashboard | MediBridge
 {% endblock %}
 
+
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard.css' %}"
+>
+
 {% endblock %}
+
 
 {% block content %}
 
 <main class="dashboard-page">
 
-    <!-- ================================
-         HEADER
-    ================================= -->
+
+    <!-- =================================
+         DASHBOARD HEADER
+    ================================== -->
 
     <header class="dashboard-header">
 
-        <a href="/dashboard/" class="brand">
+        <a
+            href="/dashboard/"
+            class="brand"
+        >
             MediBridge
         </a>
+
 
         <div class="header-user">
 
             <span id="headerUserName"></span>
 
-            <button id="logoutButton">
+            <button
+                type="button"
+                id="logoutButton"
+            >
                 Logout
             </button>
 
@@ -36,18 +51,19 @@ Dashboard | MediBridge
     </header>
 
 
-    <!-- ================================
-         MAIN CONTENT
-    ================================= -->
+
+    <!-- =================================
+         DASHBOARD CONTENT
+    ================================== -->
 
     <section class="dashboard-main">
 
 
-        <!-- ================================
+        <!-- =================================
              WELCOME
-        ================================= -->
+        ================================== -->
 
-        <div class="welcome-section">
+        <section class="welcome-section">
 
             <p class="welcome-label">
                 Welcome back
@@ -62,12 +78,13 @@ Dashboard | MediBridge
                 orders and more from one place.
             </p>
 
-        </div>
+        </section>
 
 
-        <!-- ================================
+
+        <!-- =================================
              QUICK ACTIONS
-        ================================= -->
+        ================================== -->
 
         <section class="quick-actions">
 
@@ -75,10 +92,14 @@ Dashboard | MediBridge
                 Quick actions
             </h2>
 
+
             <div class="action-grid">
 
 
-                <a href="#" class="action-card">
+                <a
+                    href="/medicines/"
+                    class="action-card"
+                >
 
                     <span class="action-icon">
                         💊
@@ -95,7 +116,11 @@ Dashboard | MediBridge
                 </a>
 
 
-                <a href="#" class="action-card">
+
+                <a
+                    href="#"
+                    class="action-card"
+                >
 
                     <span class="action-icon">
                         📄
@@ -112,7 +137,11 @@ Dashboard | MediBridge
                 </a>
 
 
-                <a href="#" class="action-card">
+
+                <a
+                    href="#"
+                    class="action-card"
+                >
 
                     <span class="action-icon">
                         🛒
@@ -129,7 +158,11 @@ Dashboard | MediBridge
                 </a>
 
 
-                <a href="#" class="action-card">
+
+                <a
+                    href="#"
+                    class="action-card"
+                >
 
                     <span class="action-icon">
                         📦
@@ -145,19 +178,19 @@ Dashboard | MediBridge
 
                 </a>
 
+
             </div>
 
         </section>
 
 
-        <!-- ================================
+
+        <!-- =================================
              HEALTH & MEDICAL FEED
-        ================================= -->
+        ================================== -->
 
         <section class="health-feed">
 
-
-            <!-- FEED HEADER -->
 
             <div class="feed-heading">
 
@@ -186,12 +219,16 @@ Dashboard | MediBridge
             </div>
 
 
-            <!-- ARTICLES -->
+
+            <!-- =================================
+                 ARTICLE LIST
+            ================================== -->
 
             <div class="article-list">
 
 
                 {% for article in articles %}
+
 
                 <article class="article-card">
 
@@ -228,6 +265,7 @@ Dashboard | MediBridge
                     </div>
 
 
+
                     <!-- ARTICLE CONTENT -->
 
                     <div class="article-content">
@@ -252,7 +290,6 @@ Dashboard | MediBridge
                         {% endif %}
 
 
-                        <!-- ARTICLE FOOTER -->
 
                         <div class="article-footer">
 
@@ -280,13 +317,12 @@ Dashboard | MediBridge
 
                     </div>
 
+
                 </article>
 
 
                 {% empty %}
 
-
-                <!-- NO ARTICLES -->
 
                 <div class="no-articles">
 
@@ -317,9 +353,6 @@ Dashboard | MediBridge
 {% endblock %}
 
 
-<!-- ================================
-     JAVASCRIPT
-================================ -->
 
 {% block extra_js %}
 

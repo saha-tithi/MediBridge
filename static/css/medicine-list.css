@@ -1,0 +1,416 @@
+/* ========================================
+   MediBridge — Medicine List
+======================================== */
+
+
+/* ========================================
+   Medicine Page
+======================================== */
+
+.medicine-page {
+    min-height: 100vh;
+
+    background: #f6f9f8;
+
+    color: #263d3a;
+}
+
+
+/* ========================================
+   Page Header
+======================================== */
+
+.medicine-header {
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 55px 30px 35px;
+
+    box-sizing: border-box;
+}
+
+
+/* Small Label */
+
+.medicine-header .page-label {
+    margin: 0 0 7px;
+
+    color: #5c948b;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Page Title */
+
+.medicine-header h1 {
+    margin: 0 0 10px;
+
+    color: #244440;
+
+    font-size: 34px;
+    font-weight: 700;
+
+    letter-spacing: -0.7px;
+}
+
+
+/* Page Description */
+
+.medicine-header > p:last-child {
+    margin: 0;
+
+    color: #78908c;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* ========================================
+   Medicine List Section
+======================================== */
+
+.medicine-list-section {
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 0 30px 70px;
+
+    box-sizing: border-box;
+}
+
+
+/* ========================================
+   Medicine Grid
+======================================== */
+
+.medicine-list {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* ========================================
+   Loading State
+======================================== */
+
+.medicine-loading {
+    grid-column: 1 / -1;
+
+    padding: 50px 20px;
+
+    text-align: center;
+
+    color: #78908c;
+
+    font-size: 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe8;
+    border-radius: 14px;
+}
+
+
+/* ========================================
+   Medicine Card
+======================================== */
+
+.medicine-card {
+    min-width: 0;
+
+    padding: 22px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #ffffff;
+
+    border: 1px solid #dfeae8;
+    border-radius: 14px;
+
+    box-shadow:
+        0 4px 14px rgba(38, 76, 71, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.medicine-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #b9d8d3;
+
+    box-shadow:
+        0 9px 22px rgba(38, 76, 71, 0.08);
+}
+
+
+/* ========================================
+   Medicine Image
+======================================== */
+
+.medicine-card-image {
+    width: 100%;
+    height: 150px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #edf6f4;
+}
+
+
+.medicine-card-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* Image Placeholder */
+
+.medicine-card-image-placeholder {
+    color: #75a39d;
+
+    font-size: 38px;
+}
+
+
+/* ========================================
+   Medicine Information
+======================================== */
+
+.medicine-category {
+    margin: 0 0 6px;
+
+    color: #5c948b;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+
+.medicine-card h2 {
+    margin: 0 0 5px;
+
+    color: #29433f;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    line-height: 1.35;
+}
+
+
+.medicine-generic {
+    margin: 0 0 10px;
+
+    color: #78908c;
+
+    font-size: 13px;
+}
+
+
+.medicine-strength {
+    display: inline-block;
+
+    width: fit-content;
+
+    margin-bottom: 12px;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    background: #eef6f4;
+
+    color: #47756e;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   Medicine Description
+======================================== */
+
+.medicine-description {
+    margin: 0 0 18px;
+
+    color: #84918e;
+
+    font-size: 13px;
+    line-height: 1.55;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* ========================================
+   Medicine Footer
+======================================== */
+
+.medicine-card-footer {
+    margin-top: auto;
+
+    padding-top: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    border-top: 1px solid #edf1f0;
+}
+
+
+.medicine-manufacturer {
+    min-width: 0;
+
+    color: #9aa6a3;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ========================================
+   Prescription Badge
+======================================== */
+
+.prescription-badge {
+    flex-shrink: 0;
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: #fff4e8;
+
+    color: #a87545;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   Empty State
+======================================== */
+
+.medicine-empty {
+    grid-column: 1 / -1;
+
+    padding: 50px 20px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e1ebe8;
+    border-radius: 14px;
+}
+
+
+.medicine-empty h3 {
+    margin: 0 0 7px;
+
+    color: #30423e;
+
+    font-size: 17px;
+}
+
+
+.medicine-empty p {
+    margin: 0;
+
+    color: #84918e;
+
+    font-size: 13px;
+}
+
+
+/* ========================================
+   Tablet
+======================================== */
+
+@media (max-width: 900px) {
+
+    .medicine-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* ========================================
+   Mobile
+======================================== */
+
+@media (max-width: 600px) {
+
+    .medicine-header {
+        padding: 40px 20px 28px;
+    }
+
+
+    .medicine-header h1 {
+        font-size: 30px;
+    }
+
+
+    .medicine-list-section {
+        padding: 0 20px 50px;
+    }
+
+
+    .medicine-list {
+        grid-template-columns: 1fr;
+    }
+
+
+    .medicine-card {
+        padding: 20px;
+    }
+
+
+    .medicine-card-image {
+        height: 170px;
+    }
+}

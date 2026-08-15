@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Browse Medicines | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/medicine-list.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="medicine-page">
+
+
+    <!-- =================================
+         PAGE HEADER
+    ================================== -->
+
+    <section class="medicine-header">
+
+        <p class="page-label">
+            MediBridge Pharmacy
+        </p>
+
+        <h1>
+            Browse Medicines
+        </h1>
+
+        <p>
+            Find medicines and healthcare products you need.
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================
+         MEDICINE LIST
+    ================================== -->
+
+    <section class="medicine-list-section">
+
+        <div
+            id="medicineList"
+            class="medicine-list"
+        >
+
+            <!--
+                Medicines will be loaded here
+                using the Medicine API.
+            -->
+
+            <div class="medicine-loading">
+                Loading medicines...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/api.js' %}"></script>
+
+<script src="{% static 'js/medicine-list.js' %}"></script>
+
+{% endblock %}

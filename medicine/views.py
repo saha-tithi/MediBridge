@@ -3,6 +3,7 @@ from rest_framework import filters, generics
 from rest_framework.permissions import AllowAny
 from .models import Medicine
 from .serializers import (MedicineListSerializer,MedicineDetailSerializer,)
+from django.shortcuts import render
 
 
 class MedicineListAPIView(generics.ListAPIView):
@@ -43,3 +44,16 @@ class MedicineDetailAPIView(generics.RetrieveAPIView):
     queryset = (Medicine.objects.select_related("category").prefetch_related("inventories").all())
     serializer_class = MedicineDetailSerializer
     permission_classes = [AllowAny]
+
+
+
+def medicine_list_page(request):
+    medicines = Medicine.objects.select_related("category").all()
+
+    return render(
+        request,
+        "medicines/medicine_list.html",
+        {
+            "medicines": medicines,
+        },
+    )
