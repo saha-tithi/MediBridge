@@ -13,19 +13,302 @@ Dashboard | MediBridge
 
 <main class="dashboard-page">
 
-    <section class="dashboard-content">
+    <!-- ================================
+         HEADER
+    ================================= -->
 
-        <p class="welcome-text">Welcome back</p>
+    <header class="dashboard-header">
 
-        <h1 id="userName">MediBridge</h1>
+        <a href="/dashboard/" class="brand">
+            MediBridge
+        </a>
 
-        <p class="dashboard-subtitle">
-            Your medicines, prescriptions and orders — all in one place.
-        </p>
+        <div class="header-user">
 
-        <button id="logoutButton">
-            Logout
-        </button>
+            <span id="headerUserName"></span>
+
+            <button id="logoutButton">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================================
+         MAIN CONTENT
+    ================================= -->
+
+    <section class="dashboard-main">
+
+
+        <!-- ================================
+             WELCOME
+        ================================= -->
+
+        <div class="welcome-section">
+
+            <p class="welcome-label">
+                Welcome back
+            </p>
+
+            <h1 id="userName">
+                Hello!
+            </h1>
+
+            <p>
+                Manage your medicines, prescriptions,
+                orders and more from one place.
+            </p>
+
+        </div>
+
+
+        <!-- ================================
+             QUICK ACTIONS
+        ================================= -->
+
+        <section class="quick-actions">
+
+            <h2>
+                Quick actions
+            </h2>
+
+            <div class="action-grid">
+
+
+                <a href="#" class="action-card">
+
+                    <span class="action-icon">
+                        💊
+                    </span>
+
+                    <h3>
+                        Browse Medicines
+                    </h3>
+
+                    <p>
+                        Find medicines and healthcare products.
+                    </p>
+
+                </a>
+
+
+                <a href="#" class="action-card">
+
+                    <span class="action-icon">
+                        📄
+                    </span>
+
+                    <h3>
+                        Upload Prescription
+                    </h3>
+
+                    <p>
+                        Upload your prescription for verification.
+                    </p>
+
+                </a>
+
+
+                <a href="#" class="action-card">
+
+                    <span class="action-icon">
+                        🛒
+                    </span>
+
+                    <h3>
+                        My Cart
+                    </h3>
+
+                    <p>
+                        Review medicines waiting in your cart.
+                    </p>
+
+                </a>
+
+
+                <a href="#" class="action-card">
+
+                    <span class="action-icon">
+                        📦
+                    </span>
+
+                    <h3>
+                        My Orders
+                    </h3>
+
+                    <p>
+                        Track your current and previous orders.
+                    </p>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================
+             HEALTH & MEDICAL FEED
+        ================================= -->
+
+        <section class="health-feed">
+
+
+            <!-- FEED HEADER -->
+
+            <div class="feed-heading">
+
+                <div>
+
+                    <p class="feed-label">
+                        Stay informed
+                    </p>
+
+                    <h2>
+                        Health & Medical Updates
+                    </h2>
+
+                    <p>
+                        The latest stories, discoveries and health
+                        updates from trusted sources.
+                    </p>
+
+                </div>
+
+
+                <span class="feed-status">
+                    Updated regularly
+                </span>
+
+            </div>
+
+
+            <!-- ARTICLES -->
+
+            <div class="article-list">
+
+
+                {% for article in articles %}
+
+                <article class="article-card">
+
+
+                    <!-- ARTICLE IMAGE -->
+
+                    <div class="article-image">
+
+                        {% if article.image %}
+
+                            <img
+                                src="{{ article.image }}"
+                                alt=""
+                                loading="lazy"
+                            >
+
+                        {% else %}
+
+                            <div class="article-image-placeholder">
+
+                                <span>
+                                    Health
+                                </span>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <span class="article-category">
+                            {{ article.category }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- ARTICLE CONTENT -->
+
+                    <div class="article-content">
+
+
+                        <p class="article-source">
+                            {{ article.source }}
+                        </p>
+
+
+                        <h3>
+                            {{ article.title }}
+                        </h3>
+
+
+                        {% if article.summary %}
+
+                            <p class="article-description">
+                                {{ article.summary }}
+                            </p>
+
+                        {% endif %}
+
+
+                        <!-- ARTICLE FOOTER -->
+
+                        <div class="article-footer">
+
+
+                            <span class="article-date">
+                                {{ article.published }}
+                            </span>
+
+
+                            {% if article.url %}
+
+                                <a
+                                    href="{{ article.url }}"
+                                    class="read-article"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Read article →
+                                </a>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                {% empty %}
+
+
+                <!-- NO ARTICLES -->
+
+                <div class="no-articles">
+
+                    <h3>
+                        No health updates available
+                    </h3>
+
+                    <p>
+                        We couldn't load the latest health stories
+                        right now. Please try again later.
+                    </p>
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+        </section>
+
 
     </section>
 
@@ -33,7 +316,15 @@ Dashboard | MediBridge
 
 {% endblock %}
 
+
+<!-- ================================
+     JAVASCRIPT
+================================ -->
+
 {% block extra_js %}
+
 <script src="{% static 'js/api.js' %}"></script>
+
 <script src="{% static 'js/dashboard.js' %}"></script>
+
 {% endblock %}

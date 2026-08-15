@@ -3,8 +3,12 @@ const user = JSON.parse(localStorage.getItem("user"));
 if (!user) {
     window.location.href = "/login/";
 } else {
+
     document.getElementById("userName").textContent =
-        `Welcome, ${user.username}`;
+        `Hello, ${user.username}`;
+
+    document.getElementById("headerUserName").textContent =
+        user.username;
 }
 
 
