@@ -1,41 +1,180 @@
 {% load static %}
 
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>
-        {% block title %}MediBridge{% endblock %}
-    </title>
+<title>
+    {% block title %}MediBridge{% endblock %}
+</title>
 
-    <!-- Global CSS -->
-    <link
-        rel="stylesheet"
-        href="{% static 'css/base.css' %}"
-    >
 
-    <!-- Page-specific CSS -->
-    {% block extra_css %}{% endblock %}
+<!-- Global CSS -->
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/base.css' %}"
+>
+
+
+<!-- Page CSS -->
+
+{% block extra_css %}
+{% endblock %}
+
 
 </head>
 
-
 <body>
+<!-- =========================================
+     NAVBAR
+========================================== -->
 
-    {% block content %}
-    {% endblock %}
+<nav class="main-navbar">
 
 
-    {% block extra_js %}
-    {% endblock %}
+    <!-- LOGO -->
+
+    <a
+        href="/medicines/"
+        class="navbar-logo"
+    >
+
+        <span class="logo-shield">
+            +
+        </span>
+
+        <span class="logo-text">
+
+            <strong>
+                MediBridge
+            </strong>
+
+            <small>
+                PHARMACY
+            </small>
+
+        </span>
+
+    </a>
+
+
+
+    <!-- NAVIGATION -->
+
+    <div class="navbar-links">
+
+
+        <a
+            href="/medicines/"
+            class="nav-link active"
+        >
+            <span class="nav-icon">💊</span>
+            <span>Medicines</span>
+        </a>
+
+
+        <a
+            href="/orders/"
+            class="nav-link"
+        >
+            <span class="nav-icon">▣</span>
+            <span>Orders</span>
+        </a>
+
+
+        <a
+            href="/upload-prescription/"
+            class="nav-link"
+        >
+            <span class="nav-icon">□</span>
+            <span>Upload Prescription</span>
+        </a>
+
+    </div>
+
+
+
+    <!-- RIGHT SIDE -->
+
+    <div class="navbar-right">
+
+
+        <!-- CART -->
+
+        <a
+            href="/cart/"
+            class="cart-link"
+            aria-label="Cart"
+        >
+
+            <span class="cart-icon">
+                🛒
+            </span>
+
+            <span
+                id="cartCount"
+                class="cart-count"
+            >
+                0
+            </span>
+
+        </a>
+
+
+
+        <!-- PROFILE -->
+
+        <a
+            href="/profile/"
+            class="profile-link"
+        >
+
+            <span class="profile-icon">
+                ♙
+            </span>
+
+            <span>
+                My Account
+            </span>
+
+            <span class="profile-arrow">
+               ⌄
+            </span>
+
+        </a>
+
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================
+     PAGE CONTENT
+========================================== -->
+
+{% block content %}
+{% endblock %}
+
+
+
+<!-- =========================================
+     PAGE JAVASCRIPT
+========================================== -->
+
+{% block extra_js %}
+{% endblock %}
 
 </body>
 

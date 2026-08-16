@@ -17,11 +17,11 @@ loginForm.addEventListener("submit", async function (event) {
         .getElementById("password")
         .value;
 
+
     loginMessage.textContent = "";
     loginMessage.style.color = "#d05b5b";
 
 
-    
     loginButton.disabled = true;
     loginButton.textContent = "Logging in...";
 
@@ -42,8 +42,6 @@ loginForm.addEventListener("submit", async function (event) {
             }
         );
 
-
-        
 
         localStorage.setItem(
             "access_token",
@@ -69,13 +67,12 @@ loginForm.addEventListener("submit", async function (event) {
 
         setTimeout(function () {
 
-            window.location.href = "/dashboard/";
+            window.location.href = "/medicines/";
 
         }, 500);
 
 
     } catch (error) {
-
 
         loginMessage.style.color = "#d05b5b";
 
@@ -99,7 +96,6 @@ function getLoginErrorMessage(error) {
     }
 
 
-    
     if (typeof error.message === "string") {
         return error.message;
     }

@@ -1,647 +1,309 @@
-/* ========================================
-   MediBridge
-   Medicine List Page
-======================================== */
 
-
-/* ========================================
-   PAGE
-======================================== */
+/* =========================================================
+   MEDIBRIDGE MEDICINE PAGE
+========================================================= */
 
 .medicine-page {
-
     min-height: 100vh;
-
     background: #f8fbfa;
-
-    color: #173f38;
+    color: #173f39;
 }
 
 
-/* ========================================
-   NAVIGATION BAR
-======================================== */
-
-.medicine-navbar {
-
-    height: 78px;
-
-    padding: 0 4.5%;
-
-    display: flex;
-    align-items: center;
-
-    background: #ffffff;
-
-    border-bottom: 1px solid #e2ece9;
-
-    box-sizing: border-box;
-
-    position: relative;
-
-    z-index: 20;
-}
-
-
-/* ========================================
-   MEDIBRIDGE BRAND
-======================================== */
-
-.medicine-brand {
-
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
-
-    min-width: 225px;
-
-    text-decoration: none;
-}
-
-
-/* LOGO */
-
-.brand-logo {
-
-    width: 40px;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #399877;
-
-    color: #ffffff;
-
-    border-radius: 11px;
-
-    box-shadow:
-        0 5px 12px rgba(57, 152, 119, 0.18);
-}
-
-
-.brand-logo span {
-
-    font-size: 25px;
-
-    font-weight: 700;
-
-    line-height: 1;
-}
-
-
-/* BRAND TEXT */
-
-.brand-name {
-
-    display: flex;
-
-    flex-direction: column;
-
-    line-height: 1;
-}
-
-
-.brand-name strong {
-
-    color: #173b35;
-
-    font-size: 21px;
-
-    font-weight: 750;
-
-    letter-spacing: -0.5px;
-}
-
-
-.brand-name small {
-
-    margin-top: 5px;
-
-    color: #708781;
-
-    font-size: 8px;
-
-    font-weight: 700;
-
-    letter-spacing: 2.2px;
-}
-
-
-/* ========================================
-   MAIN NAVIGATION
-======================================== */
-
-.medicine-nav {
-
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 30px;
-
-    margin-left: 30px;
-}
-
-
-.medicine-nav a {
-
-    height: 100%;
-
-    padding: 0 4px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    position: relative;
-
-    color: #5d706c;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    text-decoration: none;
-
-    white-space: nowrap;
-
-    transition:
-        color 0.2s ease;
-}
-
-
-.medicine-nav a:hover {
-
-    color: #329273;
-}
-
-
-/* ACTIVE NAVIGATION */
-
-.medicine-nav a.active {
-
-    color: #329273;
-}
-
-
-.medicine-nav a.active::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    right: 0;
-
-    bottom: 0;
-
-    height: 3px;
-
-    background: #329273;
-
-    border-radius:
-        3px 3px 0 0;
-}
-
-
-/* NAV ICON */
-
-.nav-icon {
-
-    font-size: 17px;
-
-    line-height: 1;
-
-    opacity: 0.85;
-}
-
-
-/* ========================================
-   RIGHT SIDE NAVIGATION
-======================================== */
-
-.medicine-nav-right {
-
-    margin-left: auto;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 25px;
-}
-
-
-/* ========================================
-   CART
-======================================== */
-
-.cart-link {
-
-    position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: #526762;
-
-    text-decoration: none;
-}
-
-
-.cart-icon {
-
-    font-size: 21px;
-
-    line-height: 1;
-}
-
-
-.cart-count {
-
-    position: absolute;
-
-    top: -9px;
-
-    right: -11px;
-
-    width: 18px;
-
-    height: 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #399877;
-
-    color: #ffffff;
-
-    border-radius: 50%;
-
-    font-size: 9px;
-
-    font-weight: 700;
-}
-
-
-/* ========================================
-   ACCOUNT
-======================================== */
-
-.account-link {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    color: #526762;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    text-decoration: none;
-}
-
-
-.account-circle {
-
-    width: 36px;
-
-    height: 36px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #f0f4f3;
-
-    border-radius: 50%;
-
-    font-size: 15px;
-}
-
-
-.account-link:hover {
-
-    color: #329273;
-}
-
-
-/* ========================================
+/* =========================================================
    HERO SECTION
-======================================== */
+========================================================= */
 
-.medicine-hero {
-
+.medicine-header {
     position: relative;
 
-    min-height: 265px;
-
-    padding: 55px 7%;
+    width: 100%;
+    min-height: 300px;
 
     display: flex;
-
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 
     overflow: hidden;
 
+    box-sizing: border-box;
+
+    padding: 55px max(7vw, 40px) 60px;
+
     background:
         linear-gradient(
-            110deg,
-            #e3f5ef 0%,
-            #eaf8f4 48%,
-            #f3faf8 100%
+            105deg,
+            #e5f5f1 0%,
+            #eef9f6 48%,
+            #f8fbfa 100%
         );
 
-    border-bottom:
-        1px solid #dcece7;
-
-    box-sizing: border-box;
+    border-bottom: 1px solid #dcece8;
 }
 
 
-/* DECORATIVE CIRCLE */
+/* =========================================================
+   HERO CONTENT
+========================================================= */
 
-.medicine-hero::after {
-
+.medicine-header::before {
     content: "";
 
     position: absolute;
 
-    width: 360px;
+    width: 420px;
+    height: 420px;
 
-    height: 360px;
-
-    right: -100px;
-
-    top: -170px;
+    right: -120px;
+    top: -210px;
 
     border-radius: 50%;
 
-    background:
-        rgba(112, 183, 158, 0.08);
+    background: rgba(71, 151, 133, 0.055);
 }
 
 
-/* ========================================
-   HERO CONTENT
-======================================== */
-
-.hero-content {
-
-    position: relative;
-
-    z-index: 2;
-
-    max-width: 700px;
-}
-
-
-.hero-label {
-
-    margin: 0 0 10px;
-
-    color: #378c70;
-
-    font-size: 15px;
-
-    font-weight: 700;
-}
-
-
-.hero-content h1 {
-
-    margin: 0 0 12px;
-
-    color: #123d35;
-
-    font-size: 46px;
-
-    font-weight: 750;
-
-    letter-spacing: -1.4px;
-
-    line-height: 1.15;
-}
-
-
-.hero-description {
-
-    margin: 0;
-
-    color: #66817a;
-
-    font-size: 16px;
-
-    line-height: 1.6;
-}
-
-
-/* ========================================
-   HERO DECORATION
-======================================== */
-
-.hero-decoration {
-
-    position: absolute;
-
-    right: 8%;
-
-    width: 290px;
-
-    height: 190px;
-}
-
-
-/* BOTTLE */
-
-.medicine-bottle {
-
-    position: absolute;
-
-    right: 45px;
-
-    top: 15px;
-
-    width: 90px;
-
-    height: 120px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border: 4px solid #a8daca;
-
-    border-radius:
-        10px 10px 16px 16px;
-
-    color: #9ed2be;
-
-    font-size: 42px;
-
-    font-weight: 400;
-
-    box-sizing: border-box;
-}
-
-
-.medicine-bottle::before {
-
+.medicine-header::after {
     content: "";
 
     position: absolute;
 
-    top: -24px;
-
-    width: 58px;
-
-    height: 25px;
-
-    border: 4px solid #a8daca;
-
-    border-bottom: none;
-
-    border-radius:
-        7px 7px 0 0;
-
-    box-sizing: border-box;
-}
-
-
-/* TABLETS */
-
-.medicine-tablets {
-
-    position: absolute;
-
-    right: 145px;
-
-    top: 65px;
-
-    color: #9bd1bc;
-
-    font-size: 22px;
-
-    line-height: 1.35;
-
-    letter-spacing: 4px;
-}
-
-
-.medicine-tablets span {
-
-    display: inline-block;
-}
-
-
-/* PLUS SYMBOLS */
-
-.hero-plus {
-
-    position: absolute;
-
-    color: #9bd1bc;
-
-    font-size: 20px;
-
-    font-weight: 700;
-}
-
-
-.plus-one {
-
-    top: 25px;
-
-    right: 10px;
-}
-
-
-.plus-two {
-
-    bottom: 22px;
+    width: 230px;
+    height: 230px;
 
     right: 150px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background: rgba(71, 151, 133, 0.045);
 }
 
 
-/* ========================================
-   CONTENT
-======================================== */
+/* =========================================================
+   SMALL LABEL
+========================================================= */
 
-.medicine-content {
+.medicine-header .page-label {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 12px;
+
+    color: #23806d;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    letter-spacing: -0.1px;
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.medicine-header h1 {
+    position: relative;
+    z-index: 2;
+
+    max-width: 800px;
+
+    margin: 0 0 14px;
+
+    color: #103f38;
+
+    font-size: clamp(42px, 4.5vw, 64px);
+
+    font-weight: 750;
+
+    line-height: 1.08;
+
+    letter-spacing: -2.2px;
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
+.medicine-header > p:last-child {
+    position: relative;
+    z-index: 2;
+
+    max-width: 650px;
+
+    margin: 0;
+
+    color: #5f7d78;
+
+    font-size: 18px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   DECORATIVE MEDICAL CROSS
+========================================================= */
+
+.medicine-header {
+    --cross-color: rgba(45, 139, 117, 0.25);
+}
+
+
+/* cross 1 */
+
+.medicine-header .page-label::before {
+    content: "+";
+
+    position: absolute;
+
+    left: calc(100vw - 340px);
+    top: -8px;
+
+    color: var(--cross-color);
+
+    font-size: 22px;
+    font-weight: 400;
+}
+
+
+/* cross 2 */
+
+.medicine-header h1::after {
+    content: "+";
+
+    position: absolute;
+
+    right: -310px;
+    top: 15px;
+
+    color: rgba(45, 139, 117, 0.18);
+
+    font-size: 30px;
+    font-weight: 300;
+}
+
+
+/* =========================================================
+   DECORATIVE CAPSULE
+========================================================= */
+
+.medicine-header h1::before {
+    content: "";
+
+    position: absolute;
+
+    right: -380px;
+    top: 25px;
+
+    width: 90px;
+    height: 38px;
+
+    border-radius: 50px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8ac7b5 0%,
+            #8ac7b5 50%,
+            #dcefe9 50%,
+            #dcefe9 100%
+        );
+
+    opacity: 0.38;
+
+    transform: rotate(-32deg);
+
+    box-shadow:
+        0 8px 20px rgba(44, 118, 101, 0.08);
+}
+
+
+/* =========================================================
+   MEDICAL PLUS DECORATIONS
+========================================================= */
+
+.medicine-header > p:last-child::before {
+    content: "+";
+
+    position: absolute;
+
+    right: -430px;
+    top: -105px;
+
+    color: rgba(45, 139, 117, 0.16);
+
+    font-size: 26px;
+}
+
+
+.medicine-header > p:last-child::after {
+    content: "+";
+
+    position: absolute;
+
+    right: -510px;
+    top: 25px;
+
+    color: rgba(45, 139, 117, 0.20);
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   MEDICINE CONTENT AREA
+========================================================= */
+
+.medicine-list-section {
+    position: relative;
+    z-index: 5;
 
     width: 100%;
-
-    max-width: 1240px;
+    max-width: 1320px;
 
     margin: 0 auto;
 
-    padding: 34px 35px 80px;
+    padding: 34px 30px 80px;
 
     box-sizing: border-box;
 }
 
 
-/* ========================================
-   SEARCH
-======================================== */
+/* =========================================================
+   SEARCH BAR
+========================================================= */
 
-.medicine-search {
-
-    margin-bottom: 30px;
-}
-
-
-.medicine-search input {
-
+.medicine-search-wrapper {
     width: 100%;
 
-    height: 60px;
+    margin-bottom: 28px;
+}
 
-    padding:
-        0 20px;
+
+.medicine-search {
+    width: 100%;
+    height: 68px;
 
     box-sizing: border-box;
 
-    border:
-        1px solid #cfe1dc;
+    padding: 0 24px;
 
-    border-radius: 13px;
+    border: 1px solid #d6e5e1;
+    border-radius: 14px;
 
     outline: none;
 
     background: #ffffff;
 
-    color: #304b45;
+    color: #294b46;
 
-    font-family: inherit;
-
-    font-size: 15px;
+    font-size: 16px;
 
     box-shadow:
-        0 5px 18px
-        rgba(35, 82, 73, 0.05);
+        0 5px 18px rgba(40, 88, 79, 0.035);
 
     transition:
         border-color 0.2s ease,
@@ -649,105 +311,131 @@
 }
 
 
-.medicine-search input::placeholder {
-
-    color: #8ca29d;
+.medicine-search::placeholder {
+    color: #8ca29e;
 }
 
 
-.medicine-search input:focus {
-
-    border-color: #72b6a0;
+.medicine-search:focus {
+    border-color: #82bdb0;
 
     box-shadow:
-        0 0 0 3px
-        rgba(87, 164, 137, 0.10);
+        0 0 0 4px rgba(73, 151, 132, 0.08);
 }
 
 
+/* =========================================================
+   MEDICINE GRID
+========================================================= */
 /* ========================================
    MEDICINE GRID
 ======================================== */
 
 .medicine-list {
-
     display: grid;
 
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
     gap: 24px;
 }
 
 
 /* ========================================
-   MEDICINE CARD
+   TABLET
 ======================================== */
 
+@media (max-width: 1000px) {
+
+    .medicine-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 650px) {
+
+    .medicine-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+
+
+/* =========================================================
+   MEDICINE CARD
+   ========================================================= */
+
 .medicine-card {
+    position: relative;
 
     min-width: 0;
 
     display: flex;
-
     flex-direction: column;
 
-    padding: 12px;
+    padding: 22px;
 
-    background: #ffffff;
-
-    border:
-        1px solid #e1ebe8;
-
-    border-radius: 16px;
+    box-sizing: border-box;
 
     text-decoration: none;
 
     color: inherit;
 
-    cursor: pointer;
+    background: #ffffff;
+
+    border: 1px solid #e0ebe8;
+    border-radius: 17px;
 
     box-shadow:
-        0 5px 18px
-        rgba(31, 78, 68, 0.055);
+        0 7px 22px rgba(31, 72, 65, 0.055);
+
+    overflow: hidden;
+
+    cursor: pointer;
 
     transition:
         transform 0.22s ease,
-        border-color 0.22s ease,
-        box-shadow 0.22s ease;
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
 }
 
 
 .medicine-card:hover {
+    transform: translateY(-4px);
 
-    transform:
-        translateY(-5px);
-
-    border-color:
-        #b9dacf;
+    border-color: #c3ddd7;
 
     box-shadow:
-        0 12px 30px
-        rgba(31, 78, 68, 0.11);
+        0 14px 30px rgba(31, 72, 65, 0.10);
 }
 
 
-/* ========================================
-   MEDICINE IMAGE
-======================================== */
+.medicine-card:active {
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MEDICINE IMAGE AREA
+   ========================================================= */
 
 .medicine-card-image {
-
     position: relative;
 
     width: 100%;
+    height: 164px;
 
-    height: 190px;
+    margin-bottom: 21px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     overflow: hidden;
@@ -758,153 +446,206 @@
         linear-gradient(
             135deg,
             #edf8f5,
-            #f6fbfa
+            #e7f3f0
         );
 }
 
 
+/* Actual medicine image */
+
 .medicine-card-image img {
-
     width: 100%;
-
     height: 100%;
 
     display: block;
 
     object-fit: cover;
+
+    border-radius: 11px;
 }
 
 
-.medicine-card-image-placeholder {
+/* =========================================================
+   FALLBACK PILL
+   ========================================================= */
 
-    display: flex;
+.medicine-pill {
+    position: relative;
 
-    align-items: center;
+    width: 82px;
+    height: 38px;
 
-    justify-content: center;
+    border-radius: 24px;
 
-    color: #62a48d;
+    transform: rotate(-45deg);
 
-    font-size: 48px;
+    background:
+        linear-gradient(
+            90deg,
+            #4fa98b 0%,
+            #4fa98b 50%,
+            #f7f9f8 50%,
+            #f7f9f8 100%
+        );
+
+    box-shadow:
+        0 9px 14px rgba(47, 98, 84, 0.18);
 }
 
 
-/* ========================================
-   CARD CONTENT
-======================================== */
+/* Small highlight on pill */
 
-.medicine-card-content {
+.medicine-pill::after {
+    content: "";
 
-    padding:
-        20px 10px 8px;
+    position: absolute;
 
-    display: flex;
+    width: 7px;
+    height: 7px;
 
-    flex-direction: column;
+    top: 7px;
+    right: 10px;
 
-    flex: 1;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.85);
 }
 
 
-/* CATEGORY */
+/* =========================================================
+   CATEGORY
+   ========================================================= */
 
 .medicine-category {
+    margin: 0 0 9px;
 
-    margin: 0 0 8px;
+    color: #26816c;
 
-    color: #368d70;
-
-    font-size: 11px;
-
+    font-size: 13px;
     font-weight: 750;
 
     text-transform: uppercase;
 
-    letter-spacing: 0.6px;
+    letter-spacing: 0.35px;
 }
 
 
-/* BRAND NAME */
+/* =========================================================
+   MEDICINE NAME
+   ========================================================= */
 
 .medicine-card h2 {
+    margin: 0 0 8px;
 
-    margin: 0 0 6px;
+    color: #102f2b;
 
-    color: #193f38;
-
-    font-size: 21px;
-
+    font-size: 25px;
     font-weight: 750;
 
-    line-height: 1.3;
+    line-height: 1.2;
+
+    letter-spacing: -0.45px;
 }
 
 
-/* GENERIC NAME */
+/* =========================================================
+   GENERIC NAME
+   ========================================================= */
 
 .medicine-generic {
+    margin: 0 0 13px;
 
-    margin: 0 0 12px;
+    color: #607b76;
 
-    color: #6c8580;
+    font-size: 16px;
 
-    font-size: 14px;
+    line-height: 1.45;
 }
 
 
-/* STRENGTH */
+/* =========================================================
+   STRENGTH
+   ========================================================= */
 
 .medicine-strength {
-
     width: fit-content;
 
-    margin-bottom: 17px;
+    margin: 0 0 17px;
 
-    padding:
-        6px 10px;
+    padding: 7px 11px;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
-    background: #e9f6f1;
+    background: #e6f3ef;
 
-    color: #36846b;
+    color: #287b68;
 
-    font-size: 11px;
-
+    font-size: 13px;
     font-weight: 700;
 }
 
 
-/* ========================================
-   CARD FOOTER
-======================================== */
+/* =========================================================
+   PRESCRIPTION BADGE
+   ========================================================= */
 
-.medicine-card-footer {
+.prescription-badge {
+    position: absolute;
 
-    margin-top: auto;
-
-    padding-top: 14px;
+    top: 214px;
+    right: 22px;
 
     display: flex;
-
     align-items: center;
+    gap: 7px;
 
+    padding: 8px 11px;
+
+    border: 1px solid #f6dcc3;
+    border-radius: 9px;
+
+    background: #fff7ef;
+
+    color: #d87822;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+
+.prescription-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+
+/* =========================================================
+   CARD FOOTER
+   ========================================================= */
+
+.medicine-card-footer {
+    margin-top: auto;
+
+    padding-top: 17px;
+
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 
-    gap: 10px;
+    gap: 12px;
 
-    border-top:
-        1px solid #edf1f0;
+    border-top: 1px solid #e9efed;
 }
 
 
 .medicine-manufacturer {
-
     min-width: 0;
 
-    color: #839590;
+    color: #718782;
 
-    font-size: 12px;
+    font-size: 14px;
 
     white-space: nowrap;
 
@@ -914,270 +655,240 @@
 }
 
 
-/* ========================================
-   PRESCRIPTION BADGE
-======================================== */
-
-.prescription-badge {
-
-    flex-shrink: 0;
-
-    padding:
-        7px 10px;
-
-    border-radius: 8px;
-
-    background: #fff4e8;
-
-    color: #d27a31;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-}
-
-
-/* ========================================
+/* =========================================================
    LOADING
-======================================== */
+   ========================================================= */
 
 .medicine-loading {
+    grid-column: 1 / -1;
 
-    grid-column:
-        1 / -1;
+    min-height: 220px;
 
-    padding:
-        60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    text-align: center;
-
-    color: #78908c;
+    gap: 14px;
 
     background: #ffffff;
 
-    border:
-        1px solid #e1ebe8;
+    border: 1px solid #e0ebe8;
+    border-radius: 17px;
 
-    border-radius: 14px;
+    color: #78918c;
 
     font-size: 14px;
 }
 
 
-/* ========================================
+.loading-pill {
+    width: 52px;
+    height: 24px;
+
+    border-radius: 20px;
+
+    transform: rotate(-35deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            #63af96 0%,
+            #63af96 50%,
+            #ffffff 50%,
+            #ffffff 100%
+        );
+
+    box-shadow:
+        0 5px 12px rgba(47, 98, 84, 0.13);
+
+    animation: loadingPulse 1.2s ease-in-out infinite;
+}
+
+
+@keyframes loadingPulse {
+
+    0%,
+    100% {
+        transform: rotate(-35deg) scale(1);
+        opacity: 0.65;
+    }
+
+    50% {
+        transform: rotate(-35deg) scale(1.08);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
    EMPTY STATE
-======================================== */
+   ========================================================= */
 
 .medicine-empty {
+    grid-column: 1 / -1;
 
-    grid-column:
-        1 / -1;
-
-    padding:
-        60px 20px;
+    padding: 65px 30px;
 
     text-align: center;
 
     background: #ffffff;
 
-    border:
-        1px solid #e1ebe8;
+    border: 1px solid #e0ebe8;
+    border-radius: 17px;
 
-    border-radius: 14px;
+    box-shadow:
+        0 6px 20px rgba(31, 72, 65, 0.04);
 }
 
 
 .medicine-empty h3 {
+    margin: 0 0 8px;
 
-    margin: 0 0 7px;
+    color: #294b46;
 
-    color: #30423e;
-
-    font-size: 18px;
+    font-size: 19px;
 }
 
 
 .medicine-empty p {
-
     margin: 0;
 
-    color: #84918e;
+    color: #849994;
 
-    font-size: 13px;
+    font-size: 14px;
 }
 
 
-/* ========================================
+/* =========================================================
    TABLET
-======================================== */
+   ========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
 
-    .medicine-brand {
-
-        min-width: 190px;
-    }
-
-
-    .medicine-nav {
-
-        gap: 18px;
-
-        margin-left: 15px;
-    }
-
-
-    .medicine-nav a {
-
-        font-size: 13px;
-    }
-
-
-    .medicine-list {
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-
-    .hero-decoration {
-
-        right: 3%;
-    }
-
-}
-
-
-/* ========================================
-   MOBILE NAVIGATION
-======================================== */
-
-@media (max-width: 850px) {
-
-    .medicine-navbar {
-
-        padding:
-            0 20px;
-    }
-
-
-    .medicine-nav {
-
-        display: none;
-    }
-
-
-    .medicine-brand {
-
-        min-width: auto;
-    }
-
-
-    .medicine-nav-right {
-
-        gap: 15px;
-    }
-
-
-    .account-text {
-
-        display: none;
-    }
-
-
-    .medicine-hero {
-
+    .medicine-header {
         min-height: 240px;
 
-        padding:
-            45px 25px;
+        padding: 52px 6% 48px;
     }
 
 
-    .hero-content h1 {
-
-        font-size: 37px;
+    .medicine-header h1 {
+        font-size: 42px;
     }
 
 
-    .hero-decoration {
-
-        right: -70px;
-
-        opacity: 0.25;
+    .medicine-list-section {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 
 
-    .medicine-content {
-
-        padding:
-            28px 20px 60px;
+    .medicine-card h2 {
+        font-size: 22px;
     }
-
 }
 
 
-/* ========================================
-   SMALL MOBILE
-======================================== */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
-    .brand-name strong {
+    .medicine-header {
+        min-height: auto;
 
-        font-size: 18px;
+        padding: 43px 22px 42px;
     }
 
 
-    .brand-name small {
-
-        font-size: 7px;
-
-        letter-spacing: 1.8px;
+    .medicine-header .page-label {
+        font-size: 14px;
     }
 
 
-    .brand-logo {
+    .medicine-header h1 {
+        font-size: 35px;
 
-        width: 36px;
+        letter-spacing: -1px;
+    }
 
-        height: 36px;
+
+    .medicine-header > p:last-child {
+        font-size: 15px;
+    }
+
+
+    .medicine-list-section {
+        padding: 24px 18px 50px;
+    }
+
+
+    .medicine-search {
+        height: 60px;
+
+        padding: 0 18px;
+
+        font-size: 15px;
     }
 
 
     .medicine-list {
-
         grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+
+    .medicine-card {
+        padding: 18px;
     }
 
 
     .medicine-card-image {
-
-        height: 180px;
+        height: 175px;
     }
 
 
-    .hero-content h1 {
+    .medicine-card h2 {
+        font-size: 22px;
+    }
 
+
+    .medicine-generic {
+        font-size: 15px;
+    }
+
+
+    .prescription-badge {
+        top: 207px;
+        right: 18px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .medicine-header h1 {
         font-size: 31px;
-
-        letter-spacing: -0.8px;
     }
 
 
-    .hero-description {
-
-        font-size: 14px;
+    .medicine-card-image {
+        height: 155px;
     }
 
 
-    .medicine-search input {
+    .prescription-badge {
+        position: static;
 
-        height: 55px;
+        width: fit-content;
 
-        font-size: 14px;
+        margin: -5px 0 15px;
     }
-
 }
