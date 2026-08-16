@@ -53,10 +53,6 @@ registerForm.addEventListener("submit", async function (event) {
 );
 
 
-        /*
-         * Registration successful
-         */
-
         registerMessage.style.color = "#438f89";
 
         registerMessage.textContent =
@@ -71,10 +67,6 @@ registerForm.addEventListener("submit", async function (event) {
 
 
     } catch (error) {
-
-        /*
-         * Registration failed
-         */
 
         registerMessage.style.color = "#d05b5b";
 
@@ -93,23 +85,12 @@ registerForm.addEventListener("submit", async function (event) {
 
 });
 
-
-/*
- * Convert backend validation errors
- * into a readable message.
- */
-
 function getRegisterErrorMessage(error) {
 
     if (!error) {
         return "Registration failed. Please try again.";
     }
 
-
-    /*
-     * If apiRequest already returns
-     * a readable error message.
-     */
 
     if (typeof error.message === "string") {
 

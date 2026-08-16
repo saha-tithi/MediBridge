@@ -17,13 +17,11 @@ loginForm.addEventListener("submit", async function (event) {
         .getElementById("password")
         .value;
 
-
-    // Clear previous message
     loginMessage.textContent = "";
     loginMessage.style.color = "#d05b5b";
 
 
-    // Disable button
+    
     loginButton.disabled = true;
     loginButton.textContent = "Logging in...";
 
@@ -45,9 +43,7 @@ loginForm.addEventListener("submit", async function (event) {
         );
 
 
-        /*
-         * Login successful
-         */
+        
 
         localStorage.setItem(
             "access_token",
@@ -80,9 +76,6 @@ loginForm.addEventListener("submit", async function (event) {
 
     } catch (error) {
 
-        /*
-         * Login failed
-         */
 
         loginMessage.style.color = "#d05b5b";
 
@@ -99,11 +92,6 @@ loginForm.addEventListener("submit", async function (event) {
 });
 
 
-/*
- * Convert backend validation errors
- * into a readable message.
- */
-
 function getLoginErrorMessage(error) {
 
     if (!error) {
@@ -111,11 +99,7 @@ function getLoginErrorMessage(error) {
     }
 
 
-    /*
-     * apiRequest already converts
-     * backend errors into readable text.
-     */
-
+    
     if (typeof error.message === "string") {
         return error.message;
     }

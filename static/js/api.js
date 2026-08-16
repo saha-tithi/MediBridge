@@ -10,13 +10,13 @@ async function apiRequest(endpoint, options = {}) {
     };
 
 
-    // Add JSON content type
+   
     if (!(options.body instanceof FormData)) {
         headers["Content-Type"] = "application/json";
     }
 
 
-    // Add authentication token when required
+    
     if (token && options.auth !== false) {
         headers["Authorization"] = `Bearer ${token}`;
     }
@@ -44,18 +44,6 @@ async function apiRequest(endpoint, options = {}) {
 
         let errorMessage = "Request failed. Please try again.";
 
-
-        /*
-         * Django API validation errors
-         *
-         * Example:
-         *
-         * errors: {
-         *     email: [
-         *         "An account with this email already exists."
-         *     ]
-         * }
-         */
 
         if (data.errors && typeof data.errors === "object") {
 
@@ -92,10 +80,7 @@ async function apiRequest(endpoint, options = {}) {
         }
 
 
-        /*
-         * Use API message only when
-         * there are no detailed validation errors.
-         */
+    
 
         else if (data.message) {
 

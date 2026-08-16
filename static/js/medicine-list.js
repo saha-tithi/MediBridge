@@ -1,12 +1,54 @@
-const medicineList = document.getElementById("medicineList");
+/* ========================================
+   MediBridge
+   Medicine List
+======================================== */
 
 
-async function loadMedicines() {
+/* ========================================
+   ELEMENTS
+======================================== */
+
+const medicineList =
+    document.getElementById("medicineList");
+
+const searchInput =
+    document.getElementById("medicineSearch");
+
+
+
+/* ========================================
+   LOAD MEDICINES
+======================================== */
+
+async function loadMedicines(search = "") {
 
     try {
 
-        const data = await apiRequest(
-            "/medicine/",
+        medicineList.innerHTML = `
+            <div class="medicine-loading">
+                Loading medicines...
+            </div>
+        `;
+
+
+        let endpoint = "/medicine/";
+
+
+        /*
+         * Add search query only
+         * when user has entered something.
+         */
+
+        if (search.trim()) {
+
+            endpoint +=
+                `?search=${encodeURIComponent(search.trim())}`;
+
+        }
+
+
+        const medicines = await apiRequest(
+            endpoint,
             {
                 method: "GET",
                 auth: false
@@ -14,138 +56,208 @@ async function loadMedicines() {
         );
 
 
-        console.log("Medicine API response:", data);
+        /*
+         * No medicines found
+         */
 
-
-        medicineList.innerHTML = "";
-
-
-        if (!data || data.length === 0) {
+        if (!medicines.length) {
 
             medicineList.innerHTML = `
+
                 <div class="medicine-empty">
 
                     <h3>
-                        No medicines available
+                        No medicines found
                     </h3>
 
                     <p>
-                        There are currently no medicines available.
+                        Try searching with another medicine,
+                        generic name or brand.
                     </p>
 
                 </div>
+
             `;
 
             return;
         }
 
 
-        data.forEach(function (medicine) {
 
-            const card = document.createElement("article");
+        /*
+         * Create medicine cards
+         */
 
-            card.className = "medicine-card";
+        medicineList.innerHTML = medicines
+            .map(function (medicine) {
 
 
-            card.innerHTML = `
+                /* ==========================
+                   MEDICINE IMAGE
+                =========================== */
 
-                <!-- Medicine Image -->
+                const image =
+                    medicine.image
 
-                <div class="medicine-card-image">
+                    ?
 
-                    ${
-                        medicine.image
-                            ? `
-                                <img
-                                    src="${medicine.image}"
-                                    alt="${medicine.brand_name}"
+                    `
+                        <img
+                            src="${medicine.image}"
+                            alt="${medicine.brand_name}"
+                            loading="lazy"
+                        >
+                    `
+
+                    :
+
+                    `
+                        <div
+                            class="medicine-card-image-placeholder"
+                        >
+                            💊
+                        </div>
+                    `;
+
+
+
+                /* ==========================
+                   PRESCRIPTION BADGE
+                =========================== */
+
+                const prescriptionBadge =
+                    medicine.requires_prescription
+
+                    ?
+
+                    `
+                        <span
+                            class="prescription-badge"
+                        >
+                            Prescription required
+                        </span>
+                    `
+
+                    :
+
+                    "";
+
+
+
+                /* ==========================
+                   CARD
+                =========================== */
+
+                return `
+
+                    <a
+                        href="/medicines/${medicine.id}/"
+                        class="medicine-card"
+                    >
+
+
+                        <!-- IMAGE -->
+
+                        <div
+                            class="medicine-card-image"
+                        >
+
+                            ${image}
+
+                        </div>
+
+
+
+                        <!-- CONTENT -->
+
+                        <div
+                            class="medicine-card-content"
+                        >
+
+
+                            <!-- CATEGORY -->
+
+                            <p
+                                class="medicine-category"
+                            >
+                                ${medicine.category}
+                            </p>
+
+
+
+                            <!-- BRAND NAME -->
+
+                            <h2>
+                                ${medicine.brand_name}
+                            </h2>
+
+
+
+                            <!-- GENERIC NAME -->
+
+                            <p
+                                class="medicine-generic"
+                            >
+                                ${medicine.generic_name}
+                            </p>
+
+
+
+                            <!-- STRENGTH -->
+
+                            <span
+                                class="medicine-strength"
+                            >
+                                ${medicine.strength}
+                            </span>
+
+
+
+                            <!-- FOOTER -->
+
+                            <div
+                                class="medicine-card-footer"
+                            >
+
+
+                                <span
+                                    class="medicine-manufacturer"
+                                    title="${medicine.manufacturer}"
                                 >
-                              `
-                            : `
-                                <div class="medicine-card-image-placeholder">
-                                    💊
-                                </div>
-                              `
-                    }
-
-                </div>
-
-
-                <!-- Medicine Information -->
-
-                <p class="medicine-category">
-                    ${medicine.category}
-                </p>
-
-
-                <h2>
-                    ${medicine.brand_name}
-                </h2>
-
-
-                <p class="medicine-generic">
-                    ${medicine.generic_name}
-                </p>
-
-
-                <span class="medicine-strength">
-                    ${medicine.strength}
-                </span>
-
-
-                <!-- Footer -->
-
-                <div class="medicine-card-footer">
-
-                    <span class="medicine-manufacturer">
-                        ${medicine.manufacturer}
-                    </span>
-
-
-                    ${
-                        medicine.requires_prescription
-                            ? `
-                                <span class="prescription-badge">
-                                    Prescription required
+                                    ${medicine.manufacturer}
                                 </span>
-                              `
-                            : ""
-                    }
-
-                </div>
-
-            `;
 
 
-            /*
-             * Clicking the medicine card
-             * will open the detail page.
-             */
-
-            card.style.cursor = "pointer";
-
-            card.addEventListener("click", function () {
-
-                window.location.href =
-                    `/medicines/${medicine.id}/`;
-
-            });
+                                ${prescriptionBadge}
 
 
-            medicineList.appendChild(card);
-
-        });
+                            </div>
 
 
-    } catch (error) {
+                        </div>
+
+
+                    </a>
+
+                `;
+
+            })
+            .join("");
+
+
+    }
+
+
+    catch (error) {
 
         console.error(
-            "Failed to load medicines:",
+            "Medicine loading error:",
             error
         );
 
 
         medicineList.innerHTML = `
+
             <div class="medicine-empty">
 
                 <h3>
@@ -153,10 +265,11 @@ async function loadMedicines() {
                 </h3>
 
                 <p>
-                    Please try again later.
+                    Please try again in a moment.
                 </p>
 
             </div>
+
         `;
 
     }
@@ -164,4 +277,40 @@ async function loadMedicines() {
 }
 
 
+
+/* ========================================
+   INITIAL LOAD
+======================================== */
+
 loadMedicines();
+
+
+
+/* ========================================
+   SEARCH
+======================================== */
+
+let searchTimeout;
+
+
+searchInput.addEventListener(
+    "input",
+    function () {
+
+
+        clearTimeout(searchTimeout);
+
+
+        searchTimeout = setTimeout(
+            function () {
+
+                loadMedicines(
+                    searchInput.value
+                );
+
+            },
+            350
+        );
+
+    }
+);

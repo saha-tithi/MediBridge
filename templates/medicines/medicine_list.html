@@ -16,54 +16,297 @@ Browse Medicines | MediBridge
 {% endblock %}
 
 
+
 {% block content %}
 
 <main class="medicine-page">
 
 
-    <!-- =================================
-         PAGE HEADER
-    ================================== -->
+    <!-- ========================================
+         NAVIGATION BAR
+    ========================================= -->
 
-    <section class="medicine-header">
+    <header class="medicine-navbar">
 
-        <p class="page-label">
-            MediBridge Pharmacy
-        </p>
 
-        <h1>
-            Browse Medicines
-        </h1>
+        <!-- ====================================
+             MEDIBRIDGE LOGO
+        ===================================== -->
 
-        <p>
-            Find medicines and healthcare products you need.
-        </p>
+        <a
+            href="/dashboard/"
+            class="medicine-brand"
+        >
+
+            <div class="brand-logo">
+                <span>✚</span>
+            </div>
+
+
+            <div class="brand-name">
+
+                <strong>
+                    MediBridge
+                </strong>
+
+                <small>
+                    PHARMACY
+                </small>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- ====================================
+             MAIN NAVIGATION
+        ===================================== -->
+
+        <nav class="medicine-nav">
+
+
+            <a
+                href="/dashboard/"
+            >
+
+                <span class="nav-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="/medicines/"
+                class="active"
+            >
+
+                <span class="nav-icon">
+                    💊
+                </span>
+
+                <span>
+                    Medicines
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="#"
+            >
+
+                <span class="nav-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Orders
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="#"
+            >
+
+                <span class="nav-icon">
+                    ▱
+                </span>
+
+                <span>
+                    Upload Prescription
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+
+        <!-- ====================================
+             RIGHT SIDE
+        ===================================== -->
+
+        <div class="medicine-nav-right">
+
+
+            <!-- CART -->
+
+            <a
+                href="#"
+                class="cart-link"
+            >
+
+                <span class="cart-icon">
+                    🛒
+                </span>
+
+                <span class="cart-count">
+                    0
+                </span>
+
+            </a>
+
+
+
+            <!-- ACCOUNT -->
+
+            <a
+                href="#"
+                class="account-link"
+            >
+
+                <span class="account-circle">
+                    👤
+                </span>
+
+                <span class="account-text">
+                    My Account
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ========================================
+         HERO SECTION
+    ========================================= -->
+
+    <section class="medicine-hero">
+
+
+        <div class="hero-content">
+
+
+            <p class="hero-label">
+                MediBridge Pharmacy
+            </p>
+
+
+            <h1>
+                Find the right medicine
+            </h1>
+
+
+            <p class="hero-description">
+                Browse our medicine collection and find
+                what you need with ease.
+            </p>
+
+
+        </div>
+
+
+
+        <!-- ====================================
+             DECORATIVE PHARMACY ILLUSTRATION
+        ===================================== -->
+
+        <div class="hero-decoration">
+
+
+            <div class="medicine-bottle">
+
+                <span>
+                    +
+                </span>
+
+            </div>
+
+
+            <div class="medicine-tablets">
+
+                <span>●</span>
+                <span>●</span>
+
+                <br>
+
+                <span>●</span>
+                <span>●</span>
+
+                <br>
+
+                <span>●</span>
+                <span>●</span>
+
+            </div>
+
+
+            <span class="hero-plus plus-one">
+                +
+            </span>
+
+
+            <span class="hero-plus plus-two">
+                +
+            </span>
+
+
+        </div>
+
 
     </section>
 
 
 
-    <!-- =================================
-         MEDICINE LIST
-    ================================== -->
+    <!-- ========================================
+         MEDICINE CONTENT
+    ========================================= -->
 
-    <section class="medicine-list-section">
+    <section class="medicine-content">
+
+
+        <!-- ====================================
+             SEARCH
+        ===================================== -->
+
+        <div class="medicine-search">
+
+            <input
+                type="text"
+                id="medicineSearch"
+                placeholder="Search by medicine, generic name or brand..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+
+        <!-- ====================================
+             MEDICINE LIST
+        ===================================== -->
 
         <div
             id="medicineList"
             class="medicine-list"
         >
 
-            <!--
-                Medicines will be loaded here
-                using the Medicine API.
-            -->
-
             <div class="medicine-loading">
+
                 Loading medicines...
+
             </div>
 
         </div>
+
 
     </section>
 
