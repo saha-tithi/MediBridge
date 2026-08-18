@@ -57,3 +57,13 @@ def medicine_list_page(request):
             "medicines": medicines,
         },
     )
+def medicine_detail_page(request, pk):
+    medicine = Medicine.objects.select_related("category").prefetch_related("inventories").get(pk=pk)
+
+    return render(
+        request,
+        "medicines/medicine_detail.html",
+        {
+            "medicine": medicine,
+        },
+    )

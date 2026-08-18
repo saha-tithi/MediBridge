@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+{{ medicine.brand_name }} | MediBridge
+{% endblock %}
+
+
+<!-- =========================================
+     HIDE NAVBAR ON MEDICINE DETAIL
+========================================= -->
+
+{% block navbar %}
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/medicine_detail.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="medicine-detail-page">
+
+
+    <!-- =====================================
+         BACK LINK
+    ====================================== -->
+
+    <div class="medicine-detail-container">
+
+        <a
+            href="/medicines/"
+            class="back-link"
+        >
+            <span>←</span>
+            <span>Back</span>
+        </a>
+
+
+
+        <!-- =====================================
+             MAIN DETAIL
+        ====================================== -->
+
+        <section class="medicine-detail">
+
+
+            <!-- =================================
+                 LEFT — IMAGE
+            ================================== -->
+
+            <div class="medicine-detail-visual">
+
+                <div class="medicine-detail-image">
+
+                    {% if medicine.image %}
+
+                        <img
+                            src="{{ medicine.image.url }}"
+                            alt="{{ medicine.brand_name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="medicine-image-placeholder">
+                            💊
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 RIGHT — INFORMATION
+            ================================== -->
+
+            <div class="medicine-detail-info">
+
+
+                <!-- Category -->
+
+                <span class="medicine-category">
+
+                    {{ medicine.category.name }}
+
+                </span>
+
+
+
+                <!-- Brand name -->
+
+                <h1>
+
+                    {{ medicine.brand_name }}
+
+                </h1>
+
+
+
+                <!-- Generic -->
+
+                <p class="generic-name">
+
+                    {{ medicine.generic_name }}
+
+                </p>
+
+
+
+                <!-- =================================
+                     PRESCRIPTION BADGE
+                ================================== -->
+
+                {% if medicine.requires_prescription %}
+
+                    <div class="prescription-badge">
+
+                        <span class="prescription-badge-icon">
+                            ▣
+                        </span>
+
+                        Prescription required
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- =================================
+                     INVENTORY
+                ================================== -->
+
+                {% with inventory=medicine.inventories.first %}
+
+
+                    <!-- =================================
+                         BASIC INFORMATION
+                    ================================== -->
+
+                    <div class="medicine-info-grid">
+
+
+                        <!-- Strength -->
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Strength
+                            </span>
+
+                            <strong>
+                                {{ medicine.strength }}
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- Manufacturer -->
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Manufacturer
+                            </span>
+
+                            <strong>
+                                {{ medicine.manufacturer }}
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- Expiry Date -->
+
+                        {% if inventory and inventory.expiry_date %}
+
+                            <div class="info-item">
+
+                                <span class="info-label">
+                                    Expiry Date
+                                </span>
+
+                                <strong>
+                                    {{ inventory.expiry_date|date:"M Y" }}
+                                </strong>
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         DESCRIPTION
+                    ================================== -->
+
+                    {% if medicine.description %}
+
+                        <div class="medicine-description">
+
+                            <h2>
+                                About this medicine
+                            </h2>
+
+                            <p>
+                                {{ medicine.description }}
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+                    <!-- =================================
+                         PURCHASE SECTION
+                    ================================== -->
+
+                    <div class="medicine-purchase">
+
+                        {% if inventory and inventory.is_available and inventory.stock > 0 %}
+
+
+                            <div class="purchase-price">
+
+                                <span>
+                                    Price
+                                </span>
+
+                                <strong>
+                                    ₹{{ inventory.selling_price }}
+                                </strong>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="add-to-cart-button"
+                                data-medicine-id="{{ medicine.id }}"
+                            >
+
+                                Add to Cart
+
+                            </button>
+
+
+                        {% else %}
+
+                            <div class="unavailable-message">
+
+                                Currently unavailable
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                {% endwith %}
+
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/medicine_detail.js' %}"></script>
+
+{% endblock %}

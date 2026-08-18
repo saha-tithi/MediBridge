@@ -3,11 +3,6 @@ const medicineSearch = document.getElementById("medicineSearch");
 
 let searchTimeout = null;
 
-
-/* =========================================================
-   LOAD MEDICINES
-   ========================================================= */
-
 async function loadMedicines(search = "") {
 
     medicineList.innerHTML = `
@@ -73,9 +68,6 @@ async function loadMedicines(search = "") {
 }
 
 
-/* =========================================================
-   RENDER MEDICINES
-   ========================================================= */
 
 function renderMedicines(medicines) {
 
@@ -103,10 +95,7 @@ function renderMedicines(medicines) {
     medicineList.innerHTML = medicines
         .map(function (medicine) {
 
-            /* -----------------------------------------
-               IMAGE
-            ----------------------------------------- */
-
+            
             const imageHTML = medicine.image
 
                 ? `
@@ -121,10 +110,7 @@ function renderMedicines(medicines) {
                 `;
 
 
-            /* -----------------------------------------
-               PRESCRIPTION BADGE
-            ----------------------------------------- */
-
+           
             const prescriptionHTML =
                 medicine.requires_prescription
 
@@ -143,10 +129,7 @@ function renderMedicines(medicines) {
                     : "";
 
 
-            /* -----------------------------------------
-               CARD
-            ----------------------------------------- */
-
+            
             return `
                 <a
                     href="/medicines/${encodeURIComponent(medicine.id)}/"
@@ -227,11 +210,6 @@ function renderMedicines(medicines) {
         .join("");
 }
 
-
-/* =========================================================
-   SEARCH
-   ========================================================= */
-
 if (medicineSearch) {
 
     medicineSearch.addEventListener(
@@ -257,9 +235,6 @@ if (medicineSearch) {
 }
 
 
-/* =========================================================
-   HTML ESCAPE
-   ========================================================= */
 
 function escapeHTML(value) {
 
@@ -280,10 +255,5 @@ function escapeHTML(value) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
-
-
-/* =========================================================
-   INITIAL LOAD
-   ========================================================= */
 
 loadMedicines();

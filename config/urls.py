@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from medicine.views import medicine_list_page
+from medicine.views import medicine_list_page,medicine_detail_page
 
 
 
@@ -33,6 +33,7 @@ urlpatterns = [
     path("api/v1/orders/",include("orders.urls"),),
 
     path("medicines/", medicine_list_page, name="medicine-list-page"),
+    path("medicines/<uuid:pk>/",medicine_detail_page,name="medicine-detail-page",),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT,)

@@ -18,15 +18,12 @@
 </title>
 
 
-<!-- Global CSS -->
+
 
 <link
     rel="stylesheet"
     href="{% static 'css/base.css' %}"
 >
-
-
-<!-- Page CSS -->
 
 {% block extra_css %}
 {% endblock %}
@@ -35,14 +32,10 @@
 </head>
 
 <body>
-<!-- =========================================
-     NAVBAR
-========================================== -->
 
+{% if request.resolver_match.url_name != 'login-page' and request.resolver_match.url_name != 'register-page' and request.resolver_match.url_name != 'medicine-detail-page' %}
 <nav class="main-navbar">
 
-
-    <!-- LOGO -->
 
     <a
         href="/medicines/"
@@ -66,10 +59,6 @@
         </span>
 
     </a>
-
-
-
-    <!-- NAVIGATION -->
 
     <div class="navbar-links">
 
@@ -103,13 +92,8 @@
     </div>
 
 
-
-    <!-- RIGHT SIDE -->
-
     <div class="navbar-right">
 
-
-        <!-- CART -->
 
         <a
             href="/cart/"
@@ -130,9 +114,6 @@
 
         </a>
 
-
-
-        <!-- PROFILE -->
 
         <a
             href="/profile/"
@@ -158,20 +139,10 @@
 
 </nav>
 
-
-
-<!-- =========================================
-     PAGE CONTENT
-========================================== -->
+{% endif %}
 
 {% block content %}
 {% endblock %}
-
-
-
-<!-- =========================================
-     PAGE JAVASCRIPT
-========================================== -->
 
 {% block extra_js %}
 {% endblock %}

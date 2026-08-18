@@ -393,11 +393,6 @@ body {
     transform: translateY(-1px);
 }
 
-
-/* =========================================
-   RESPONSIVE NAVBAR
-========================================= */
-
 @media (max-width: 1100px) {
 
     .main-navbar {
