@@ -506,3 +506,29 @@ body {
     }
 
 }
+/* =========================================
+   ACTIVE CART
+========================================= */
+
+.cart-link.active {
+    background: #eef8f5;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(61, 151, 130, 0.08);
+}
+
+
+/* Make the cart icon slightly stronger */
+
+.cart-link.active .cart-icon {
+    transform: scale(1.08);
+}
+
+
+/* =========================================
+   ACTIVE PROFILE
+========================================= */
+
+.profile-link.active {
+    background: #eef8f5;
+    border-radius: 24px;
+}

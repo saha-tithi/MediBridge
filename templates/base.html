@@ -6,36 +6,43 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>
-    {% block title %}MediBridge{% endblock %}
-</title>
-
-
+    <title>
+        {% block title %}MediBridge{% endblock %}
+    </title>
 
 
-<link
-    rel="stylesheet"
-    href="{% static 'css/base.css' %}"
->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base.css' %}"
+    >
+   
 
-{% block extra_css %}
-{% endblock %}
 
+    {% block extra_css %}
+    {% endblock %}
 
 </head>
 
+
 <body>
 
+
 {% if request.resolver_match.url_name != 'login-page' and request.resolver_match.url_name != 'register-page' and request.resolver_match.url_name != 'medicine-detail-page' %}
+
+
 <nav class="main-navbar">
 
+
+    <!-- =====================================
+         LOGO
+    ====================================== -->
 
     <a
         href="/medicines/"
@@ -60,44 +67,87 @@
 
     </a>
 
+
+
+    <!-- =====================================
+         NAVIGATION LINKS
+    ====================================== -->
+
     <div class="navbar-links">
 
 
+        <!-- Medicines -->
+
         <a
             href="/medicines/"
-            class="nav-link active"
+            class="nav-link {% if request.resolver_match.url_name == 'medicine-list-page' %}active{% endif %}"
         >
-            <span class="nav-icon">💊</span>
-            <span>Medicines</span>
+
+            <span class="nav-icon">
+                💊
+            </span>
+
+            <span>
+                Medicines
+            </span>
+
         </a>
 
+
+
+        <!-- Orders -->
 
         <a
             href="/orders/"
-            class="nav-link"
+            class="nav-link {% if request.resolver_match.url_name == 'orders-page' %}active{% endif %}"
         >
-            <span class="nav-icon">▣</span>
-            <span>Orders</span>
+
+            <span class="nav-icon">
+                ▣
+            </span>
+
+            <span>
+                Orders
+            </span>
+
         </a>
 
+
+
+        <!-- Upload Prescription -->
 
         <a
             href="/upload-prescription/"
-            class="nav-link"
+            class="nav-link {% if request.resolver_match.url_name == 'upload-prescription-page' %}active{% endif %}"
         >
-            <span class="nav-icon">□</span>
-            <span>Upload Prescription</span>
+
+            <span class="nav-icon">
+                □
+            </span>
+
+            <span>
+                Upload Prescription
+            </span>
+
         </a>
+
 
     </div>
 
 
+
+    <!-- =====================================
+         RIGHT SIDE
+    ====================================== -->
+
     <div class="navbar-right">
 
 
+        <!-- CART -->
+
         <a
             href="/cart/"
-            class="cart-link"
+            class="cart-link {% if request.resolver_match.url_name == 'cart-page' %}active{% endif %}"
             aria-label="Cart"
         >
 
@@ -115,9 +165,12 @@
         </a>
 
 
+
+        <!-- PROFILE -->
+
         <a
             href="/profile/"
-            class="profile-link"
+            class="profile-link {% if request.resolver_match.url_name == 'profile-page' %}active{% endif %}"
         >
 
             <span class="profile-icon">
@@ -129,7 +182,7 @@
             </span>
 
             <span class="profile-arrow">
-               ⌄
+                ⌄
             </span>
 
         </a>
@@ -137,15 +190,22 @@
 
     </div>
 
+
 </nav>
 
+
 {% endif %}
+
+
 
 {% block content %}
 {% endblock %}
 
+
+
 {% block extra_js %}
 {% endblock %}
+
 
 </body>
 

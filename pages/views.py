@@ -9,3 +9,5 @@ def login_page(request):
 def register_page(request):
     return render(request, "register.html")
 
+def cart_page(request):
+    return render(request, "cart/cart.html")

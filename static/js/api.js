@@ -3,22 +3,29 @@ const API_BASE_URL = "/api/v1";
 
 async function apiRequest(endpoint, options = {}) {
 
-    const token = localStorage.getItem("access_token");
+    const token =
+        localStorage.getItem("access_token");
+
 
     const headers = {
         ...options.headers
     };
 
 
-   
     if (!(options.body instanceof FormData)) {
-        headers["Content-Type"] = "application/json";
+
+        headers["Content-Type"] =
+            "application/json";
     }
 
 
-    
-    if (token && options.auth !== false) {
-        headers["Authorization"] = `Bearer ${token}`;
+    if (
+        token &&
+        options.auth !== false
+    ) {
+
+        headers["Authorization"] =
+            `Bearer ${token}`;
     }
 
 
@@ -31,7 +38,9 @@ async function apiRequest(endpoint, options = {}) {
     );
 
 
-    const contentType = response.headers.get("content-type");
+    const contentType =
+        response.headers.get("content-type");
+
 
     const data =
         contentType &&
@@ -42,49 +51,62 @@ async function apiRequest(endpoint, options = {}) {
 
     if (!response.ok) {
 
-        let errorMessage = "Request failed. Please try again.";
+        let errorMessage =
+            "Request failed. Please try again.";
 
 
-        if (data.errors && typeof data.errors === "object") {
+        if (
+            data.errors &&
+            typeof data.errors === "object"
+        ) {
 
             const messages = [];
 
 
-            Object.values(data.errors).forEach(function (errors) {
+            Object.values(data.errors)
+                .forEach(function (errors) {
 
-                if (Array.isArray(errors)) {
+                    if (Array.isArray(errors)) {
 
-                    errors.forEach(function (message) {
+                        errors.forEach(function (message) {
 
-                        if (typeof message === "string") {
-                            messages.push(message);
-                        }
+                            if (
+                                typeof message === "string"
+                            ) {
 
-                    });
+                                messages.push(message);
 
-                }
+                            }
 
-                else if (typeof errors === "string") {
+                        });
 
-                    messages.push(errors);
+                    }
 
-                }
+                    else if (
+                        typeof errors === "string"
+                    ) {
 
-            });
+                        messages.push(errors);
+
+                    }
+
+                });
 
 
             if (messages.length > 0) {
-                errorMessage = messages.join(" ");
+
+                errorMessage =
+                    messages.join(" ");
+
             }
 
         }
 
 
-    
-
         else if (data.message) {
 
-            errorMessage = data.message;
+            errorMessage =
+                data.message;
 
         }
 

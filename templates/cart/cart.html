@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Your Cart | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/cart.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="cart-page">
+
+    <div class="cart-container">
+
+
+        <!-- ================================
+             PAGE HEADER
+        ================================= -->
+
+        <section class="cart-header">
+
+            <div class="cart-header-text">
+
+                <span class="cart-eyebrow">
+                    MEDIBRIDGE PHARMACY
+                </span>
+
+                <h1>
+                    Your Cart
+                </h1>
+
+                <p>
+                    Review the medicines you've selected before continuing.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/medicines/"
+                class="continue-shopping-top"
+            >
+                ← Continue Shopping
+            </a>
+
+        </section>
+
+
+
+        <!-- ================================
+             CART LAYOUT
+        ================================= -->
+
+        <section
+            id="cartLayout"
+            class="cart-layout"
+        >
+
+
+            <!-- ============================
+                 CART ITEMS
+            ============================= -->
+
+            <div
+                id="cartItems"
+                class="cart-items"
+            >
+
+                <div class="cart-loading">
+
+                    <div class="loading-circle"></div>
+
+                    <p>
+                        Loading your cart...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ============================
+                 ORDER SUMMARY
+            ============================= -->
+
+            <aside
+                id="orderSummary"
+                class="order-summary"
+            >
+
+                <h2>
+                    Order Summary
+                </h2>
+
+
+                <div class="summary-line">
+
+                    <span>
+                        Items
+                    </span>
+
+                    <strong id="summaryItems">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-divider"></div>
+
+
+                <div class="summary-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="summaryTotal">
+                        ₹0.00
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="checkoutButton"
+                    class="checkout-button"
+                    disabled
+                >
+                    Proceed to Checkout
+                </button>
+
+
+                <p class="checkout-note">
+                    Final prescription verification, if required,
+                    will be completed before your order is processed.
+                </p>
+
+            </aside>
+
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/cart.js' %}"></script>
+
+{% endblock %}
