@@ -1,3 +1,6 @@
+/* =========================================
+   MEDICINE DETAIL CART
+========================================= */
 
 const cartAction =
     document.getElementById("medicineCartAction");
@@ -8,14 +11,25 @@ if (cartAction) {
     const medicineId =
         cartAction.dataset.medicineId;
 
+    const availableStock =
+        parseInt(
+            cartAction.dataset.stock,
+            10
+        );
 
-    
+
+    /* =========================================
+       INITIAL LOAD
+    ========================================= */
 
     loadMedicineCart();
 
 
 
-    
+    /* =========================================
+       LOAD CART
+    ========================================= */
+
     async function loadMedicineCart() {
 
         try {
@@ -58,17 +72,15 @@ if (cartAction) {
                         existingItem.quantity
                     );
 
-                }
-
-                else {
+                } else {
 
                     showAddButton();
 
                 }
 
-            }
+                updateNavbarCartCount(cart);
 
-            else {
+            } else {
 
                 showAddButton();
 
@@ -82,8 +94,6 @@ if (cartAction) {
                 error
             );
 
-            
-
             showAddButton();
 
         }
@@ -92,7 +102,10 @@ if (cartAction) {
 
 
 
-    
+    /* =========================================
+       SHOW ADD BUTTON
+    ========================================= */
+
     function showAddButton() {
 
         cartAction.innerHTML = `
@@ -123,7 +136,10 @@ if (cartAction) {
 
 
 
-    
+    /* =========================================
+       ADD TO CART
+    ========================================= */
+
     async function addToCart() {
 
         const button =
@@ -154,17 +170,9 @@ if (cartAction) {
                 );
 
 
-            console.log(
-                "Added to cart:",
-                response
-            );
-
-
             const cart =
                 response.data;
 
-
-            
 
             const cartItem =
                 cart.items.find(
@@ -189,8 +197,6 @@ if (cartAction) {
             }
 
 
-            
-
             updateNavbarCartCount(cart);
 
 
@@ -202,16 +208,21 @@ if (cartAction) {
             );
 
 
-            alert(
-                error.message ||
-                "Unable to add medicine to cart."
-            );
-
-
             button.disabled = false;
 
             button.textContent =
                 "Add to Cart";
+
+
+            /*
+             * The backend is the source
+             * of truth for stock.
+             */
+
+            showCartMessage(
+                error.message ||
+                "Unable to add medicine to cart."
+            );
 
         }
 
@@ -219,70 +230,118 @@ if (cartAction) {
 
 
 
-    
+    /* =========================================
+       SHOW QUANTITY CONTROL
+    ========================================= */
+
     function showQuantityControl(
         cartItemId,
         quantity
     ) {
 
+        const maximumReached =
+            quantity >= availableStock;
+
+
         cartAction.innerHTML = `
 
-            <div class="medicine-quantity-control">
+            <div class="medicine-quantity-wrapper">
 
-                <button
-                    type="button"
-                    class="medicine-quantity-button"
-                    id="decreaseQuantity"
-                >
-                    −
-                </button>
+                <div class="medicine-quantity-control">
 
-
-                <span
-                    class="medicine-quantity-value"
-                    id="medicineQuantity"
-                >
-                    ${quantity}
-                </span>
+                    <button
+                        type="button"
+                        class="medicine-quantity-button"
+                        id="decreaseQuantity"
+                        aria-label="Decrease quantity"
+                    >
+                        −
+                    </button>
 
 
-                <button
-                    type="button"
-                    class="medicine-quantity-button"
-                    id="increaseQuantity"
-                >
-                    +
-                </button>
+                    <span
+                        class="medicine-quantity-value"
+                        id="medicineQuantity"
+                    >
+                        ${quantity}
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="medicine-quantity-button"
+                        id="increaseQuantity"
+                        aria-label="Increase quantity"
+                        ${maximumReached ? "disabled" : ""}
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                ${
+                    maximumReached
+                    ?
+                    `
+                        <p class="stock-limit-message">
+                            Maximum available quantity reached.
+                        </p>
+                    `
+                    :
+                    ""
+                }
 
             </div>
 
         `;
 
 
-        document
-            .getElementById("decreaseQuantity")
-            .addEventListener(
-                "click",
-                function () {
-
-                    if (quantity > 1) {
-
-                        updateQuantity(
-                            cartItemId,
-                            quantity - 1
-                        );
-
-                    }
-
-                }
+        const decreaseButton =
+            document.getElementById(
+                "decreaseQuantity"
             );
 
 
-        document
-            .getElementById("increaseQuantity")
-            .addEventListener(
-                "click",
-                function () {
+        const increaseButton =
+            document.getElementById(
+                "increaseQuantity"
+            );
+
+
+        /*
+         * Decrease
+         */
+
+        decreaseButton.addEventListener(
+            "click",
+            function () {
+
+                if (quantity > 1) {
+
+                    updateQuantity(
+                        cartItemId,
+                        quantity - 1
+                    );
+
+                }
+
+            }
+        );
+
+
+        /*
+         * Increase
+         */
+
+        increaseButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    quantity <
+                    availableStock
+                ) {
 
                     updateQuantity(
                         cartItemId,
@@ -290,10 +349,17 @@ if (cartAction) {
                     );
 
                 }
-            );
+
+            }
+        );
 
     }
 
+
+
+    /* =========================================
+       UPDATE QUANTITY
+    ========================================= */
 
     async function updateQuantity(
         cartItemId,
@@ -353,10 +419,25 @@ if (cartAction) {
             );
 
 
-            alert(
+            /*
+             * Important:
+             *
+             * The server still validates
+             * the actual stock.
+             */
+
+            showCartMessage(
                 error.message ||
                 "Unable to update quantity."
             );
+
+
+            /*
+             * Refresh cart state so the UI
+             * matches the server.
+             */
+
+            await loadMedicineCart();
 
         }
 
@@ -364,7 +445,10 @@ if (cartAction) {
 
 
 
-    
+    /* =========================================
+       NAVBAR CART COUNT
+    ========================================= */
+
     function updateNavbarCartCount(cart) {
 
         const cartCount =
@@ -410,6 +494,63 @@ if (cartAction) {
 
         cartCount.textContent =
             totalItems;
+
+    }
+
+
+
+    /* =========================================
+       USER-FRIENDLY CART MESSAGE
+    ========================================= */
+
+    function showCartMessage(message) {
+
+        let messageElement =
+            document.getElementById(
+                "cartActionMessage"
+            );
+
+
+        if (!messageElement) {
+
+            messageElement =
+                document.createElement(
+                    "p"
+                );
+
+            messageElement.id =
+                "cartActionMessage";
+
+            messageElement.className =
+                "cart-action-message";
+
+
+            cartAction.appendChild(
+                messageElement
+            );
+
+        }
+
+
+        messageElement.textContent =
+            message;
+
+
+        setTimeout(
+            function () {
+
+                if (
+                    messageElement &&
+                    messageElement.parentNode
+                ) {
+
+                    messageElement.remove();
+
+                }
+
+            },
+            3000
+        );
 
     }
 

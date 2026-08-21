@@ -584,3 +584,113 @@
 
     background: #ffffff;
 }
+.medicine-quantity-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+
+.medicine-quantity-control {
+
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+
+    border: 1px solid #d8e8e4;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+
+.medicine-quantity-button {
+
+    width: 54px;
+    height: 56px;
+
+    border: none;
+
+    background: #eef8f5;
+
+    color: #25866b;
+
+    font-size: 25px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.medicine-quantity-button:hover:not(:disabled) {
+
+    background: #dff1eb;
+
+    color: #176c58;
+
+}
+
+
+.medicine-quantity-button:disabled {
+
+    background: #f4f7f6;
+
+    color: #aabbb7;
+
+    cursor: not-allowed;
+
+    opacity: 0.7;
+}
+
+
+.medicine-quantity-value {
+
+    min-width: 58px;
+
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    color: #183f39;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.stock-limit-message {
+
+    margin: 0;
+
+    color: #718783;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    text-align: right;
+}
+
+.cart-action-message {
+
+    margin: 8px 0 0;
+
+    color: #c46b5c;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    text-align: right;
+}
