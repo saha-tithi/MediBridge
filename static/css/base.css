@@ -1,6 +1,3 @@
-/* =========================================
-   MediBridge — Global Base
-========================================= */
 
 * {
     box-sizing: border-box;
@@ -27,10 +24,6 @@ body {
 }
 
 
-/* =========================================
-   NAVBAR
-========================================= */
-
 .main-navbar {
     width: 100%;
     height: 84px;
@@ -51,12 +44,6 @@ body {
     box-shadow:
         0 2px 12px rgba(35, 76, 69, 0.035);
 }
-
-
-/* =========================================
-   LOGO
-========================================= */
-
 .navbar-logo {
     display: flex;
     align-items: center;
@@ -67,9 +54,6 @@ body {
 
     flex-shrink: 0;
 }
-
-
-/* Shield */
 
 .logo-shield {
     width: 48px;
@@ -97,10 +81,6 @@ body {
         8% 14%
     );
 }
-
-
-/* Logo text */
-
 .logo-text {
     display: flex;
     flex-direction: column;
@@ -130,12 +110,6 @@ body {
 
     line-height: 1;
 }
-
-
-/* =========================================
-   NAVIGATION LINKS
-========================================= */
-
 .navbar-links {
     height: 100%;
 
@@ -176,22 +150,13 @@ body {
         background 0.2s ease;
 }
 
-
-/* Hover */
-
 .nav-link:hover {
     color: #25866b;
 }
 
-
-/* Active */
-
 .nav-link.active {
     color: #25866b;
 }
-
-
-/* Active underline */
 
 .nav-link.active::after {
     content: "";
@@ -209,12 +174,6 @@ body {
     border-radius:
         3px 3px 0 0;
 }
-
-
-/* =========================================
-   NAV ICONS
-========================================= */
-
 .nav-icon {
     width: 23px;
     height: 23px;
@@ -233,12 +192,6 @@ body {
 .nav-link.active .nav-icon {
     color: #2f9878;
 }
-
-
-/* =========================================
-   RIGHT SIDE
-========================================= */
-
 .navbar-right {
     display: flex;
     align-items: center;
@@ -247,12 +200,6 @@ body {
 
     flex-shrink: 0;
 }
-
-
-/* =========================================
-   CART
-========================================= */
-
 .cart-link {
     width: 48px;
     height: 48px;
@@ -289,7 +236,7 @@ body {
 }
 
 
-/* Cart count */
+
 
 .cart-count {
     position: absolute;
@@ -317,11 +264,6 @@ body {
 
     border: 2px solid #ffffff;
 }
-
-
-/* =========================================
-   PROFILE
-========================================= */
 
 .profile-link {
     min-height: 48px;
@@ -355,7 +297,7 @@ body {
 }
 
 
-/* Profile circle */
+
 
 .profile-icon {
     width: 42px;
@@ -379,7 +321,6 @@ body {
 }
 
 
-/* Account arrow */
 
 .profile-arrow {
     margin-left: 2px;
@@ -506,28 +447,14 @@ body {
     }
 
 }
-/* =========================================
-   ACTIVE CART
-========================================= */
-
 .cart-link.active {
     background: #eef8f5;
     border-radius: 50%;
     box-shadow: 0 0 0 4px rgba(61, 151, 130, 0.08);
 }
-
-
-/* Make the cart icon slightly stronger */
-
 .cart-link.active .cart-icon {
     transform: scale(1.08);
 }
-
-
-/* =========================================
-   ACTIVE PROFILE
-========================================= */
-
 .profile-link.active {
     background: #eef8f5;
     border-radius: 24px;

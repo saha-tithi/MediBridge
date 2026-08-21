@@ -7,13 +7,6 @@
 {% endblock %}
 
 
-<!-- =========================================
-     HIDE NAVBAR ON MEDICINE DETAIL
-========================================= -->
-
-{% block navbar %}
-{% endblock %}
-
 
 {% block extra_css %}
 
@@ -31,32 +24,28 @@
 <main class="medicine-detail-page">
 
 
-    <!-- =====================================
-         BACK LINK
-    ====================================== -->
-
+   
     <div class="medicine-detail-container">
+
 
         <a
             href="/medicines/"
             class="back-link"
         >
-            <span>←</span>
-            <span>Back</span>
+
+            <span>
+                ←
+            </span>
+
+            <span>
+                Back
+            </span>
+
         </a>
 
 
-
-        <!-- =====================================
-             MAIN DETAIL
-        ====================================== -->
-
         <section class="medicine-detail">
 
-
-            <!-- =================================
-                 LEFT — IMAGE
-            ================================== -->
 
             <div class="medicine-detail-visual">
 
@@ -83,24 +72,18 @@
 
 
 
-            <!-- =================================
-                 RIGHT — INFORMATION
-            ================================== -->
+           
 
             <div class="medicine-detail-info">
 
 
-                <!-- Category -->
-
+                
                 <span class="medicine-category">
 
                     {{ medicine.category.name }}
 
                 </span>
 
-
-
-                <!-- Brand name -->
 
                 <h1>
 
@@ -109,20 +92,11 @@
                 </h1>
 
 
-
-                <!-- Generic -->
-
                 <p class="generic-name">
 
                     {{ medicine.generic_name }}
 
                 </p>
-
-
-
-                <!-- =================================
-                     PRESCRIPTION BADGE
-                ================================== -->
 
                 {% if medicine.requires_prescription %}
 
@@ -140,17 +114,12 @@
 
 
 
-                <!-- =================================
-                     INVENTORY
-                ================================== -->
+               
 
                 {% with inventory=medicine.inventories.first %}
 
 
-                    <!-- =================================
-                         BASIC INFORMATION
-                    ================================== -->
-
+                   
                     <div class="medicine-info-grid">
 
 
@@ -209,9 +178,7 @@
 
 
 
-                    <!-- =================================
-                         DESCRIPTION
-                    ================================== -->
+                    
 
                     {% if medicine.description %}
 
@@ -231,14 +198,14 @@
 
 
 
-                    <!-- =================================
-                         PURCHASE SECTION
-                    ================================== -->
-
+                    
                     <div class="medicine-purchase">
+
 
                         {% if inventory and inventory.is_available and inventory.stock > 0 %}
 
+
+            
 
                             <div class="purchase-price">
 
@@ -253,26 +220,40 @@
                             </div>
 
 
-                            <button
-                                type="button"
-                                class="add-to-cart-button"
+
+                            
+                            <div
+                                id="medicineCartAction"
+                                class="medicine-cart-action"
                                 data-medicine-id="{{ medicine.id }}"
                             >
 
-                                Add to Cart
+                                <button
+                                    type="button"
+                                    class="add-to-cart-button"
+                                    id="addToCartButton"
+                                >
 
-                            </button>
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
 
 
                         {% else %}
 
+
+                           
                             <div class="unavailable-message">
 
                                 Currently unavailable
 
                             </div>
 
+
                         {% endif %}
+
 
                     </div>
 
@@ -282,9 +263,12 @@
 
             </div>
 
+
         </section>
 
+
     </div>
+
 
 </main>
 
@@ -293,6 +277,7 @@
 
 
 {% block extra_js %}
+
 <script src="{% static 'js/api.js' %}"></script>
 
 <script src="{% static 'js/medicine_detail.js' %}"></script>

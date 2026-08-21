@@ -1,149 +1,416 @@
-const addToCartButton =
-    document.querySelector(".add-to-cart-button");
+
+const cartAction =
+    document.getElementById("medicineCartAction");
 
 
-if (addToCartButton) {
+if (cartAction) {
 
-    addToCartButton.addEventListener(
-        "click",
-        async function () {
-
-            const medicineId =
-                this.dataset.medicineId;
+    const medicineId =
+        cartAction.dataset.medicineId;
 
 
-            if (!medicineId) {
+    
 
-                console.error(
-                    "Medicine ID not found."
+    loadMedicineCart();
+
+
+
+    
+    async function loadMedicineCart() {
+
+        try {
+
+            const response =
+                await apiRequest(
+                    "/cart/",
+                    {
+                        method: "GET"
+                    }
                 );
 
-                return;
-            }
+
+            const cart =
+                response.data;
 
 
-            const originalText =
-                this.textContent;
+            if (
+                cart &&
+                cart.items
+            ) {
 
+                const existingItem =
+                    cart.items.find(
+                        function (item) {
 
-            this.disabled = true;
+                            return (
+                                item.medicine_id ===
+                                medicineId
+                            );
 
-            this.textContent =
-                "Adding...";
-
-
-            try {
-
-                const response =
-                    await apiRequest(
-                        "/cart/items/",
-                        {
-                            method: "POST",
-
-                            body: JSON.stringify({
-                                medicine_id: medicineId,
-                                quantity: 1
-                            })
                         }
                     );
 
 
-                console.log(
-                    "Added to cart:",
-                    response
+                if (existingItem) {
+
+                    showQuantityControl(
+                        existingItem.id,
+                        existingItem.quantity
+                    );
+
+                }
+
+                else {
+
+                    showAddButton();
+
+                }
+
+            }
+
+            else {
+
+                showAddButton();
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Unable to load cart:",
+                error
+            );
+
+            
+
+            showAddButton();
+
+        }
+
+    }
+
+
+
+    
+    function showAddButton() {
+
+        cartAction.innerHTML = `
+
+            <button
+                type="button"
+                class="add-to-cart-button"
+                id="addToCartButton"
+            >
+                Add to Cart
+            </button>
+
+        `;
+
+
+        const button =
+            document.getElementById(
+                "addToCartButton"
+            );
+
+
+        button.addEventListener(
+            "click",
+            addToCart
+        );
+
+    }
+
+
+
+    
+    async function addToCart() {
+
+        const button =
+            document.getElementById(
+                "addToCartButton"
+            );
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Adding...";
+
+
+        try {
+
+            const response =
+                await apiRequest(
+                    "/cart/items/",
+                    {
+                        method: "POST",
+
+                        body: JSON.stringify({
+                            medicine_id: medicineId,
+                            quantity: 1
+                        })
+                    }
                 );
 
 
-                this.textContent =
-                    "Added to Cart ✓";
+            console.log(
+                "Added to cart:",
+                response
+            );
 
 
-                /*
-                 * Update navbar cart count
-                 */
-
-                const cartCount =
-                    document.getElementById(
-                        "cartCount"
-                    );
+            const cart =
+                response.data;
 
 
-                if (cartCount) {
+            
 
-                    const cart =
-                        response.data;
+            const cartItem =
+                cart.items.find(
+                    function (item) {
 
+                        return (
+                            item.medicine_id ===
+                            medicineId
+                        );
 
-                    if (
-                        cart &&
-                        cart.items
-                    ) {
-
-                        const totalItems =
-                            cart.items.reduce(
-                                function (
-                                    total,
-                                    item
-                                ) {
-
-                                    return (
-                                        total +
-                                        item.quantity
-                                    );
-
-                                },
-                                0
-                            );
+                    }
+                );
 
 
-                        cartCount.textContent =
-                            totalItems;
+            if (cartItem) {
+
+                showQuantityControl(
+                    cartItem.id,
+                    cartItem.quantity
+                );
+
+            }
+
+
+            
+
+            updateNavbarCartCount(cart);
+
+
+        } catch (error) {
+
+            console.error(
+                "Add to cart error:",
+                error
+            );
+
+
+            alert(
+                error.message ||
+                "Unable to add medicine to cart."
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+                "Add to Cart";
+
+        }
+
+    }
+
+
+
+    
+    function showQuantityControl(
+        cartItemId,
+        quantity
+    ) {
+
+        cartAction.innerHTML = `
+
+            <div class="medicine-quantity-control">
+
+                <button
+                    type="button"
+                    class="medicine-quantity-button"
+                    id="decreaseQuantity"
+                >
+                    −
+                </button>
+
+
+                <span
+                    class="medicine-quantity-value"
+                    id="medicineQuantity"
+                >
+                    ${quantity}
+                </span>
+
+
+                <button
+                    type="button"
+                    class="medicine-quantity-button"
+                    id="increaseQuantity"
+                >
+                    +
+                </button>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById("decreaseQuantity")
+            .addEventListener(
+                "click",
+                function () {
+
+                    if (quantity > 1) {
+
+                        updateQuantity(
+                            cartItemId,
+                            quantity - 1
+                        );
 
                     }
 
                 }
+            );
 
 
-                /*
-                 * Restore button
-                 */
+        document
+            .getElementById("increaseQuantity")
+            .addEventListener(
+                "click",
+                function () {
 
-                setTimeout(
-                    function () {
+                    updateQuantity(
+                        cartItemId,
+                        quantity + 1
+                    );
 
-                        addToCartButton.disabled =
-                            false;
+                }
+            );
 
-                        addToCartButton.textContent =
-                            originalText;
+    }
 
-                    },
-                    1200
+
+    async function updateQuantity(
+        cartItemId,
+        newQuantity
+    ) {
+
+        try {
+
+            const response =
+                await apiRequest(
+                    `/cart/items/${cartItemId}/`,
+                    {
+                        method: "PATCH",
+
+                        body: JSON.stringify({
+                            quantity: newQuantity
+                        })
+                    }
                 );
 
 
-            } catch (error) {
+            const cart =
+                response.data;
 
-                console.error(
-                    "Add to cart error:",
-                    error
+
+            const cartItem =
+                cart.items.find(
+                    function (item) {
+
+                        return (
+                            item.medicine_id ===
+                            medicineId
+                        );
+
+                    }
                 );
 
 
-                alert(
-                    error.message ||
-                    "Unable to add medicine to cart."
+            if (cartItem) {
+
+                showQuantityControl(
+                    cartItem.id,
+                    cartItem.quantity
                 );
-
-
-                this.disabled = false;
-
-                this.textContent =
-                    originalText;
 
             }
 
+
+            updateNavbarCartCount(cart);
+
+
+        } catch (error) {
+
+            console.error(
+                "Quantity update error:",
+                error
+            );
+
+
+            alert(
+                error.message ||
+                "Unable to update quantity."
+            );
+
         }
-    );
+
+    }
+
+
+
+    
+    function updateNavbarCartCount(cart) {
+
+        const cartCount =
+            document.getElementById(
+                "cartCount"
+            );
+
+
+        if (!cartCount) {
+            return;
+        }
+
+
+        if (
+            !cart ||
+            !cart.items
+        ) {
+
+            cartCount.textContent =
+                "0";
+
+            return;
+
+        }
+
+
+        const totalItems =
+            cart.items.reduce(
+                function (
+                    total,
+                    item
+                ) {
+
+                    return (
+                        total +
+                        item.quantity
+                    );
+
+                },
+                0
+            );
+
+
+        cartCount.textContent =
+            totalItems;
+
+    }
 
 }

@@ -39,11 +39,6 @@
 
 <nav class="main-navbar">
 
-
-    <!-- =====================================
-         LOGO
-    ====================================== -->
-
     <a
         href="/medicines/"
         class="navbar-logo"
@@ -67,16 +62,10 @@
 
     </a>
 
-
-
-    <!-- =====================================
-         NAVIGATION LINKS
-    ====================================== -->
-
     <div class="navbar-links">
 
 
-        <!-- Medicines -->
+       
 
         <a
             href="/medicines/"
@@ -95,8 +84,7 @@
 
 
 
-        <!-- Orders -->
-
+        
         <a
             href="/orders/"
             class="nav-link {% if request.resolver_match.url_name == 'orders-page' %}active{% endif %}"
@@ -114,8 +102,7 @@
 
 
 
-        <!-- Upload Prescription -->
-
+       
         <a
             href="/upload-prescription/"
             class="nav-link {% if request.resolver_match.url_name == 'upload-prescription-page' %}active{% endif %}"
@@ -136,14 +123,11 @@
 
 
 
-    <!-- =====================================
-         RIGHT SIDE
-    ====================================== -->
-
+    
     <div class="navbar-right">
 
 
-        <!-- CART -->
+       
 
         <a
             href="/cart/"
@@ -202,7 +186,8 @@
 {% endblock %}
 
 
-
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/navbar.js' %}"></script>
 {% block extra_js %}
 {% endblock %}
 
