@@ -49,7 +49,8 @@ INSTALLED_APPS = [
      "ai_engine",
      "cart",
      "orders",
-     "pages"
+     "pages",
+     "addresses"
 ]
 
 MIDDLEWARE = [

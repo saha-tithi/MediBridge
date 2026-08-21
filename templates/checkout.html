@@ -1,0 +1,440 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+Delivery Details | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/checkout.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="checkout-page">
+
+    <div class="checkout-container">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="checkout-header">
+
+            <h1>
+                Delivery Details
+            </h1>
+
+            <p>
+                Select where you'd like your order delivered.
+            </p>
+
+        </header>
+
+
+
+        <!-- =====================================
+             SAVED ADDRESSES
+        ====================================== -->
+
+        <section class="address-section">
+
+
+            <div class="section-header">
+
+                <h2>
+                    Saved Addresses
+                </h2>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ADDRESS GRID
+            ================================== -->
+
+            <div
+                id="addressList"
+                class="address-list"
+            >
+
+                <div class="address-loading">
+
+                    <div class="loading-circle"></div>
+
+                    <p>
+                        Loading addresses...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ADD NEW ADDRESS
+            ================================== -->
+
+            <button
+                type="button"
+                id="addAddressButton"
+                class="add-address-button"
+            >
+
+                <span class="add-address-icon">
+                    +
+                </span>
+
+                <span>
+                    Add New Address
+                </span>
+
+            </button>
+
+
+
+            <!-- =================================
+                 NEW ADDRESS FORM
+            ================================== -->
+
+            <div
+                id="newAddressForm"
+                class="new-address-form"
+                style="display: none;"
+            >
+
+
+                <div class="new-address-header">
+
+                    <div>
+
+                        <span class="form-eyebrow">
+                            New Address
+                        </span>
+
+                        <h2>
+                            Add Delivery Address
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="cancelAddressButton"
+                        class="close-address-button"
+                        aria-label="Close"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+
+                <!-- =================================
+                     ADDRESS TYPE
+                ================================== -->
+
+                <div class="form-group">
+
+                    <label>
+                        Save as
+                    </label>
+
+
+                    <div class="address-type-options">
+
+
+                        <label class="address-type-option">
+
+                            <input
+                                type="radio"
+                                name="address_label"
+                                value="Home"
+                                checked
+                            >
+
+                            <span>
+                                🏠 Home
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="address-type-option">
+
+                            <input
+                                type="radio"
+                                name="address_label"
+                                value="Work"
+                            >
+
+                            <span>
+                                💼 Work
+                            </span>
+
+                        </label>
+
+
+
+                        <label class="address-type-option">
+
+                            <input
+                                type="radio"
+                                name="address_label"
+                                value="Other"
+                            >
+
+                            <span>
+                                📍 Other
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     NAME
+                ================================== -->
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="full_name"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================
+                     PHONE
+                ================================== -->
+
+                <div class="form-group">
+
+                    <label for="phoneNumber">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phoneNumber"
+                        name="phone_number"
+                        placeholder="Enter your phone number"
+                        autocomplete="tel"
+                        maxlength="15"
+                    >
+
+                </div>
+
+
+
+                <!-- =================================
+                     ADDRESS
+                ================================== -->
+
+                <div class="form-group">
+
+                    <label for="deliveryAddress">
+                        Address
+                    </label>
+
+                    <textarea
+                        id="deliveryAddress"
+                        name="delivery_address"
+                        rows="3"
+                        placeholder="House / Flat, Street, Area"
+                        autocomplete="street-address"
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- =================================
+                     CITY + PINCODE
+                ================================== -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="city">
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            placeholder="City"
+                            autocomplete="address-level2"
+                        >
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="pincode">
+                            Pincode
+                        </label>
+
+                        <input
+                            type="text"
+                            id="pincode"
+                            name="pincode"
+                            placeholder="6-digit pincode"
+                            autocomplete="postal-code"
+                            maxlength="6"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================
+                     DEFAULT ADDRESS
+                ================================== -->
+
+                <label class="default-address-option">
+
+                    <input
+                        type="checkbox"
+                        id="isDefaultAddress"
+                    >
+
+                    <span>
+                        Make this my default address
+                    </span>
+
+                </label>
+
+
+
+                <!-- =================================
+                     ERROR
+                ================================== -->
+
+                <div
+                    id="addressFormError"
+                    class="address-form-error"
+                    style="display: none;"
+                ></div>
+
+
+
+                <!-- =================================
+                     FORM ACTIONS
+                ================================== -->
+
+                <div class="address-form-actions">
+
+                    <button
+                        type="button"
+                        id="cancelAddressButtonBottom"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="saveAddressButton"
+                        class="primary-button"
+                    >
+                        Save Address
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             CHECKOUT ACTIONS
+        ====================================== -->
+
+        <div class="checkout-actions">
+
+
+            <a
+                href="/cart/"
+                class="secondary-button"
+            >
+                ← Back to Cart
+            </a>
+
+
+
+            <button
+                type="button"
+                id="proceedButton"
+                class="primary-button"
+                disabled
+            >
+
+                Proceed
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/checkout.js' %}"></script>
+
+{% endblock %}

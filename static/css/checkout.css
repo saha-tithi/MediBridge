@@ -1,0 +1,790 @@
+/* =========================================
+   CHECKOUT PAGE
+========================================= */
+
+.checkout-page {
+    min-height: calc(100vh - 80px);
+    padding: 48px 24px 60px;
+    background: #f8faf9;
+}
+
+
+.checkout-container {
+    width: min(1050px, 100%);
+    margin: 0 auto;
+}
+
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.checkout-header {
+    margin-bottom: 34px;
+}
+
+
+.checkout-header h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #263f3d;
+}
+
+
+.checkout-header p {
+    margin: 0;
+    font-size: 15px;
+    color: #758583;
+}
+
+
+
+/* =========================================
+   ADDRESS SECTION
+========================================= */
+
+.address-section {
+    background: #ffffff;
+    border: 1px solid #e3ecea;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 5px 20px rgba(54, 89, 84, 0.05);
+}
+
+
+.section-header {
+    margin-bottom: 22px;
+}
+
+
+.section-header h2 {
+    margin: 0;
+    font-size: 19px;
+    color: #2d4542;
+}
+
+
+
+/* =========================================
+   ADDRESS GRID
+========================================= */
+
+.address-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+
+
+/* =========================================
+   ADDRESS CARD
+========================================= */
+
+.address-card {
+    position: relative;
+    min-height: 145px;
+    padding: 18px;
+    border: 1px solid #dfe9e7;
+    border-radius: 14px;
+    background: #ffffff;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.address-card:hover {
+    border-color: #9bbdb8;
+    box-shadow: 0 5px 16px rgba(54, 89, 84, 0.08);
+    transform: translateY(-1px);
+}
+
+
+.address-card.selected {
+    border-color: #438f89;
+    background: #f4faf9;
+    box-shadow: 0 0 0 2px rgba(67, 143, 137, 0.10);
+}
+
+
+
+/* =========================================
+   ADDRESS SELECT
+========================================= */
+
+.address-select {
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+}
+
+
+.address-select input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.custom-radio {
+    flex: 0 0 19px;
+    width: 19px;
+    height: 19px;
+    margin-top: 2px;
+    border: 2px solid #b7c9c6;
+    border-radius: 50%;
+    transition: 0.2s ease;
+}
+
+
+.address-card.selected .custom-radio {
+    border-color: #438f89;
+    box-shadow: inset 0 0 0 4px #ffffff;
+    background: #438f89;
+}
+
+
+
+/* =========================================
+   ADDRESS CONTENT
+========================================= */
+
+.address-content {
+    min-width: 0;
+}
+
+
+.address-title-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+
+.address-title-row strong {
+    font-size: 15px;
+    color: #2e4744;
+}
+
+
+.address-content p {
+    margin: 4px 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #71817f;
+}
+
+
+.address-content p:first-of-type {
+    font-weight: 600;
+    color: #435956;
+}
+
+
+
+/* =========================================
+   ADDRESS ACTIONS
+========================================= */
+
+.address-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    padding-left: 31px;
+}
+
+
+.edit-address,
+.delete-address {
+    border: none;
+    padding: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+.edit-address {
+    color: #438f89;
+}
+
+
+.delete-address {
+    color: #c66a6a;
+}
+
+
+.edit-address:hover,
+.delete-address:hover {
+    text-decoration: underline;
+}
+
+
+
+/* =========================================
+   ADD ADDRESS BUTTON
+========================================= */
+
+.add-address-button {
+    width: 100%;
+    min-height: 62px;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: 1.5px dashed #9bbdb8;
+    border-radius: 13px;
+
+    background: #f9fcfb;
+    color: #438f89;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.add-address-button:hover {
+    background: #f0f8f6;
+    border-color: #438f89;
+}
+
+
+.add-address-icon {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+
+
+/* =========================================
+   NEW ADDRESS FORM
+========================================= */
+
+.new-address-form {
+    margin-top: 22px;
+    padding: 26px;
+    border: 1px solid #dfe9e7;
+    border-radius: 15px;
+    background: #fbfdfc;
+}
+
+
+.new-address-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+
+.form-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #438f89;
+}
+
+
+.new-address-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #2d4542;
+}
+
+
+.close-address-button {
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #edf4f2;
+    color: #5e7470;
+
+    font-family: inherit;
+    font-size: 22px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+.close-address-button:hover {
+    background: #e2eeeb;
+}
+
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #435956;
+}
+
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid #d6e3e0;
+    border-radius: 9px;
+
+    padding: 11px 13px;
+
+    background: #ffffff;
+    color: #344b48;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.form-group input {
+    height: 44px;
+}
+
+
+.form-group textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #438f89;
+    box-shadow: 0 0 0 3px rgba(67, 143, 137, 0.10);
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a2b1af;
+}
+
+
+
+/* =========================================
+   ADDRESS TYPE
+========================================= */
+
+.address-type-options {
+    display: flex;
+    gap: 10px;
+}
+
+
+.address-type-option {
+    cursor: pointer;
+}
+
+
+.address-type-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+
+.address-type-option span {
+    display: block;
+    padding: 9px 14px;
+
+    border: 1px solid #d7e3e0;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #60736f;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+
+.address-type-option input:checked + span {
+    border-color: #438f89;
+    background: #eef8f6;
+    color: #438f89;
+}
+
+
+
+/* =========================================
+   FORM ROW
+========================================= */
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+
+
+/* =========================================
+   DEFAULT ADDRESS
+========================================= */
+
+.default-address-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin: 4px 0 20px;
+
+    font-size: 13px;
+    color: #61736f;
+
+    cursor: pointer;
+}
+
+
+.default-address-option input {
+    width: 16px;
+    height: 16px;
+
+    accent-color: #438f89;
+
+    cursor: pointer;
+}
+
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.address-form-error {
+    margin-bottom: 16px;
+    padding: 10px 12px;
+
+    border: 1px solid #f0d0d0;
+    border-radius: 8px;
+
+    background: #fff6f6;
+    color: #c35f5f;
+
+    font-size: 13px;
+}
+
+
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.address-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.primary-button,
+.secondary-button {
+    min-height: 44px;
+    padding: 0 20px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.primary-button {
+    border: 1px solid #438f89;
+
+    background: #438f89;
+    color: #ffffff;
+}
+
+
+.primary-button:hover:not(:disabled) {
+    background: #367c76;
+    border-color: #367c76;
+    transform: translateY(-1px);
+}
+
+
+.primary-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+
+.secondary-button {
+    border: 1px solid #d4e1de;
+
+    background: #ffffff;
+    color: #526864;
+}
+
+
+.secondary-button:hover {
+    background: #f4f8f7;
+}
+
+
+
+/* =========================================
+   CHECKOUT ACTIONS
+========================================= */
+
+.checkout-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 24px;
+}
+
+
+.checkout-actions .primary-button {
+    min-width: 125px;
+}
+
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.no-addresses {
+    grid-column: 1 / -1;
+
+    padding: 30px 20px;
+
+    border: 1px dashed #d6e3e0;
+    border-radius: 13px;
+
+    text-align: center;
+
+    color: #758583;
+}
+
+
+.no-address-icon {
+    width: 38px;
+    height: 38px;
+
+    margin: 0 auto 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef6f4;
+    color: #438f89;
+
+    font-size: 22px;
+}
+
+
+.no-addresses p {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.address-loading {
+    grid-column: 1 / -1;
+
+    padding: 35px;
+
+    text-align: center;
+    color: #758583;
+}
+
+
+.loading-circle {
+    width: 26px;
+    height: 26px;
+
+    margin: 0 auto 10px;
+
+    border: 3px solid #dce9e6;
+    border-top-color: #438f89;
+
+    border-radius: 50%;
+
+    animation: checkout-spin 0.8s linear infinite;
+}
+
+
+@keyframes checkout-spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.address-error {
+    grid-column: 1 / -1;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    background: #fff7f7;
+
+    text-align: center;
+
+    color: #c35f5f;
+}
+
+
+.address-error p {
+    margin: 0 0 6px;
+    font-weight: 600;
+}
+
+
+.address-error small {
+    color: #a87575;
+}
+
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .checkout-page {
+        padding: 30px 16px 45px;
+    }
+
+
+    .address-section {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+
+    .address-list {
+        grid-template-columns: 1fr;
+    }
+
+
+    .checkout-header h1 {
+        font-size: 26px;
+    }
+
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+
+    .address-type-options {
+        flex-wrap: wrap;
+    }
+
+
+    .checkout-actions {
+        gap: 10px;
+    }
+
+
+    .checkout-actions .primary-button,
+    .checkout-actions .secondary-button {
+        flex: 1;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .checkout-actions {
+        flex-direction: column-reverse;
+    }
+
+
+    .checkout-actions .primary-button,
+    .checkout-actions .secondary-button {
+        width: 100%;
+    }
+
+
+    .new-address-form {
+        padding: 19px;
+    }
+
+}

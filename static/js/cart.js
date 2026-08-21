@@ -568,7 +568,7 @@ checkoutButton.addEventListener(
 
 
         window.location.href =
-            "/orders/create/";
+            "/checkout/";
 
     }
 );

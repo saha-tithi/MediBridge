@@ -11,3 +11,6 @@ def register_page(request):
 
 def cart_page(request):
     return render(request, "cart/cart.html")
+
+def checkout_page(request):
+    return render(request, "checkout.html")
