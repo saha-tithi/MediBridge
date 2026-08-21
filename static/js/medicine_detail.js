@@ -1,6 +1,3 @@
-/* =========================================
-   MEDICINE DETAIL CART
-========================================= */
 
 const cartAction =
     document.getElementById("medicineCartAction");
@@ -17,18 +14,7 @@ if (cartAction) {
             10
         );
 
-
-    /* =========================================
-       INITIAL LOAD
-    ========================================= */
-
     loadMedicineCart();
-
-
-
-    /* =========================================
-       LOAD CART
-    ========================================= */
 
     async function loadMedicineCart() {
 
@@ -100,12 +86,6 @@ if (cartAction) {
 
     }
 
-
-
-    /* =========================================
-       SHOW ADD BUTTON
-    ========================================= */
-
     function showAddButton() {
 
         cartAction.innerHTML = `
@@ -133,12 +113,6 @@ if (cartAction) {
         );
 
     }
-
-
-
-    /* =========================================
-       ADD TO CART
-    ========================================= */
 
     async function addToCart() {
 
@@ -214,11 +188,6 @@ if (cartAction) {
                 "Add to Cart";
 
 
-            /*
-             * The backend is the source
-             * of truth for stock.
-             */
-
             showCartMessage(
                 error.message ||
                 "Unable to add medicine to cart."
@@ -227,12 +196,6 @@ if (cartAction) {
         }
 
     }
-
-
-
-    /* =========================================
-       SHOW QUANTITY CONTROL
-    ========================================= */
 
     function showQuantityControl(
         cartItemId,
@@ -309,9 +272,7 @@ if (cartAction) {
             );
 
 
-        /*
-         * Decrease
-         */
+
 
         decreaseButton.addEventListener(
             "click",
@@ -330,9 +291,7 @@ if (cartAction) {
         );
 
 
-        /*
-         * Increase
-         */
+
 
         increaseButton.addEventListener(
             "click",
@@ -357,9 +316,7 @@ if (cartAction) {
 
 
 
-    /* =========================================
-       UPDATE QUANTITY
-    ========================================= */
+
 
     async function updateQuantity(
         cartItemId,
@@ -419,12 +376,7 @@ if (cartAction) {
             );
 
 
-            /*
-             * Important:
-             *
-             * The server still validates
-             * the actual stock.
-             */
+            
 
             showCartMessage(
                 error.message ||
@@ -432,22 +384,12 @@ if (cartAction) {
             );
 
 
-            /*
-             * Refresh cart state so the UI
-             * matches the server.
-             */
-
+           
             await loadMedicineCart();
 
         }
 
     }
-
-
-
-    /* =========================================
-       NAVBAR CART COUNT
-    ========================================= */
 
     function updateNavbarCartCount(cart) {
 
@@ -497,11 +439,6 @@ if (cartAction) {
 
     }
 
-
-
-    /* =========================================
-       USER-FRIENDLY CART MESSAGE
-    ========================================= */
 
     function showCartMessage(message) {
 
