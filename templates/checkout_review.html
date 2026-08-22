@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+Review & Payment | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/checkout_review.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="checkout-review-page">
+
+    <div class="checkout-review-container">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="review-header">
+
+            <h1>
+                Review & Payment
+            </h1>
+
+            <p>
+                Review your order and choose your payment method.
+            </p>
+
+        </header>
+
+
+
+        <!-- =====================================
+             DELIVERY ADDRESS
+        ====================================== -->
+
+        <section class="review-section">
+
+            <div class="review-section-header">
+
+                <h2>
+                    Delivery Address
+                </h2>
+
+                <a
+                    href="/checkout/"
+                    class="change-address-button"
+                >
+                    Change
+                </a>
+
+            </div>
+
+
+            <div
+                id="selectedAddress"
+                class="selected-address"
+            >
+
+                <div class="review-loading">
+                    Loading address...
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             ORDER ITEMS
+        ====================================== -->
+
+        <section class="review-section">
+
+            <div class="review-section-header">
+
+                <h2>
+                    Your Order
+                </h2>
+
+            </div>
+
+
+            <div
+                id="reviewItems"
+                class="review-items"
+            >
+
+                <div class="review-loading">
+                    Loading your order...
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 PRICE DETAILS
+            ================================== -->
+
+            <div class="price-details">
+
+                <div class="price-row">
+
+                    <span>
+                        Items
+                    </span>
+
+                    <strong id="itemsTotal">
+                        ₹0
+                    </strong>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Delivery
+                    </span>
+
+                    <strong>
+                        Free
+                    </strong>
+
+                </div>
+
+
+                <div class="price-divider"></div>
+
+
+                <div class="price-row total-row">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="grandTotal">
+                        ₹0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             PAYMENT METHOD
+        ====================================== -->
+
+        <section class="review-section payment-section">
+
+            <div class="review-section-header">
+
+                <h2>
+                    Payment Method
+                </h2>
+
+            </div>
+
+
+            <div class="payment-options">
+
+
+                <!-- ONLINE PAYMENT -->
+
+                <label class="payment-option selected">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="ONLINE"
+                        checked
+                    >
+
+
+                    <span class="payment-radio"></span>
+
+
+                    <span class="payment-content">
+
+                        <strong>
+                            Online Payment
+                        </strong>
+
+                        <small>
+                            Pay securely online
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+
+                <!-- CASH ON DELIVERY -->
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment_method"
+                        value="COD"
+                    >
+
+
+                    <span class="payment-radio"></span>
+
+
+                    <span class="payment-content">
+
+                        <strong>
+                            Cash on Delivery
+                        </strong>
+
+                        <small>
+                            Pay when your order arrives
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             ERROR
+        ====================================== -->
+
+        <div
+            id="reviewError"
+            class="review-error"
+            style="display: none;"
+        ></div>
+
+
+
+        <!-- =====================================
+             BOTTOM ACTIONS
+        ====================================== -->
+
+        <div class="review-actions">
+
+
+            <a
+                href="/checkout/"
+                class="back-button"
+            >
+                ← Back
+            </a>
+
+
+            <button
+                type="button"
+                id="placeOrderButton"
+                class="place-order-button"
+            >
+
+                Place Order
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/checkout_review.js' %}"></script>
+
+{% endblock %}

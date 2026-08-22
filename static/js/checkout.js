@@ -1164,6 +1164,10 @@ proceedButton.addEventListener(
             return;
 
         }
+        sessionStorage.setItem(
+            "selectedAddressId",
+            selectedAddressId
+        );
 
 
         window.location.href =
