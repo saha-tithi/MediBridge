@@ -45,6 +45,7 @@ let addresses = [];
 let selectedAddressId = null;
 
 let editingAddressId = null;
+let expandedAddressId = null;
 
 
 
@@ -212,31 +213,83 @@ function createAddressHTML(address) {
         String(selectedAddressId);
 
 
+    const isExpanded =
+        String(address.id) ===
+        String(expandedAddressId);
+
+
+    let icon = "📍";
+
+
+    if (address.label === "HOME") {
+
+        icon = "🏠";
+
+    }
+
+    else if (address.label === "WORK") {
+
+        icon = "💼";
+
+    }
+
+
     return `
 
         <article
             class="
                 address-card
                 ${isSelected ? "selected" : ""}
+                ${isExpanded ? "expanded" : ""}
             "
             data-address-id="${address.id}"
         >
 
-            <label class="address-select">
 
-                <input
-                    type="radio"
-                    name="selectedAddress"
-                    value="${address.id}"
-                    ${isSelected ? "checked" : ""}
+            <!-- =================================
+                 COMPACT HEADER
+            ================================== -->
+
+            <div
+                class="address-card-header"
+                data-address-id="${address.id}"
+            >
+
+
+                <!-- RADIO -->
+
+                <label
+                    class="address-radio"
+                    onclick="event.stopPropagation();"
                 >
 
-                <span class="custom-radio"></span>
+                    <input
+                        type="radio"
+                        name="selectedAddress"
+                        value="${address.id}"
+                        ${
+                            isSelected
+                                ? "checked"
+                                : ""
+                        }
+                    >
+
+                    <span class="custom-radio"></span>
+
+                </label>
 
 
-                <div class="address-content">
 
-                    <div class="address-title-row">
+                <!-- ADDRESS SUMMARY -->
+
+                <div class="address-card-main">
+
+                    <span class="address-icon">
+                        ${icon}
+                    </span>
+
+
+                    <div class="address-card-title">
 
                         <strong>
                             ${escapeHTML(
@@ -246,13 +299,48 @@ function createAddressHTML(address) {
                             )}
                         </strong>
 
+
+                        <span>
+                            ${escapeHTML(
+                                address.full_name
+                            )}
+                        </span>
+
                     </div>
 
+                </div>
+
+
+                <!-- EXPAND BUTTON -->
+
+                <span class="address-expand-icon">
+                    +
+                </span>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 EXPANDED CONTENT
+            ================================== -->
+
+            <div class="address-expanded-content">
+
+                <div class="address-divider"></div>
+
+
+                <div class="address-full-details">
 
                     <p>
-                        ${escapeHTML(
-                            address.full_name
-                        )}
+
+                        <strong>
+                            ${escapeHTML(
+                                address.full_name
+                            )}
+                        </strong>
+
                     </p>
 
 
@@ -264,45 +352,63 @@ function createAddressHTML(address) {
 
 
                     <p>
+
                         ${escapeHTML(
                             address.city
                         )}
+
                         -
+
                         ${escapeHTML(
                             address.pincode
                         )}
+
                     </p>
 
 
                     <p>
+
+                        Phone:
+
                         ${escapeHTML(
                             address.phone_number
                         )}
+
                     </p>
 
                 </div>
 
-            </label>
 
 
-            <div class="address-actions">
+                <!-- =================================
+                     EDIT / DELETE
+                ================================== -->
 
-                <button
-                    type="button"
-                    class="edit-address"
-                    data-address-id="${address.id}"
-                >
-                    Edit
-                </button>
+                <div class="address-expanded-actions">
 
 
-                <button
-                    type="button"
-                    class="delete-address"
-                    data-address-id="${address.id}"
-                >
-                    Delete
-                </button>
+                    <div class="address-manage-actions">
+
+                        <button
+                            type="button"
+                            class="edit-address"
+                            data-address-id="${address.id}"
+                        >
+                            Edit
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="delete-address"
+                            data-address-id="${address.id}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -311,9 +417,6 @@ function createAddressHTML(address) {
     `;
 
 }
-
-
-
 /* =========================================
    ADDRESS LABEL
 ========================================= */
@@ -355,15 +458,23 @@ addressList.addEventListener(
         }
 
 
+        /*
+         * Selecting an address should
+         * NOT expand it.
+         */
+
         selectedAddressId =
             event.target.value;
 
+
+        /*
+         * Do not change expandedAddressId.
+         */
 
         renderAddresses();
 
     }
 );
-
 
 
 /* =========================================
@@ -374,6 +485,35 @@ addressList.addEventListener(
     "click",
     function (event) {
 
+
+        /* =================================
+           EDIT
+        ================================== */
+
+        const editButton =
+            event.target.closest(
+                ".edit-address"
+            );
+
+
+        if (editButton) {
+
+            event.stopPropagation();
+
+            editAddress(
+                editButton.dataset.addressId
+            );
+
+            return;
+
+        }
+
+
+
+        /* =================================
+           DELETE
+        ================================== */
+
         const deleteButton =
             event.target.closest(
                 ".delete-address"
@@ -381,6 +521,8 @@ addressList.addEventListener(
 
 
         if (deleteButton) {
+
+            event.stopPropagation();
 
             deleteAddress(
                 deleteButton.dataset.addressId
@@ -391,25 +533,76 @@ addressList.addEventListener(
         }
 
 
-        const editButton =
+
+        /* =================================
+           RADIO
+        ================================== */
+
+        if (
             event.target.closest(
-                ".edit-address"
-            );
+                ".address-radio"
+            )
+        ) {
 
-
-        if (editButton) {
-
-            editAddress(
-                editButton.dataset.addressId
-            );
+            return;
 
         }
 
+
+
+        /* =================================
+           ADDRESS HEADER
+           → EXPAND / COLLAPSE
+        ================================== */
+
+        const header =
+            event.target.closest(
+                ".address-card-header"
+            );
+
+
+        if (!header) {
+
+            return;
+
+        }
+
+
+        const addressId =
+            header.dataset.addressId;
+
+
+        /*
+         * Clicking the currently expanded
+         * address closes it.
+         */
+
+        if (
+            String(expandedAddressId) ===
+            String(addressId)
+        ) {
+
+            expandedAddressId = null;
+
+        }
+
+        else {
+
+            /*
+             * Only ONE address can be
+             * expanded at a time.
+             */
+
+            expandedAddressId =
+                addressId;
+
+        }
+
+
+        renderAddresses();
+
     }
 );
-
-
-
 /* =========================================
    SHOW ADD ADDRESS FORM
 ========================================= */

@@ -85,8 +85,10 @@
 
 .address-card {
     position: relative;
-    min-height: 145px;
-    padding: 18px;
+    min-height: 0;
+    padding: 0;
+    height: max-content;
+    overflow: hidden;
     border: 1px solid #dfe9e7;
     border-radius: 14px;
     background: #ffffff;
@@ -736,9 +738,16 @@
     }
 
 
-    .address-list {
-        grid-template-columns: 1fr;
-    }
+   .address-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+
+    /* Important:
+       Don't stretch the other card when
+       one card becomes taller. */
+    align-items: start;
+}
 
 
     .checkout-header h1 {
@@ -787,4 +796,361 @@
         padding: 19px;
     }
 
+}
+/* =========================================
+   COMPACT ADDRESS CARD
+========================================= */
+
+.address-card {
+    min-height: auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.address-card-header {
+    min-height: 92px;
+    padding: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    cursor: pointer;
+}
+
+
+.address-card-main {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+
+.address-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #eef7f5;
+
+    font-size: 20px;
+}
+
+
+.address-card-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.address-card-title strong {
+    font-size: 15px;
+    color: #2e4744;
+}
+
+
+.address-card-title span {
+    font-size: 13px;
+    color: #758583;
+}
+
+
+.address-expand-icon {
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0f5f4;
+    color: #438f89;
+
+    font-size: 19px;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.address-card.expanded
+.address-expand-icon {
+    transform: rotate(45deg);
+    background: #438f89;
+    color: #ffffff;
+}
+
+
+
+/* =========================================
+   EXPANDED CONTENT
+========================================= */
+
+.address-expanded-content {
+    display: none;
+
+    padding: 0 22px 20px;
+}
+
+
+.address-card.expanded
+.address-expanded-content {
+    display: block;
+}
+
+
+.address-divider {
+    height: 1px;
+    margin-bottom: 16px;
+
+    background: #e7efed;
+}
+
+
+.address-full-details {
+    padding-left: 42px;
+}
+
+
+.address-full-details p {
+    margin: 5px 0;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    color: #6d7e7b;
+}
+
+
+.address-full-details p:first-child {
+    color: #3f5652;
+}
+
+
+.address-full-details strong {
+    font-weight: 600;
+}
+
+.address-expanded-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 20px;
+    padding-left: 0;
+}
+
+.address-manage-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+}
+
+
+
+
+.address-manage-actions button {
+    border: none;
+    padding: 0;
+
+    background: transparent;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.address-manage-actions
+.edit-address {
+    color: #438f89;
+}
+
+
+.address-manage-actions
+.delete-address {
+    color: #c66a6a;
+}
+
+
+
+/* =========================================
+   SELECTED CARD
+========================================= */
+
+.address-card.selected {
+    border-color: #438f89;
+}
+
+
+.address-card.selected
+.address-card-header {
+    background: #f5faf9;
+}
+/* =========================================
+   ADDRESS RADIO
+========================================= */
+
+.address-radio {
+    position: relative;
+
+    width: 20px;
+    height: 20px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+
+.address-radio input {
+    position: absolute;
+
+    opacity: 0;
+
+    width: 20px;
+    height: 20px;
+
+    cursor: pointer;
+}
+
+
+.address-radio .custom-radio {
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+
+    border: 2px solid #b7c9c6;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    transition: 0.2s ease;
+}
+
+
+.address-radio input:checked
++ .custom-radio {
+
+    border-color: #438f89;
+
+    background: #438f89;
+
+    box-shadow:
+        inset 0 0 0 4px #ffffff;
+}
+
+
+/* =========================================
+   FIX ADDRESS CARD EXPANSION
+========================================= */
+
+.address-list {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    align-items: start !important;
+
+    grid-auto-rows: max-content;
+}
+
+
+/*
+ * Every card must keep its own height.
+ * The card beside an expanded card
+ * must NOT stretch.
+ */
+
+.address-card {
+    align-self: start !important;
+
+    height: max-content !important;
+
+    min-height: 0 !important;
+
+    box-sizing: border-box;
+}
+
+
+/*
+ * Expanded card is allowed to grow naturally.
+ */
+
+.address-card.expanded {
+    height: auto !important;
+}
+
+
+/*
+ * Collapsed card must stay compact.
+ */
+
+.address-card:not(.expanded) {
+    height: max-content !important;
+}
+
+
+/* =========================================
+   EXPANDED CONTENT
+========================================= */
+
+.address-expanded-content {
+    display: none !important;
+}
+
+
+.address-card.expanded
+.address-expanded-content {
+    display: block !important;
+}
+
+
+/* =========================================
+   EDIT / DELETE
+========================================= */
+
+.address-expanded-actions {
+    display: flex !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 0 !important;
+}
+
+
+.address-manage-actions {
+    display: flex !important;
+
+    justify-content: center !important;
+    align-items: center;
+
+    gap: 30px;
 }
