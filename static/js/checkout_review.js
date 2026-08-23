@@ -26,12 +26,9 @@ const reviewError =
    STATE
 ========================================= */
 
-let selectedAddressId =
-    sessionStorage.getItem(
-        "selectedAddressId"
-    );
-
+let selectedAddressId =sessionStorage.getItem("selectedAddressId");
 let currentCart = null;
+let selectedAddressForPayment = null;
 
 
 
@@ -389,7 +386,6 @@ paymentOptions.forEach(
 );
 
 
-
 /* =========================================
    PLACE ORDER
 ========================================= */
@@ -439,43 +435,146 @@ placeOrderButton.addEventListener(
 
         try {
 
-            /*
-             * Order API connection will be
-             * added after we verify the
-             * exact Orders API payload.
-             */
+            /* =================================
+               GET SELECTED ADDRESS
+            ================================= */
+
+            const addresses =
+                await apiRequest(
+                    "/addresses/",
+                    {
+                        method: "GET"
+                    }
+                );
+
+
+            const selectedAddress =
+                addresses.find(
+                    function (address) {
+
+                        return String(address.id) ===
+                            String(selectedAddressId);
+
+                    }
+                );
+
+
+            if (!selectedAddress) {
+
+                throw new Error(
+                    "Selected delivery address could not be found."
+                );
+
+            }
+            selectedAddressForPayment = selectedAddress;
+
+ 
+            /* =================================
+               BUILD SHIPPING ADDRESS
+            ================================= */
+
+            const shippingAddress =
+                [
+                    selectedAddress.full_name,
+                    selectedAddress.address,
+                    selectedAddress.city,
+                    selectedAddress.pincode,
+                    `Phone: ${selectedAddress.phone_number}`
+                ]
+                .filter(Boolean)
+                .join(", ");
+
+
+
+            /* =================================
+               CREATE MEDIBRIDGE ORDER
+            ================================= */
+
+            const orderResponse =
+                await apiRequest(
+                    "/orders/create/",
+                    {
+                        method: "POST",
+
+                        body:
+                            JSON.stringify({
+
+                                shipping_address:
+                                    shippingAddress,
+
+                                payment_method:
+                                    paymentMethod
+
+                            })
+                    }
+                );
+
+
+            const order =
+                orderResponse.data;
+
+
+            if (
+                !order ||
+                !order.id
+            ) {
+
+                throw new Error(
+                    "Unable to create your order."
+                );
+
+            }
+
 
             console.log(
-                "Order details:",
-                {
-                    address_id:
-                        selectedAddressId,
-
-                    payment_method:
-                        paymentMethod,
-
-                    cart:
-                        currentCart
-                }
+                "MediBridge order created:",
+                order
             );
 
 
-            /*
-             * Temporary success message.
-             *
-             * We will replace this with
-             * the real Orders API call next.
-             */
 
-            alert(
-                "Review completed successfully."
-            );
+            /* =================================
+               COD
+            ================================= */
 
+            if (
+                paymentMethod === "COD"
+            ) {
+
+                sessionStorage.setItem(
+                    "lastOrderId",
+                    order.id
+                );
+
+
+                window.location.href =
+                    `/orders/success/${order.id}/`;
+
+
+                return;
+
+            }
+
+
+
+            /* =================================
+               ONLINE PAYMENT
+            ================================= */
+
+            if (
+                paymentMethod === "ONLINE"
+            ) {
+
+                await startRazorpayPayment(
+                    order
+                );
+
+            }
 
         } catch (error) {
 
             console.error(
-                "Place order error:",
+                "Order creation error:",
                 error
             );
 
@@ -497,8 +596,245 @@ placeOrderButton.addEventListener(
 
     }
 );
+/* =========================================
+   START RAZORPAY PAYMENT
+========================================= */
+
+async function startRazorpayPayment(order) {
+
+    try {
+
+        placeOrderButton.textContent =
+            "Opening Payment...";
 
 
+        /* =================================
+           CREATE RAZORPAY ORDER
+        ================================= */
+
+        const response =
+            await apiRequest(
+                `/orders/${order.id}/razorpay/create/`,
+                {
+                    method: "POST"
+                }
+            );
+
+
+        const razorpayData =
+            response.data;
+
+
+        if (
+            !razorpayData ||
+            !razorpayData.razorpay_order_id
+        ) {
+
+            throw new Error(
+                "Unable to initialize online payment."
+            );
+
+        }
+
+
+        /* =================================
+           RAZORPAY CHECKOUT OPTIONS
+        ================================= */
+
+        const options = {
+
+            key:
+                razorpayData.key_id,
+
+            amount:
+                razorpayData.amount,
+
+            currency:
+                razorpayData.currency,
+
+            name:
+                "MediBridge",
+
+            description:
+                "Medicine Order",
+
+            order_id:
+                razorpayData.razorpay_order_id,
+
+
+            /* ==============================
+               PAYMENT SUCCESS
+            ============================== */
+
+            handler:
+                async function (
+                    paymentResponse
+                ) {
+
+                    try {
+
+                        placeOrderButton.textContent =
+                            "Verifying Payment...";
+
+
+                        const verificationResponse =
+                            await apiRequest(
+                                `/orders/${order.id}/razorpay/verify/`,
+                                {
+                                    method: "POST",
+
+                                    body:
+                                        JSON.stringify({
+
+                                            razorpay_order_id:
+                                                paymentResponse.razorpay_order_id,
+
+                                            razorpay_payment_id:
+                                                paymentResponse.razorpay_payment_id,
+
+                                            razorpay_signature:
+                                                paymentResponse.razorpay_signature
+
+                                        })
+                                }
+                            );
+
+
+                        console.log(
+                            "Payment verified:",
+                            verificationResponse
+                        );
+
+
+                        sessionStorage.setItem(
+                            "lastOrderId",
+                            order.id
+                        );
+
+
+                        window.location.href =
+                            `/orders/success/${order.id}/`;
+
+                    } catch (error) {
+
+                        console.error(
+                            "Payment verification error:",
+                            error
+                        );
+
+
+                        showReviewError(
+                            error.message ||
+                            "Payment verification failed."
+                        );
+
+
+                        placeOrderButton.disabled =
+                            false;
+
+
+                        placeOrderButton.textContent =
+                            "Place Order";
+
+                    }
+
+                },
+
+
+            /* ==============================
+               PREFILL CUSTOMER
+            ============================== */
+
+            prefill: {
+
+                name:
+                    selectedAddressForPayment.full_name,
+
+                contact:
+                    selectedAddressForPayment.phone_number
+
+            },
+
+
+            /* ==============================
+               THEME
+            ============================== */
+
+            theme: {
+
+                color:
+                    "#438f89"
+
+            }
+
+        };
+
+
+        /* =================================
+           OPEN RAZORPAY
+        ================================= */
+
+        const razorpay =
+            new Razorpay(
+                options
+            );
+
+
+        razorpay.on(
+            "payment.failed",
+            function (
+                response
+            ) {
+
+                console.error(
+                    "Razorpay payment failed:",
+                    response
+                );
+
+
+                showReviewError(
+                    "Payment failed. Please try again."
+                );
+
+
+                placeOrderButton.disabled =
+                    false;
+
+
+                placeOrderButton.textContent =
+                    "Place Order";
+
+            }
+        );
+
+
+        razorpay.open();
+
+
+    } catch (error) {
+
+        console.error(
+            "Razorpay error:",
+            error
+        );
+
+
+        showReviewError(
+            error.message ||
+            "Unable to open payment."
+        );
+
+
+        placeOrderButton.disabled =
+            false;
+
+
+        placeOrderButton.textContent =
+            "Place Order";
+
+    }
+
+}
 
 /* =========================================
    ADDRESS LABEL

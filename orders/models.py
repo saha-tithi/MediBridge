@@ -30,8 +30,12 @@ class Order(models.Model):
     status = models.CharField(max_length=20,choices=Status.choices,default=Status.PLACED,)
 
     payment_status = models.CharField(max_length=20,choices=PaymentStatus.choices,default=PaymentStatus.PENDING,)
-    payment_method = models.CharField(max_length=20,choices=PaymentMethod.choices,default=PaymentMethod.COD,
-)
+    payment_method = models.CharField(max_length=20,choices=PaymentMethod.choices,default=PaymentMethod.COD,)
+    razorpay_order_id =models.CharField(max_length=100,blank=True,null=True,)
+
+    razorpay_payment_id = models.CharField(max_length=100, blank=True,null=True,)
+
+    razorpay_signature = models.CharField(max_length=255,blank=True,null=True,)
     total_amount = models.DecimalField(max_digits=10,decimal_places=2,)
 
     shipping_address = models.TextField()

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+Order Placed | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/order_success.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="order-success-page">
+
+    <div class="order-success-container">
+
+
+        <!-- =====================================
+             SUCCESS ICON
+        ====================================== -->
+
+        <div class="success-icon">
+
+            ✓
+
+        </div>
+
+
+
+        <!-- =====================================
+             MESSAGE
+        ====================================== -->
+
+        <h1>
+            Order Placed Successfully
+        </h1>
+
+
+        <p class="success-message">
+
+            Thank you for ordering with MediBridge.
+            Your order has been placed successfully.
+
+        </p>
+
+
+
+        <!-- =====================================
+             ORDER DETAILS
+        ====================================== -->
+
+        <div
+            id="orderDetails"
+            class="order-details"
+        >
+
+            <div class="success-loading">
+
+                Loading order details...
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             ACTIONS
+        ====================================== -->
+
+        <div class="success-actions">
+
+            <a
+                href="/orders/"
+                class="view-orders-button"
+            >
+                View My Orders
+            </a>
+
+
+            <a
+                href="/medicines/"
+                class="continue-shopping-button"
+            >
+                Continue Shopping
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+
+<script src="{% static 'js/order_success.js' %}"></script>
+
+{% endblock %}

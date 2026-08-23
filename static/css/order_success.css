@@ -1,0 +1,246 @@
+/* =========================================
+   ORDER SUCCESS
+========================================= */
+
+.order-success-page {
+    min-height: calc(100vh - 80px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 50px 20px;
+
+    background: #f8faf9;
+}
+
+
+.order-success-container {
+    width: min(560px, 100%);
+
+    padding: 42px;
+
+    text-align: center;
+
+    border: 1px solid #e1ebe9;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 30px rgba(54, 89, 84, 0.06);
+}
+
+
+
+/* =========================================
+   SUCCESS ICON
+========================================= */
+
+.success-icon {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e8f5f2;
+
+    color: #438f89;
+
+    font-size: 32px;
+    font-weight: 700;
+}
+
+
+.order-success-container h1 {
+    margin: 0 0 10px;
+
+    color: #2d4542;
+
+    font-size: 27px;
+}
+
+
+.success-message {
+    margin: 0 auto 28px;
+
+    max-width: 430px;
+
+    color: #71817e;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+
+/* =========================================
+   ORDER DETAILS
+========================================= */
+
+.order-details {
+    margin-bottom: 28px;
+
+    padding: 17px 20px;
+
+    border: 1px solid #e1ebe9;
+    border-radius: 12px;
+
+    background: #f8fcfb;
+
+    text-align: left;
+}
+
+
+.order-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #e6efed;
+}
+
+
+.order-detail-row:last-child {
+    border-bottom: none;
+}
+
+
+.order-detail-row span {
+    color: #71817e;
+
+    font-size: 13px;
+}
+
+
+.order-detail-row strong {
+    color: #3d5551;
+
+    font-size: 13px;
+
+    text-align: right;
+
+    word-break: break-all;
+}
+
+
+.order-detail-row .order-status {
+    color: #438f89;
+}
+
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.success-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+}
+
+
+.view-orders-button,
+.continue-shopping-button {
+    min-height: 43px;
+
+    padding: 0 18px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+
+.view-orders-button {
+    border: 1px solid #438f89;
+
+    background: #438f89;
+
+    color: #ffffff;
+}
+
+
+.continue-shopping-button {
+    border: 1px solid #d6e2df;
+
+    background: #ffffff;
+
+    color: #526864;
+}
+
+
+
+/* =========================================
+   LOADING / ERROR
+========================================= */
+
+.success-loading,
+.order-error {
+    padding: 10px;
+
+    color: #71817e;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 550px) {
+
+    .order-success-page {
+        padding: 30px 16px;
+    }
+
+
+    .order-success-container {
+        padding: 30px 20px;
+    }
+
+
+    .order-success-container h1 {
+        font-size: 23px;
+    }
+
+
+    .success-actions {
+        flex-direction: column;
+    }
+
+
+    .view-orders-button,
+    .continue-shopping-button {
+        width: 100%;
+    }
+
+}

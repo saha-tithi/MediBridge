@@ -19,3 +19,12 @@ def checkout_review_page(request):
     return render(
         request,
         "checkout_review.html")
+def order_success_page(request, pk):
+
+    return render(
+        request,
+        "order_success.html",
+        {
+            "order_id": pk,
+        }
+    )

@@ -8,6 +8,9 @@ from .serializers import (CreateOrderSerializer,OrderSerializer,)
 from .services import create_order,process_order, update_order_status
 from .permissions import IsPharmacistOrAdmin
 from .emails import send_order_placed_email,send_order_delivered_email
+import razorpay
+from django.conf import settings
+
 
 
 class CreateOrderAPIView(APIView):
@@ -40,6 +43,310 @@ class CreateOrderAPIView(APIView):
                 "data": response_serializer.data,
             },
             status=status.HTTP_201_CREATED,
+        )
+
+class CreateRazorpayOrderAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+
+        order = get_object_or_404(
+            Order,
+            id=pk,
+            customer=request.user,
+        )
+
+
+        # -----------------------------------------
+        # Only ONLINE orders can use Razorpay
+        # -----------------------------------------
+
+        if order.payment_method != Order.PaymentMethod.ONLINE:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Razorpay payment is only available for online orders.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+        # -----------------------------------------
+        # Don't create another Razorpay order
+        # -----------------------------------------
+
+        if order.razorpay_order_id:
+
+            return Response(
+                {
+                    "success": True,
+                    "message": "Razorpay order already exists.",
+                    "data": {
+                        "razorpay_order_id":
+                            order.razorpay_order_id,
+
+                        "amount":
+                            int(
+                                order.total_amount * 100
+                            ),
+
+                        "currency":
+                            "INR",
+
+                        "key_id":
+                            settings.RAZORPAY_KEY_ID,
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
+
+
+        # -----------------------------------------
+        # Create Razorpay client
+        # -----------------------------------------
+
+        client = razorpay.Client(
+            auth=(
+                settings.RAZORPAY_KEY_ID,
+                settings.RAZORPAY_KEY_SECRET,
+            )
+        )
+
+
+        # -----------------------------------------
+        # Amount is in paise
+        # ₹100 = 10000 paise
+        # -----------------------------------------
+
+        amount = int(
+            order.total_amount * 100
+        )
+
+
+        razorpay_order = client.order.create(
+            {
+                "amount": amount,
+                "currency": "INR",
+                "receipt": str(order.id),
+            }
+        )
+
+
+        # -----------------------------------------
+        # Save Razorpay order ID
+        # -----------------------------------------
+
+        order.razorpay_order_id =razorpay_order["id"]
+
+
+        order.save(
+            update_fields=[
+                "razorpay_order_id",
+                "updated_at",
+            ]
+        )
+
+
+        return Response(
+            {
+                "success": True,
+
+                "message":
+                    "Razorpay order created successfully.",
+
+                "data": {
+
+                    "razorpay_order_id":
+                        razorpay_order["id"],
+
+                    "amount":
+                        amount,
+
+                    "currency":
+                        "INR",
+
+                    "key_id":
+                        settings.RAZORPAY_KEY_ID,
+
+                },
+            },
+
+            status=status.HTTP_201_CREATED,
+        )
+
+class VerifyRazorpayPaymentAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+
+        order = get_object_or_404(
+            Order,
+            id=pk,
+            customer=request.user,
+        )
+
+        # -----------------------------------------
+        # Only ONLINE orders
+        # -----------------------------------------
+
+        if order.payment_method != Order.PaymentMethod.ONLINE:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Payment verification is only available for online orders.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # -----------------------------------------
+        # Don't pay an already-paid order
+        # -----------------------------------------
+
+        if order.payment_status == Order.PaymentStatus.PAID:
+
+            return Response(
+                {
+                    "success": True,
+                    "message": "Payment has already been verified.",
+                    "data": OrderSerializer(order).data,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        # -----------------------------------------
+        # Get Razorpay response
+        # -----------------------------------------
+
+        razorpay_order_id = request.data.get(
+            "razorpay_order_id"
+        )
+
+        razorpay_payment_id = request.data.get(
+            "razorpay_payment_id"
+        )
+
+        razorpay_signature = request.data.get(
+            "razorpay_signature"
+        )
+
+        if not all(
+            [
+                razorpay_order_id,
+                razorpay_payment_id,
+                razorpay_signature,
+            ]
+        ):
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Incomplete payment details.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # -----------------------------------------
+        # Make sure this payment belongs
+        # to this MediBridge order
+        # -----------------------------------------
+
+        if (
+            razorpay_order_id !=
+            order.razorpay_order_id
+        ):
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid Razorpay order.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # -----------------------------------------
+        # Razorpay client
+        # -----------------------------------------
+
+        client = razorpay.Client(
+            auth=(
+                settings.RAZORPAY_KEY_ID,
+                settings.RAZORPAY_KEY_SECRET,
+            )
+        )
+
+        # -----------------------------------------
+        # VERIFY SIGNATURE
+        # -----------------------------------------
+
+        try:
+
+            client.utility.verify_payment_signature(
+                {
+                    "razorpay_order_id":
+                        razorpay_order_id,
+
+                    "razorpay_payment_id":
+                        razorpay_payment_id,
+
+                    "razorpay_signature":
+                        razorpay_signature,
+                }
+            )
+
+        except razorpay.errors.SignatureVerificationError:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": "Payment verification failed.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # -----------------------------------------
+        # PAYMENT VERIFIED
+        # -----------------------------------------
+
+        order.razorpay_payment_id = (
+            razorpay_payment_id
+        )
+
+        order.razorpay_signature = (
+            razorpay_signature
+        )
+
+        order.payment_status = (
+            Order.PaymentStatus.PAID
+        )
+
+        order.save(
+            update_fields=[
+                "razorpay_payment_id",
+                "razorpay_signature",
+                "payment_status",
+                "updated_at",
+            ]
+        )
+
+        # -----------------------------------------
+        # RESPONSE
+        # -----------------------------------------
+
+        serializer = OrderSerializer(
+            order
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": "Payment verified successfully.",
+                "data": serializer.data,
+            },
+            status=status.HTTP_200_OK,
         )
 
 
