@@ -1,0 +1,409 @@
+/* =========================================
+   ORDER DETAIL PAGE
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f6f9f8;
+    color: #263b3a;
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.order-detail-page {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+    padding: 45px 0 70px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #438f89;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.order-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.order-id {
+    margin: 0;
+    color: #71807f;
+    font-size: 14px;
+}
+
+.order-date {
+    color: #71807f;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.order-error {
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: #fff1f1;
+    color: #b43b3b;
+    border: 1px solid #f0caca;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.order-card {
+    background: #ffffff;
+    border: 1px solid #e2ebe9;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 22px;
+    box-shadow: 0 5px 18px rgba(45, 75, 72, 0.05);
+}
+
+.section-heading {
+    margin-bottom: 22px;
+}
+
+.section-heading h2 {
+    margin: 0;
+    font-size: 19px;
+    color: #263b3a;
+}
+
+
+/* =========================================
+   STATUS TRACKER
+========================================= */
+
+.status-tracker {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 25px 0 18px;
+}
+
+.status-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+    color: #9aa9a7;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    background: #edf2f1;
+    color: #9aa9a7;
+    border: 2px solid #dce5e3;
+}
+
+.status-step.active {
+    color: #438f89;
+}
+
+.status-step.active .status-circle {
+    background: #438f89;
+    border-color: #438f89;
+    color: #ffffff;
+}
+
+.status-step.completed {
+    color: #438f89;
+}
+
+.status-step.completed .status-circle {
+    background: #438f89;
+    border-color: #438f89;
+    color: #ffffff;
+}
+
+.status-line {
+    flex: 1;
+    height: 2px;
+    background: #dce5e3;
+    margin: 0 8px 25px;
+}
+
+.status-line.completed {
+    background: #438f89;
+}
+
+.status-message {
+    margin: 20px 0 0;
+    text-align: center;
+    color: #667775;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   ORDER ITEMS
+========================================= */
+
+.order-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    padding: 17px 5px;
+    border-bottom: 1px solid #edf1f0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item:hover {
+    background: #f8fbfa;
+}
+
+.order-item-image {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #eef7f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.order-item-pill {
+    width: 38px;
+    height: 17px;
+    border-radius: 50%;
+    background: #438f89;
+    transform: rotate(-25deg);
+}
+
+.order-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.order-item-info strong {
+    font-size: 15px;
+    color: #263b3a;
+}
+
+.order-item-info span {
+    font-size: 13px;
+    color: #788785;
+}
+
+.order-item-info small {
+    width: fit-content;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #eef7f5;
+    color: #438f89;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.order-item-price {
+    font-size: 15px;
+    color: #263b3a;
+}
+
+.empty-order-items {
+    margin: 0;
+    color: #788785;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   TOTAL
+========================================= */
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 20px;
+    border-top: 1px solid #dfe8e6;
+}
+
+.order-total span {
+    color: #667775;
+    font-size: 14px;
+}
+
+.order-total strong {
+    font-size: 21px;
+    color: #263b3a;
+}
+
+
+/* =========================================
+   INFORMATION GRID
+========================================= */
+
+.order-information-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+
+/* =========================================
+   SHIPPING ADDRESS
+========================================= */
+
+.information-content {
+    color: #526360;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   PAYMENT INFORMATION
+========================================= */
+
+.payment-information {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.payment-information > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.payment-information span {
+    color: #788785;
+    font-size: 13px;
+}
+
+.payment-information strong {
+    color: #263b3a;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 750px) {
+
+    .order-detail-page {
+        width: 94%;
+        padding-top: 28px;
+    }
+
+    .order-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .order-header h1 {
+        font-size: 27px;
+    }
+
+    .status-tracker {
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .status-step {
+        min-width: 70px;
+    }
+
+    .status-line {
+        min-width: 35px;
+    }
+
+    .order-information-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-card {
+        padding: 19px;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .order-item {
+        gap: 11px;
+    }
+
+    .order-item-image {
+        width: 52px;
+        height: 52px;
+    }
+
+    .order-item-pill {
+        width: 30px;
+        height: 14px;
+    }
+
+    .order-item-info strong {
+        font-size: 14px;
+    }
+
+    .order-item-price {
+        font-size: 14px;
+    }
+
+}

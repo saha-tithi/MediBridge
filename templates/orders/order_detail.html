@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    MediBridge | Order Details
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/order_detail.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="order-detail-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <section class="order-header">
+
+        <div>
+
+        
+            <h1>
+                Order Details
+            </h1>
+
+            <p
+                id="orderId"
+                class="order-id"
+            >
+                Loading order...
+            </p>
+
+        </div>
+
+
+        <div
+            id="orderDate"
+            class="order-date"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ERROR
+    ========================================== -->
+
+    <div
+        id="orderError"
+        class="order-error"
+        style="display: none;"
+    ></div>
+
+
+
+    <!-- =========================================
+         ORDER STATUS
+    ========================================== -->
+
+    <section class="order-card">
+
+        <div class="section-heading">
+
+            <h2>
+                Order Status
+            </h2>
+
+        </div>
+
+
+        <div class="status-tracker">
+
+
+            <div
+                class="status-step"
+                data-status="PLACED"
+            >
+
+                <div class="status-circle">
+                    ✓
+                </div>
+
+                <span>
+                    Placed
+                </span>
+
+            </div>
+
+
+            <div class="status-line"></div>
+
+
+            <div
+                class="status-step"
+                data-status="PACKED"
+            >
+
+                <div class="status-circle">
+                    ✓
+                </div>
+
+                <span>
+                    Packed
+                </span>
+
+            </div>
+
+
+            <div class="status-line"></div>
+
+
+            <div
+                class="status-step"
+                data-status="SHIPPED"
+            >
+
+                <div class="status-circle">
+                    ✓
+                </div>
+
+                <span>
+                    Shipped
+                </span>
+
+            </div>
+
+
+            <div class="status-line"></div>
+
+
+            <div
+                class="status-step"
+                data-status="DELIVERED"
+            >
+
+                <div class="status-circle">
+                    ✓
+                </div>
+
+                <span>
+                    Delivered
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <p
+            id="statusMessage"
+            class="status-message"
+        ></p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ORDER ITEMS
+    ========================================== -->
+
+    <section class="order-card">
+
+        <div class="section-heading">
+
+            <h2>
+                Items in this Order
+            </h2>
+
+        </div>
+
+
+        <div
+            id="orderItems"
+            class="order-items"
+        >
+        </div>
+
+
+        <div class="order-total">
+
+            <span>
+                Total
+            </span>
+
+            <strong id="orderTotal">
+                ₹0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         DELIVERY + PAYMENT
+    ========================================== -->
+
+    <div class="order-information-grid">
+
+
+        <!-- DELIVERY -->
+
+        <section class="order-card">
+
+            <div class="section-heading">
+
+                <h2>
+                    Delivery Address
+                </h2>
+
+            </div>
+
+
+            <div
+                id="shippingAddress"
+                class="information-content"
+            >
+                Loading...
+            </div>
+
+        </section>
+
+
+
+        <!-- PAYMENT -->
+
+        <section class="order-card">
+
+            <div class="section-heading">
+
+                <h2>
+                    Payment
+                </h2>
+
+            </div>
+
+
+            <div class="payment-information">
+
+
+                <div>
+
+                    <span>
+                        Payment Method
+                    </span>
+
+                    <strong id="paymentMethod">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Payment Status
+                    </span>
+
+                    <strong id="paymentStatus">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Order Total
+                    </span>
+
+                    <strong id="paymentTotal">
+                        ₹0
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script>
+
+    const ORDER_ID =
+        "{{ order_id }}";
+
+</script>
+
+
+<script
+    src="{% static 'js/order_detail.js' %}"
+></script>
+
+{% endblock %}

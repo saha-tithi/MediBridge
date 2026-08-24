@@ -28,3 +28,15 @@ def order_success_page(request, pk):
             "order_id": pk,
         }
     )
+def orders_page(request):
+    return render(request,"orders/orders.html"
+)
+def order_detail_page(request, pk):
+
+    return render(
+        request,
+        "orders/order_detail.html",
+        {
+            "order_id": pk,
+        }
+    )

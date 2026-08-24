@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    My Orders | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/orders.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="orders-page">
+
+
+    <!-- =========================================
+         ORDERS HEADER
+    ========================================== -->
+
+    <section class="orders-header">
+
+        <div>
+
+            <p class="page-eyebrow">
+                ORDER HISTORY
+            </p>
+
+            <h1>
+                My Orders
+            </h1>
+
+            <p class="orders-subtitle">
+                View and track all your orders.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ERROR
+    ========================================== -->
+
+    <div
+        id="ordersError"
+        class="orders-error"
+        style="display: none;"
+    ></div>
+
+
+
+    <!-- =========================================
+         LOADING
+    ========================================== -->
+
+    <div
+        id="ordersLoading"
+        class="orders-loading"
+    >
+
+        Loading your orders...
+
+    </div>
+
+
+
+    <!-- =========================================
+         ORDERS LIST
+    ========================================== -->
+
+    <section
+        id="ordersList"
+        class="orders-list"
+    ></section>
+
+
+
+    <!-- =========================================
+         EMPTY STATE
+    ========================================== -->
+
+    <section
+        id="ordersEmpty"
+        class="orders-empty"
+        style="display: none;"
+    >
+
+        <div class="empty-icon">
+            🛍️
+        </div>
+
+
+        <h2>
+            No orders yet
+        </h2>
+
+
+        <p>
+            Your orders will appear here once you place one.
+        </p>
+
+
+        <a
+            href="/medicines/"
+            class="browse-button"
+        >
+            Browse Medicines
+        </a>
+
+    </section>
+
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/orders.js' %}"
+></script>
+
+{% endblock %}

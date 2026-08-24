@@ -14,11 +14,13 @@ class CreateOrderSerializer(serializers.Serializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
     medicine_name = serializers.CharField(source="medicine.brand_name",read_only=True,)
+    medicine_id = serializers.UUIDField(source="medicine.id",read_only=True,)
 
     class Meta:
         model = OrderItem
         fields = (
             "id",
+            "medicine_id",
             "medicine_name",
             "quantity",
             "unit_price",
