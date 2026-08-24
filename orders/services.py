@@ -6,14 +6,17 @@ from prescriptions.models import Prescription
 
 
 @transaction.atomic
-def create_order(customer, shipping_address,payment_method):
+def create_order(customer, shipping_address, payment_method):
 
     try:
         cart = Cart.objects.get(customer=customer)
     except Cart.DoesNotExist:
         raise ValueError("Cart does not exist.")
 
-    cart_items = cart.items.select_related("medicine","prescription",).all()
+    cart_items = cart.items.select_related(
+        "medicine",
+        "prescription",
+    ).all()
 
     if not cart_items.exists():
         raise ValueError("Your cart is empty.")
@@ -23,10 +26,17 @@ def create_order(customer, shipping_address,payment_method):
     for cart_item in cart_items:
         total_amount += cart_item.subtotal
 
-   
-    order = Order.objects.create(customer=customer,status=Order.Status.PLACED,payment_status=Order.PaymentStatus.PENDING,payment_method=payment_method,total_amount=total_amount,shipping_address=shipping_address,)
+    order = Order.objects.create(
+        customer=customer,
+        status=Order.Status.PLACED,
+        payment_status=Order.PaymentStatus.PENDING,
+        payment_method=payment_method,
+        total_amount=total_amount,
+        shipping_address=shipping_address,
+    )
 
     for cart_item in cart_items:
+
         OrderItem.objects.create(
             order=order,
             medicine=cart_item.medicine,
@@ -37,8 +47,9 @@ def create_order(customer, shipping_address,payment_method):
             subtotal=cart_item.subtotal,
         )
 
-   
-    cart_items.delete()
+    if payment_method == Order.PaymentMethod.COD:
+
+        cart_items.delete()
 
     return order
 
@@ -79,7 +90,8 @@ def process_order(order):
                 f"{item.medicine.brand_name} is out of stock."
             )
 
-        inventory.stock -= item.quantityinventory.save(update_fields=["stock"])
+        inventory.stock -= item.quantity
+        inventory.save(update_fields=["stock"])
 
     order.status = Order.Status.PACKED
 

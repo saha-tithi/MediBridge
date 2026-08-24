@@ -10,7 +10,7 @@ from .permissions import IsPharmacistOrAdmin
 from .emails import send_order_placed_email,send_order_delivered_email
 import razorpay
 from django.conf import settings
-
+from cart.models import Cart
 
 
 class CreateOrderAPIView(APIView):
@@ -23,7 +23,9 @@ class CreateOrderAPIView(APIView):
 
         try:
             order = create_order(customer=request.user,shipping_address=serializer.validated_data["shipping_address"], payment_method=serializer.validated_data["payment_method"])
-            send_order_placed_email(order)
+            if order.payment_method == Order.PaymentMethod.COD:
+               send_order_placed_email(order)
+
 
         except ValueError as error:
             return Response(
@@ -58,9 +60,6 @@ class CreateRazorpayOrderAPIView(APIView):
         )
 
 
-        # -----------------------------------------
-        # Only ONLINE orders can use Razorpay
-        # -----------------------------------------
 
         if order.payment_method != Order.PaymentMethod.ONLINE:
 
@@ -72,10 +71,6 @@ class CreateRazorpayOrderAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-
-        # -----------------------------------------
-        # Don't create another Razorpay order
-        # -----------------------------------------
 
         if order.razorpay_order_id:
 
@@ -103,9 +98,7 @@ class CreateRazorpayOrderAPIView(APIView):
             )
 
 
-        # -----------------------------------------
-        # Create Razorpay client
-        # -----------------------------------------
+      
 
         client = razorpay.Client(
             auth=(
@@ -115,10 +108,6 @@ class CreateRazorpayOrderAPIView(APIView):
         )
 
 
-        # -----------------------------------------
-        # Amount is in paise
-        # ₹100 = 10000 paise
-        # -----------------------------------------
 
         amount = int(
             order.total_amount * 100
@@ -133,10 +122,6 @@ class CreateRazorpayOrderAPIView(APIView):
             }
         )
 
-
-        # -----------------------------------------
-        # Save Razorpay order ID
-        # -----------------------------------------
 
         order.razorpay_order_id =razorpay_order["id"]
 
@@ -188,9 +173,7 @@ class VerifyRazorpayPaymentAPIView(APIView):
             customer=request.user,
         )
 
-        # -----------------------------------------
-        # Only ONLINE orders
-        # -----------------------------------------
+        
 
         if order.payment_method != Order.PaymentMethod.ONLINE:
 
@@ -202,9 +185,6 @@ class VerifyRazorpayPaymentAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # -----------------------------------------
-        # Don't pay an already-paid order
-        # -----------------------------------------
 
         if order.payment_status == Order.PaymentStatus.PAID:
 
@@ -217,9 +197,7 @@ class VerifyRazorpayPaymentAPIView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-        # -----------------------------------------
-        # Get Razorpay response
-        # -----------------------------------------
+       
 
         razorpay_order_id = request.data.get(
             "razorpay_order_id"
@@ -249,11 +227,7 @@ class VerifyRazorpayPaymentAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # -----------------------------------------
-        # Make sure this payment belongs
-        # to this MediBridge order
-        # -----------------------------------------
-
+       
         if (
             razorpay_order_id !=
             order.razorpay_order_id
@@ -267,9 +241,7 @@ class VerifyRazorpayPaymentAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # -----------------------------------------
-        # Razorpay client
-        # -----------------------------------------
+        
 
         client = razorpay.Client(
             auth=(
@@ -278,9 +250,7 @@ class VerifyRazorpayPaymentAPIView(APIView):
             )
         )
 
-        # -----------------------------------------
-        # VERIFY SIGNATURE
-        # -----------------------------------------
+        
 
         try:
 
@@ -306,10 +276,9 @@ class VerifyRazorpayPaymentAPIView(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        # -----------------------------------------
-        # PAYMENT VERIFIED
-        # -----------------------------------------
+                # =========================================
+        # PAYMENT VERIFIED SUCCESSFULLY
+        # =========================================
 
         order.razorpay_payment_id = (
             razorpay_payment_id
@@ -332,9 +301,34 @@ class VerifyRazorpayPaymentAPIView(APIView):
             ]
         )
 
-        # -----------------------------------------
+
+        # =========================================
+        # CLEAR CART AFTER SUCCESSFUL PAYMENT
+        # =========================================
+
+        try:
+
+            cart = Cart.objects.get(
+                customer=request.user
+            )
+
+            cart.items.all().delete()
+
+        except Cart.DoesNotExist:
+
+            pass
+
+
+        # =========================================
+        # SEND ORDER PLACED EMAIL
+        # =========================================
+
+        send_order_placed_email(order)
+
+
+        # =========================================
         # RESPONSE
-        # -----------------------------------------
+        # =========================================
 
         serializer = OrderSerializer(
             order
@@ -348,6 +342,8 @@ class VerifyRazorpayPaymentAPIView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+        
 
 
 class OrderListAPIView(APIView):

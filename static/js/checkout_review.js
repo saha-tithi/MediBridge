@@ -29,7 +29,7 @@ const reviewError =
 let selectedAddressId =sessionStorage.getItem("selectedAddressId");
 let currentCart = null;
 let selectedAddressForPayment = null;
-
+let pendingOnlineOrder = null;
 
 
 /* =========================================
@@ -394,6 +394,21 @@ placeOrderButton.addEventListener(
     "click",
     async function () {
 
+        /* =================================
+           RETRY EXISTING ONLINE PAYMENT
+        ================================= */
+
+        if (pendingOnlineOrder) {
+
+            await startRazorpayPayment(
+                pendingOnlineOrder
+            );
+
+            return;
+
+        }
+
+
         if (
             !selectedAddressId ||
             !currentCart
@@ -524,6 +539,11 @@ placeOrderButton.addEventListener(
                 );
 
             }
+            if (paymentMethod === "ONLINE") {
+
+               pendingOnlineOrder =
+               order;
+            }
 
 
             console.log(
@@ -597,6 +617,18 @@ placeOrderButton.addEventListener(
     }
 );
 /* =========================================
+   ENABLE PAYMENT RETRY
+========================================= */
+
+function enablePaymentRetry() {
+
+    placeOrderButton.disabled = false;
+
+    placeOrderButton.textContent =
+        "Retry Payment";
+
+}
+/* =========================================
    START RAZORPAY PAYMENT
 ========================================= */
 
@@ -609,7 +641,7 @@ async function startRazorpayPayment(order) {
 
 
         /* =================================
-           CREATE RAZORPAY ORDER
+           CREATE / GET RAZORPAY ORDER
         ================================= */
 
         const response =
@@ -704,6 +736,7 @@ async function startRazorpayPayment(order) {
                             "Payment verified:",
                             verificationResponse
                         );
+                        pendingOnlineOrder = null;
 
 
                         sessionStorage.setItem(
@@ -729,12 +762,7 @@ async function startRazorpayPayment(order) {
                         );
 
 
-                        placeOrderButton.disabled =
-                            false;
-
-
-                        placeOrderButton.textContent =
-                            "Place Order";
+                        enablePaymentRetry();
 
                     }
 
@@ -765,13 +793,34 @@ async function startRazorpayPayment(order) {
                 color:
                     "#438f89"
 
-            }
+            },
+            /* ==============================
+   MODAL CLOSE
+============================== */
+
+modal: {
+
+    ondismiss: function () {
+
+        console.log(
+            "Razorpay checkout closed."
+        );
+
+        showReviewError(
+            "Payment was not completed. You can try again."
+        );
+
+        enablePaymentRetry();
+
+    }
+
+}
 
         };
 
 
         /* =================================
-           OPEN RAZORPAY
+           CREATE RAZORPAY INSTANCE
         ================================= */
 
         const razorpay =
@@ -780,11 +829,15 @@ async function startRazorpayPayment(order) {
             );
 
 
+        /* =================================
+           PAYMENT FAILED
+        ================================= */
+
         razorpay.on(
             "payment.failed",
             function (
                 response
-            ) {
+) {
 
                 console.error(
                     "Razorpay payment failed:",
@@ -797,16 +850,16 @@ async function startRazorpayPayment(order) {
                 );
 
 
-                placeOrderButton.disabled =
-                    false;
-
-
-                placeOrderButton.textContent =
-                    "Place Order";
+                enablePaymentRetry();
 
             }
         );
 
+
+
+        /* =================================
+           OPEN RAZORPAY
+        ================================= */
 
         razorpay.open();
 
@@ -825,55 +878,11 @@ async function startRazorpayPayment(order) {
         );
 
 
-        placeOrderButton.disabled =
-            false;
-
-
-        placeOrderButton.textContent =
-            "Place Order";
+        enablePaymentRetry();
 
     }
 
 }
-
-/* =========================================
-   ADDRESS LABEL
-========================================= */
-
-function getAddressLabel(label) {
-
-    const labels = {
-
-        HOME: "Home",
-
-        WORK: "Work",
-
-        OTHER: "Other"
-
-    };
-
-
-    return labels[label] || label;
-
-}
-
-
-
-/* =========================================
-   ERROR
-========================================= */
-
-function showReviewError(message) {
-
-    reviewError.textContent =
-        message;
-
-    reviewError.style.display =
-        "block";
-
-}
-
-
 
 /* =========================================
    HTML ESCAPE
@@ -919,7 +928,40 @@ function escapeHTML(value) {
         );
 
 }
+/* =========================================
+   ADDRESS LABEL
+========================================= */
 
+function getAddressLabel(label) {
+
+    const labels = {
+
+        HOME: "Home",
+
+        WORK: "Work",
+
+        OTHER: "Other"
+
+    };
+
+    return labels[label] || label;
+
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+function showReviewError(message) {
+
+    reviewError.textContent =
+        message;
+
+    reviewError.style.display =
+        "block";
+
+}
 
 
 /* =========================================
