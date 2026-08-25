@@ -40,3 +40,13 @@ def order_detail_page(request, pk):
             "order_id": pk,
         }
     )
+def profile_page(request):
+    return render(
+        request,
+        "profile.html"
+    )
+def addresses_page(request):
+    return render(
+        request,
+        "addresses.html"
+    )

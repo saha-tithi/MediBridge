@@ -1,0 +1,424 @@
+/* =========================================
+   PROFILE PAGE
+========================================= */
+
+.profile-page {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 44px 32px 70px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.page-eyebrow {
+    margin: 0 0 7px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    color: #438f89;
+}
+
+.profile-header h1 {
+    margin: 0;
+    color: #263b3b;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.profile-subtitle {
+    margin: 8px 0 0;
+    color: #718080;
+    font-size: 15px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.profile-error {
+    margin-bottom: 22px;
+    padding: 13px 17px;
+    border: 1px solid #f0caca;
+    border-radius: 10px;
+    background: #fff1f1;
+    color: #b94a48;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   PROFILE CARD
+========================================= */
+
+.profile-card {
+    margin-bottom: 20px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e3e9e8;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(39, 65, 65, 0.045);
+}
+
+
+/* =========================================
+   SECTION HEADING
+========================================= */
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #edf1f0;
+}
+
+.section-heading h2 {
+    margin: 0;
+    color: #344747;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.section-heading p {
+    margin: 6px 0 0;
+    color: #7c8989;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   PROFILE FORM
+========================================= */
+
+.profile-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    color: #5e6e6e;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #dce5e3;
+    border-radius: 9px;
+
+    background: #fafcfc;
+    color: #344747;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-group input:disabled {
+    color: #5f6e6e;
+    cursor: default;
+}
+
+.form-group input:not(:disabled) {
+    background: #ffffff;
+}
+
+.form-group input:not(:disabled):focus {
+    border-color: #438f89;
+    box-shadow: 0 0 0 3px rgba(67, 143, 137, 0.09);
+}
+
+
+/* =========================================
+   EDIT BUTTON
+========================================= */
+
+.edit-profile-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 16px;
+
+    border: 1px solid #438f89;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #438f89;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.edit-profile-button:hover {
+    background: #438f89;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   PROFILE ACTIONS
+========================================= */
+
+.profile-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    padding-top: 4px;
+}
+
+
+/* =========================================
+   CANCEL BUTTON
+========================================= */
+
+.cancel-button {
+    padding: 9px 17px;
+
+    border: 1px solid #dce5e3;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #657474;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background: #f5f8f7;
+}
+
+
+/* =========================================
+   SAVE BUTTON
+========================================= */
+
+.save-button {
+    padding: 9px 17px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #438f89;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.save-button:hover {
+    background: #367b76;
+    transform: translateY(-1px);
+}
+
+.save-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* =========================================
+   ACCOUNT INFORMATION
+========================================= */
+
+.account-information {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.account-information > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    padding: 14px 16px;
+
+    border-radius: 10px;
+    background: #fafcfc;
+}
+
+.account-information span {
+    color: #899696;
+    font-size: 12px;
+}
+
+.account-information strong {
+    color: #344747;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   MANAGE ADDRESS BUTTON
+========================================= */
+
+.manage-address-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 16px;
+
+    border-radius: 8px;
+
+    background: #438f89;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.manage-address-button:hover {
+    background: #367b76;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   ACCOUNT ACTIONS
+========================================= */
+
+.account-actions-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.account-actions-card h2 {
+    margin: 0;
+    color: #344747;
+    font-size: 18px;
+}
+
+.account-actions-card p {
+    margin: 6px 0 0;
+    color: #7c8989;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+.logout-button {
+    padding: 9px 18px;
+
+    border: 1px solid #e3bcbc;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #b94a48;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.logout-button:hover {
+    background: #fff1f1;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .profile-page {
+        padding: 32px 18px 50px;
+    }
+
+    .profile-header h1 {
+        font-size: 28px;
+    }
+
+    .profile-form {
+        grid-template-columns: 1fr;
+    }
+
+    .account-information {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .account-actions-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .manage-address-button,
+    .logout-button {
+        width: 100%;
+    }
+
+}

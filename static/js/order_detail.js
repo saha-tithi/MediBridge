@@ -286,7 +286,7 @@ function renderOrderItems(items) {
 
 
                         window.location.href =
-                            `/medicine/${medicineId}/`;
+                            `/medicines/${medicineId}/`;
 
                     }
                 );

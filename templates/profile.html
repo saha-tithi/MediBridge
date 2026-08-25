@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    My Account | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/profile.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="profile-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <section class="profile-header">
+
+        <p class="page-eyebrow">
+            ACCOUNT
+        </p>
+
+        <h1>
+            My Account
+        </h1>
+
+        <p class="profile-subtitle">
+            Manage your profile and account information.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ERROR
+    ========================================== -->
+
+    <div
+        id="profileError"
+        class="profile-error"
+        style="display: none;"
+    ></div>
+
+
+
+    <!-- =========================================
+         PROFILE
+    ========================================== -->
+
+    <section class="profile-card">
+
+        <div class="section-heading">
+
+            <h2>
+                Profile Information
+            </h2>
+
+            <button
+                type="button"
+                id="editProfileButton"
+                class="edit-profile-button"
+            >
+                Edit Profile
+            </button>
+
+        </div>
+
+
+
+        <form
+            id="profileForm"
+            class="profile-form"
+        >
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    disabled
+                >
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    disabled
+                >
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label for="phone_number">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone_number"
+                    name="phone_number"
+                    disabled
+                >
+
+            </div>
+
+
+
+            <div
+                id="profileActions"
+                class="profile-actions"
+                style="display: none;"
+            >
+
+                <button
+                    type="button"
+                    id="cancelEditButton"
+                    class="cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveProfileButton"
+                    class="save-button"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ACCOUNT INFORMATION
+    ========================================== -->
+
+    <section class="profile-card">
+
+        <div class="section-heading">
+
+            <h2>
+                Account Information
+            </h2>
+
+        </div>
+
+
+        <div class="account-information">
+
+
+            <div>
+
+                <span>
+                    Account Type
+                </span>
+
+                <strong id="accountRole">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Member Since
+                </span>
+
+                <strong id="accountCreated">
+                    -
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ADDRESSES
+    ========================================== -->
+
+    <section class="profile-card">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    Delivery Addresses
+                </h2>
+
+                <p>
+                    Manage your saved delivery addresses.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/addresses/"
+                class="manage-address-button"
+            >
+                Manage Addresses
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         LOGOUT
+    ========================================== -->
+
+    <section class="profile-card account-actions-card">
+
+        <div>
+
+            <h2>
+                Account
+            </h2>
+
+            <p>
+                Sign out of your MediBridge account.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="logoutButton"
+            class="logout-button"
+        >
+            Logout
+        </button>
+
+    </section>
+
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/profile.js' %}"
+></script>
+
+{% endblock %}
