@@ -8,21 +8,19 @@ def clean_text(text):
 
     text = text.upper()
 
-    replacements = {
-        "0": "O",
-        "1": "I",
-        "|": "I",
-        "$": "S",
-        "@": "A",
-    }
+    # Keep letters and numbers.
+    # Do NOT replace 0 → O or 1 → I.
+    text = re.sub(
+        r"[^A-Z0-9\s]",
+        " ",
+        text
+    )
 
-    for old, new in replacements.items():
-        text = text.replace(old, new)
-
-   
-    text = re.sub(r"[^A-Z0-9\s]", " ", text)
-
-   
-    text = re.sub(r"\s+", " ", text)
+    # Remove repeated spaces
+    text = re.sub(
+        r"\s+",
+        " ",
+        text
+    )
 
     return text.strip()

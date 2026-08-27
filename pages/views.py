@@ -50,3 +50,8 @@ def addresses_page(request):
         request,
         "addresses.html"
     )
+def upload_prescription_page(request):
+    return render(
+        request,
+        "prescriptions/upload_prescription.html"
+    )

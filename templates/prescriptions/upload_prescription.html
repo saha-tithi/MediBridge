@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Upload Prescription | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/upload_prescription.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="prescription-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <section class="prescription-header">
+
+        <p class="page-eyebrow">
+            PRESCRIPTION
+        </p>
+
+        <h1>
+            Upload Prescription
+        </h1>
+
+        <p class="prescription-subtitle">
+            Upload your prescription and let MediBridge
+            identify the medicines for you.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ERROR
+    ========================================== -->
+
+    <div
+        id="prescriptionError"
+        class="prescription-error"
+        style="display: none;"
+    ></div>
+
+
+
+    <!-- =========================================
+         UPLOAD CARD
+    ========================================== -->
+
+    <section
+        id="uploadArea"
+        class="upload-card"
+    >
+
+        <div class="upload-card-header">
+
+            <div>
+
+                <h2>
+                    Upload your prescription
+                </h2>
+
+                <p>
+                    Upload a clear image or PDF of your prescription.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             FILE DROP AREA
+        ====================================== -->
+
+        <label
+            for="prescriptionFile"
+            class="upload-drop-area"
+        >
+
+            <div class="upload-icon">
+                +
+            </div>
+
+            <strong>
+                Choose prescription file
+            </strong>
+
+            <span>
+                JPG, PNG or PDF
+            </span>
+
+            <small>
+                Maximum file size: 10 MB
+            </small>
+
+            <input
+                type="file"
+                id="prescriptionFile"
+                accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
+                hidden
+            >
+
+        </label>
+
+
+
+        <!-- =====================================
+             SELECTED FILE
+        ====================================== -->
+
+        <div
+            id="selectedFile"
+            class="selected-file"
+            style="display: none;"
+        >
+
+            <div class="selected-file-info">
+
+                <div class="file-icon">
+                    FILE
+                </div>
+
+                <div>
+
+                    <strong id="selectedFileName">
+                        prescription
+                    </strong>
+
+                    <span id="selectedFileSize">
+                        0 KB
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="removeFileButton"
+                class="remove-file-button"
+            >
+                Remove
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             UPLOAD ACTION
+        ====================================== -->
+
+        <div class="upload-actions">
+
+            <button
+                type="button"
+                id="uploadButton"
+                class="upload-button"
+                disabled
+            >
+                Upload Prescription
+            </button>
+
+        </div>
+
+
+
+        <!-- =====================================
+             UPLOAD STATUS
+        ====================================== -->
+
+        <div
+            id="uploadStatus"
+            class="processing-status"
+            style="display: none;"
+        >
+
+            <span class="loading-spinner"></span>
+
+            <span>
+                Uploading prescription...
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         UPLOADED PRESCRIPTION
+    ========================================== -->
+
+    <section
+        id="uploadedPrescription"
+        class="uploaded-card"
+        style="display: none;"
+    >
+
+        <div class="uploaded-card-header">
+
+            <div>
+
+                <p class="card-eyebrow">
+                    UPLOADED
+                </p>
+
+                <h2>
+                    Prescription uploaded
+                </h2>
+
+                <p>
+                    Your prescription has been saved successfully.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="uploaded-file">
+
+            <div class="uploaded-file-icon">
+                ✓
+            </div>
+
+            <div class="uploaded-file-info">
+
+                <strong id="uploadedFileName">
+                    prescription
+                </strong>
+
+                <span>
+                    Prescription ready for analysis
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="extract-actions">
+
+            <button
+                type="button"
+                id="extractButton"
+                class="extract-button"
+            >
+                Identify Medicines
+            </button>
+
+        </div>
+
+
+        <!-- =====================================
+             EXTRACTION STATUS
+        ====================================== -->
+
+        <div
+            id="extractStatus"
+            class="processing-status"
+            style="display: none;"
+        >
+
+            <span class="loading-spinner"></span>
+
+            <span>
+                Reading prescription...
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         OCR RESULT
+    ========================================== -->
+
+    <section
+        id="ocrResult"
+        class="ocr-card"
+        style="display: none;"
+    >
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="card-eyebrow">
+                    OCR RESULT
+                </p>
+
+                <h2>
+                    Extracted Text
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="ocr-content">
+
+            <pre
+                id="ocrText"
+                class="ocr-text"
+            ></pre>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         EXTRACTED MEDICINES
+    ========================================== -->
+
+    <section
+        id="extractedMedicinesCard"
+        class="medicines-card"
+        style="display: none;"
+    >
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="card-eyebrow">
+                    MEDICINE IDENTIFICATION
+                </p>
+
+                <h2>
+                    Identified Medicines
+                </h2>
+
+                <p>
+                    Review the medicines identified from your prescription.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="extractedMedicines"
+            class="extracted-medicines"
+        ></div>
+
+
+        <div
+            class="medicine-selection-note"
+        >
+            Only medicines available at MediBridge can be selected.
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/upload_prescription.js' %}"
+></script>
+
+{% endblock %}

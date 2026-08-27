@@ -1,0 +1,860 @@
+/* =========================================
+   UPLOAD PRESCRIPTION PAGE
+========================================= */
+
+.prescription-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 44px 32px 70px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.prescription-header {
+    margin-bottom: 30px;
+}
+
+.page-eyebrow,
+.card-eyebrow {
+    margin: 0 0 7px;
+
+    color: #438f89;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 1.6px;
+}
+
+.prescription-header h1 {
+    margin: 0;
+
+    color: #263b3b;
+
+    font-size: 34px;
+    font-weight: 700;
+
+    letter-spacing: -0.4px;
+}
+
+.prescription-subtitle {
+    margin: 8px 0 0;
+
+    color: #718080;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.prescription-error {
+    margin-bottom: 22px;
+
+    padding: 13px 17px;
+
+    border: 1px solid #f0caca;
+    border-radius: 10px;
+
+    background: #fff1f1;
+
+    color: #b94a48;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   COMMON CARDS
+========================================= */
+
+.upload-card,
+.uploaded-card,
+.ocr-card,
+.medicines-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e3e9e8;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 16px rgba(39, 65, 65, 0.045);
+}
+
+
+/* =========================================
+   UPLOAD CARD
+========================================= */
+
+.upload-card {
+    padding: 26px;
+}
+
+.upload-card-header {
+    margin-bottom: 22px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #edf1f0;
+}
+
+.upload-card-header h2,
+.uploaded-card-header h2,
+.section-heading h2 {
+
+    margin: 0;
+
+    color: #344747;
+
+    font-size: 19px;
+
+    font-weight: 700;
+}
+
+.upload-card-header p,
+.uploaded-card-header p,
+.section-heading p {
+
+    margin: 7px 0 0;
+
+    color: #7c8989;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   DROP AREA
+========================================= */
+
+.upload-drop-area {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 210px;
+
+    padding: 30px;
+
+    border: 1.5px dashed #cbdcd9;
+
+    border-radius: 12px;
+
+    background: #f9fbfa;
+
+    color: #344747;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.upload-drop-area:hover {
+
+    border-color: #438f89;
+
+    background: #f4f9f8;
+}
+
+
+/* =========================================
+   UPLOAD ICON
+========================================= */
+
+.upload-icon {
+
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #edf7f5;
+
+    color: #438f89;
+
+    font-size: 27px;
+
+    font-weight: 400;
+}
+
+.upload-drop-area strong {
+
+    margin-bottom: 6px;
+
+    color: #344747;
+
+    font-size: 15px;
+}
+
+.upload-drop-area span {
+
+    color: #718080;
+
+    font-size: 13px;
+}
+
+.upload-drop-area small {
+
+    margin-top: 6px;
+
+    color: #9aa5a5;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   SELECTED FILE
+========================================= */
+
+.selected-file {
+
+    margin-top: 16px;
+
+    padding: 13px 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border: 1px solid #dce8e5;
+
+    border-radius: 10px;
+
+    background: #f7faf9;
+}
+
+.selected-file-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+}
+
+.file-icon {
+
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #edf7f5;
+
+    color: #438f89;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.selected-file-info strong {
+
+    display: block;
+
+    max-width: 450px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #344747;
+
+    font-size: 13px;
+}
+
+.selected-file-info span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #899696;
+
+    font-size: 12px;
+}
+
+.remove-file-button {
+
+    flex-shrink: 0;
+
+    padding: 7px 11px;
+
+    border: 1px solid #ebcece;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #b94a48;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.remove-file-button:hover {
+
+    background: #fff5f5;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.upload-actions,
+.extract-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 20px;
+}
+
+.upload-button,
+.extract-button {
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #438f89;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.upload-button:hover:not(:disabled),
+.extract-button:hover:not(:disabled) {
+
+    background: #367b76;
+
+    transform: translateY(-1px);
+}
+
+.upload-button:disabled,
+.extract-button:disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================
+   PROCESSING STATUS
+========================================= */
+
+.processing-status {
+
+    margin-top: 18px;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    color: #718080;
+
+    font-size: 13px;
+}
+
+.loading-spinner {
+
+    width: 15px;
+    height: 15px;
+
+    border: 2px solid #dce8e5;
+
+    border-top-color: #438f89;
+
+    border-radius: 50%;
+
+    animation:
+        prescriptionSpin 0.8s linear infinite;
+}
+
+@keyframes prescriptionSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================
+   UPLOADED CARD
+========================================= */
+
+.uploaded-card {
+
+    margin-top: 22px;
+
+    padding: 26px;
+}
+
+.uploaded-card-header {
+
+    margin-bottom: 20px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #edf1f0;
+}
+
+.uploaded-file {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 15px;
+
+    border: 1px solid #dce8e5;
+
+    border-radius: 10px;
+
+    background: #f7faf9;
+}
+
+.uploaded-file-icon {
+
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eaf6ee;
+
+    color: #398054;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+.uploaded-file-info strong {
+
+    display: block;
+
+    color: #344747;
+
+    font-size: 13px;
+}
+
+.uploaded-file-info span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #899696;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   OCR CARD
+========================================= */
+
+.ocr-card {
+
+    margin-top: 22px;
+
+    padding: 26px;
+}
+
+.section-heading {
+
+    margin-bottom: 18px;
+
+    padding-bottom: 17px;
+
+    border-bottom: 1px solid #edf1f0;
+}
+
+.ocr-content {
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    background: #f7faf9;
+}
+
+.ocr-text {
+
+    margin: 0;
+
+    min-height: 80px;
+
+    color: #344747;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   MEDICINES CARD
+========================================= */
+
+.medicines-card {
+
+    margin-top: 22px;
+
+    padding: 26px;
+}
+
+
+/* =========================================
+   MEDICINES LIST
+========================================= */
+
+.extracted-medicines {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+.extracted-medicine {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 15px 16px;
+
+    border: 1px solid #e3e9e8;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.extracted-medicine:hover {
+
+    border-color: #d5e2df;
+
+    background: #fbfcfc;
+}
+
+
+/* =========================================
+   MEDICINE INFORMATION
+========================================= */
+
+.medicine-result-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+.medicine-result-info strong {
+
+    color: #344747;
+
+    font-size: 14px;
+}
+
+.medicine-result-info span {
+
+    color: #718080;
+
+    font-size: 13px;
+}
+
+.medicine-result-info small {
+
+    color: #899696;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   AVAILABILITY
+========================================= */
+
+.medicine-availability {
+
+    margin-top: 5px;
+
+    font-size: 12px !important;
+
+    font-weight: 600;
+}
+
+.availability-available
+.medicine-availability {
+
+    color: #398054;
+}
+
+.availability-out-of-stock
+.medicine-availability {
+
+    color: #92723c;
+}
+
+.availability-not-available
+.medicine-availability {
+
+    color: #b94a48;
+}
+
+
+/* =========================================
+   MEDICINE SELECTION
+========================================= */
+
+.medicine-select {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    color: #438f89;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.medicine-checkbox {
+
+    width: 16px;
+    height: 16px;
+
+    accent-color: #438f89;
+
+    cursor: pointer;
+}
+
+.medicine-unavailable-label {
+
+    flex-shrink: 0;
+
+    color: #899696;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   NO MEDICINE RESULT
+========================================= */
+
+.extracted-medicine p {
+
+    margin: 5px 0 0;
+
+    color: #899696;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   NOTE
+========================================= */
+
+.medicine-selection-note {
+
+    margin-top: 18px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #edf1f0;
+
+    color: #899696;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .prescription-page {
+
+        padding: 32px 18px 50px;
+    }
+
+    .prescription-header h1 {
+
+        font-size: 28px;
+    }
+
+    .upload-card,
+    .uploaded-card,
+    .ocr-card,
+    .medicines-card {
+
+        padding: 20px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .selected-file {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .remove-file-button {
+
+        width: 100%;
+    }
+
+    .upload-actions,
+    .extract-actions {
+
+        justify-content: stretch;
+    }
+
+    .upload-button,
+    .extract-button {
+
+        width: 100%;
+    }
+
+    .extracted-medicine {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .medicine-select,
+    .medicine-unavailable-label {
+
+        align-self: flex-start;
+    }
+
+}
