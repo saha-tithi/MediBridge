@@ -1,6 +1,16 @@
 /* =========================================
-   UPLOAD PRESCRIPTION
+   MEDIBRIDGE
+   PRESCRIPTION IDENTIFICATION
 ========================================= */
+
+
+/* =========================================
+   ELEMENT HELPER
+========================================= */
+
+function getElement(id) {
+    return document.getElementById(id);
+}
 
 
 /* =========================================
@@ -8,89 +18,49 @@
 ========================================= */
 
 const prescriptionFile =
-    document.getElementById(
-        "prescriptionFile"
-    );
+    getElement("prescriptionFile");
 
 const uploadButton =
-    document.getElementById(
-        "uploadButton"
-    );
+    getElement("uploadButton");
 
 const uploadArea =
-    document.getElementById(
-        "uploadArea"
-    );
+    getElement("uploadArea");
 
 const selectedFile =
-    document.getElementById(
-        "selectedFile"
-    );
+    getElement("selectedFile");
 
 const selectedFileName =
-    document.getElementById(
-        "selectedFileName"
-    );
+    getElement("selectedFileName");
 
 const selectedFileSize =
-    document.getElementById(
-        "selectedFileSize"
-    );
+    getElement("selectedFileSize");
 
 const removeFileButton =
-    document.getElementById(
-        "removeFileButton"
-    );
+    getElement("removeFileButton");
 
 const uploadStatus =
-    document.getElementById(
-        "uploadStatus"
-    );
+    getElement("uploadStatus");
 
 const prescriptionError =
-    document.getElementById(
-        "prescriptionError"
-    );
+    getElement("prescriptionError");
 
 const uploadedPrescription =
-    document.getElementById(
-        "uploadedPrescription"
-    );
+    getElement("uploadedPrescription");
 
 const uploadedFileName =
-    document.getElementById(
-        "uploadedFileName"
-    );
+    getElement("uploadedFileName");
 
 const extractButton =
-    document.getElementById(
-        "extractButton"
-    );
+    getElement("extractButton");
 
 const extractStatus =
-    document.getElementById(
-        "extractStatus"
-    );
-
-const ocrResult =
-    document.getElementById(
-        "ocrResult"
-    );
-
-const ocrText =
-    document.getElementById(
-        "ocrText"
-    );
+    getElement("extractStatus");
 
 const extractedMedicinesCard =
-    document.getElementById(
-        "extractedMedicinesCard"
-    );
+    getElement("extractedMedicinesCard");
 
 const extractedMedicines =
-    document.getElementById(
-        "extractedMedicines"
-    );
+    getElement("extractedMedicines");
 
 
 /* =========================================
@@ -103,28 +73,56 @@ let uploadedPrescriptionId = null;
 
 
 /* =========================================
-   FILE SELECT
+   CHECK PAGE ELEMENTS
 ========================================= */
 
-prescriptionFile.addEventListener(
-    "change",
-    function () {
-
-        const file =
-            this.files[0];
-
-
-        if (!file) {
-
-            return;
-
-        }
-
-
-        validateSelectedFile(file);
-
-    }
+console.log(
+    "MediBridge prescription page loaded."
 );
+
+console.log(
+    "Prescription file:",
+    prescriptionFile
+);
+
+console.log(
+    "Upload button:",
+    uploadButton
+);
+
+console.log(
+    "Extract button:",
+    extractButton
+);
+
+console.log(
+    "Medicines container:",
+    extractedMedicines
+);
+
+
+/* =========================================
+   FILE SELECTION
+========================================= */
+
+if (prescriptionFile) {
+
+    prescriptionFile.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            validateSelectedFile(file);
+        }
+    );
+
+}
 
 
 /* =========================================
@@ -157,11 +155,9 @@ function validateSelectedFile(file) {
             "Please select a JPG, PNG, or PDF file."
         );
 
-
         resetFileSelection();
 
         return;
-
     }
 
 
@@ -177,11 +173,9 @@ function validateSelectedFile(file) {
             "Prescription file must be smaller than 10 MB."
         );
 
-
         resetFileSelection();
 
         return;
-
     }
 
 
@@ -190,7 +184,6 @@ function validateSelectedFile(file) {
 
 
     showSelectedFile(file);
-
 }
 
 
@@ -200,22 +193,34 @@ function validateSelectedFile(file) {
 
 function showSelectedFile(file) {
 
-    selectedFileName.textContent =
-        file.name;
+    if (selectedFileName) {
+
+        selectedFileName.textContent =
+            file.name;
+    }
 
 
-    selectedFileSize.textContent =
-        formatFileSize(
-            file.size
-        );
+    if (selectedFileSize) {
+
+        selectedFileSize.textContent =
+            formatFileSize(
+                file.size
+            );
+    }
 
 
-    selectedFile.style.display =
-        "flex";
+    if (selectedFile) {
+
+        selectedFile.style.display =
+            "flex";
+    }
 
 
-    uploadButton.disabled =
-        false;
+    if (uploadButton) {
+
+        uploadButton.disabled =
+            false;
+    }
 
 }
 
@@ -224,14 +229,18 @@ function showSelectedFile(file) {
    REMOVE FILE
 ========================================= */
 
-removeFileButton.addEventListener(
-    "click",
-    function () {
+if (removeFileButton) {
 
-        resetFileSelection();
+    removeFileButton.addEventListener(
+        "click",
+        function () {
 
-    }
-);
+            resetFileSelection();
+
+        }
+    );
+
+}
 
 
 function resetFileSelection() {
@@ -240,263 +249,485 @@ function resetFileSelection() {
         null;
 
 
-    prescriptionFile.value =
-        "";
+    if (prescriptionFile) {
+
+        prescriptionFile.value =
+            "";
+    }
 
 
-    selectedFile.style.display =
-        "none";
+    if (selectedFile) {
+
+        selectedFile.style.display =
+            "none";
+    }
 
 
-    uploadButton.disabled =
-        true;
+    if (uploadButton) {
+
+        uploadButton.disabled =
+            true;
+    }
 
 }
 
 
 /* =========================================
-   UPLOAD
+   UPLOAD PRESCRIPTION
 ========================================= */
 
-uploadButton.addEventListener(
-    "click",
-    async function () {
+if (uploadButton) {
 
-        if (
-            !selectedPrescription
-        ) {
+    uploadButton.addEventListener(
+        "click",
+        async function () {
 
-            return;
+            if (!selectedPrescription) {
 
-        }
-
-
-        clearPrescriptionError();
+                return;
+            }
 
 
-        uploadButton.disabled =
-            true;
-
-
-        uploadStatus.style.display =
-            "flex";
-
-
-        const formData =
-            new FormData();
-
-
-        formData.append(
-            "prescription",
-            selectedPrescription
-        );
-
-
-        try {
-
-            const response =
-                await apiRequest(
-                    "/prescriptions/upload/",
-                    {
-                        method: "POST",
-
-                        body: formData
-                    }
-                );
-
-
-            const prescription =
-                response.data ||
-                response;
-
-
-            uploadedPrescriptionId =
-                prescription.id;
-
-
-            uploadedFileName.textContent =
-                selectedPrescription.name;
-
-
-            uploadedPrescription.style.display =
-                "block";
-
-
-            uploadStatus.style.display =
-                "none";
-
-
-            uploadArea.style.display =
-                "none";
-
-
-            selectedFile.style.display =
-                "none";
-
-
-            selectedPrescription =
-                null;
-
-
-            uploadedPrescription.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
-
-
-        } catch (error) {
-
-            console.error(
-                "Prescription upload error:",
-                error
-            );
-
-
-            uploadStatus.style.display =
-                "none";
+            clearPrescriptionError();
 
 
             uploadButton.disabled =
-                false;
+                true;
 
 
-            showPrescriptionError(
-                error.message ||
-                "Unable to upload prescription."
+            if (uploadStatus) {
+
+                uploadStatus.style.display =
+                    "flex";
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "prescription",
+                selectedPrescription
             );
 
-        }
 
-    }
-);
+            try {
 
-
-/* =========================================
-   EXTRACT MEDICINES
-========================================= */
-
-extractButton.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            !uploadedPrescriptionId
-        ) {
-
-            return;
-
-        }
+                const response =
+                    await apiRequest(
+                        "/prescriptions/upload/",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
 
 
-        clearPrescriptionError();
-
-
-        extractButton.disabled =
-            true;
-
-
-        extractStatus.style.display =
-            "flex";
-
-
-        try {
-
-            const response =
-                await apiRequest(
-                    `/prescriptions/${uploadedPrescriptionId}/extract/`,
-                    {
-                        method: "POST"
-                    }
+                console.log(
+                    "UPLOAD RESPONSE:",
+                    response
                 );
 
 
-            const result =
-                response.data ||
-                response;
+                /*
+                 * Depending on apiRequest(),
+                 * response may be:
+                 *
+                 * {
+                 *     id: "..."
+                 * }
+                 *
+                 * OR:
+                 *
+                 * {
+                 *     data: {
+                 *         id: "..."
+                 *     }
+                 * }
+                 */
 
 
-            /*
-             * Backend response:
-             *
-             * {
-             *     extracted_text: "...",
-             *     medicines: [...]
-             * }
-             */
+                const prescription =
+                    response &&
+                    response.data
+                        ? response.data
+                        : response;
 
 
-            /* ================================
-               SHOW RAW OCR TEXT
-            ================================= */
+                if (
+                    !prescription ||
+                    !prescription.id
+                ) {
 
-            ocrText.textContent =
-                result.extracted_text ||
-                "No text could be extracted.";
-
-
-            ocrResult.style.display =
-                "block";
+                    throw new Error(
+                        "Upload succeeded, but no prescription ID was returned."
+                    );
+                }
 
 
-            /* ================================
-               STOP EXTRACTION LOADING
-            ================================= */
-
-            extractStatus.style.display =
-                "none";
+                uploadedPrescriptionId =
+                    prescription.id;
 
 
-            /* ================================
-               SHOW MEDICINES
-            ================================= */
+                if (uploadedFileName) {
 
-            renderExtractedMedicines(
-                result.medicines ||
-                []
-            );
+                    uploadedFileName.textContent =
+                        selectedPrescription.name;
+                }
 
 
-        } catch (error) {
+                if (uploadedPrescription) {
 
-            console.error(
-                "Prescription extraction error:",
-                error
-            );
-
-
-            extractStatus.style.display =
-                "none";
+                    uploadedPrescription.style.display =
+                        "block";
+                }
 
 
-            extractButton.disabled =
-                false;
+                if (uploadStatus) {
+
+                    uploadStatus.style.display =
+                        "none";
+                }
 
 
-            showPrescriptionError(
-                error.message ||
-                "Unable to identify medicines."
-            );
+                if (uploadArea) {
+
+                    uploadArea.style.display =
+                        "none";
+                }
+
+
+                if (selectedFile) {
+
+                    selectedFile.style.display =
+                        "none";
+                }
+
+
+                selectedPrescription =
+                    null;
+
+
+                if (uploadedPrescription) {
+
+                    uploadedPrescription.scrollIntoView({
+
+                        behavior: "smooth",
+
+                        block: "center"
+
+                    });
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "UPLOAD ERROR:",
+                    error
+                );
+
+
+                if (uploadStatus) {
+
+                    uploadStatus.style.display =
+                        "none";
+                }
+
+
+                uploadButton.disabled =
+                    false;
+
+
+                showPrescriptionError(
+                    error.message ||
+                    "Unable to upload prescription."
+                );
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 /* =========================================
-   RENDER EXTRACTED MEDICINES
+   IDENTIFY MEDICINES
+========================================= */
+
+if (extractButton) {
+
+    extractButton.addEventListener(
+        "click",
+        async function () {
+
+            if (!uploadedPrescriptionId) {
+
+                showPrescriptionError(
+                    "Prescription ID is missing."
+                );
+
+                return;
+            }
+
+
+            clearPrescriptionError();
+
+
+            extractButton.disabled =
+                true;
+
+
+            if (extractStatus) {
+
+                extractStatus.style.display =
+                    "flex";
+            }
+
+
+            try {
+
+                console.log(
+                    "Starting medicine identification..."
+                );
+
+
+                const response =
+                    await apiRequest(
+                        `/prescriptions/${uploadedPrescriptionId}/extract/`,
+                        {
+                            method: "POST"
+                        }
+                    );
+
+
+                console.log(
+                    "EXTRACTION RESPONSE:",
+                    response
+                );
+
+
+                /* =================================
+                   GET ACTUAL DATA
+                ================================= */
+
+
+                let result =
+                    response;
+
+
+                /*
+                 * Our backend returns:
+                 *
+                 * {
+                 *     success: true,
+                 *     message: "...",
+                 *     data: {
+                 *         extracted_text: "...",
+                 *         medicines: [...]
+                 *     }
+                 * }
+                 *
+                 * So if data exists, use it.
+                 */
+
+                if (
+                    response &&
+                    response.data
+                ) {
+
+                    result =
+                        response.data;
+                }
+
+
+                console.log(
+                    "ACTUAL RESULT:",
+                    result
+                );
+
+
+                /* =================================
+                   EXTRACTED TEXT
+                ================================= */
+
+                const extractedText =
+                    result &&
+                    result.extracted_text
+                        ? result.extracted_text
+                        : "No medicine text could be extracted.";
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * Check the element before
+                 * setting textContent.
+                 */
+
+                if (ocrTextExists()) {
+
+                    const textElement =
+                        getElement("ocrText");
+
+
+                    textElement.textContent =
+                        extractedText;
+
+
+                    const resultCard =
+                        getElement("ocrResult");
+
+
+                    if (resultCard) {
+
+                        resultCard.style.display =
+                            "block";
+                    }
+
+                }
+
+
+                /* =================================
+                   MEDICINES
+                ================================= */
+
+                const medicines =
+                    result &&
+                    Array.isArray(
+                        result.medicines
+                    )
+                        ? result.medicines
+                        : [];
+
+
+                console.log(
+                    "MEDICINES:",
+                    medicines
+                );
+
+
+                renderExtractedMedicines(
+                    medicines
+                );
+
+
+                /* =================================
+                   STOP LOADING
+                ================================= */
+
+                if (extractStatus) {
+
+                    extractStatus.style.display =
+                        "none";
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "EXTRACTION ERROR:",
+                    error
+                );
+
+
+                if (extractStatus) {
+
+                    extractStatus.style.display =
+                        "none";
+                }
+
+
+                extractButton.disabled =
+                    false;
+
+
+                showPrescriptionError(
+                    error.message ||
+                    "Unable to identify medicines."
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   CHECK OCR ELEMENT
+========================================= */
+
+function ocrTextExists() {
+
+    const element =
+        getElement("ocrText");
+
+
+    if (!element) {
+
+        console.warn(
+            "ocrText element was not found."
+        );
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =========================================
+   RENDER MEDICINES
 ========================================= */
 
 function renderExtractedMedicines(
     medicines
 ) {
 
-    extractedMedicines.innerHTML =
+    const container =
+        getElement(
+            "extractedMedicines"
+        );
+
+
+    const card =
+        getElement(
+            "extractedMedicinesCard"
+        );
+
+
+    if (!container) {
+
+        console.error(
+            "ERROR: extractedMedicines element not found."
+        );
+
+        return;
+    }
+
+
+    if (!card) {
+
+        console.error(
+            "ERROR: extractedMedicinesCard element not found."
+        );
+
+        return;
+    }
+
+
+    container.innerHTML =
         "";
 
 
     /* =====================================
-       NO MEDICINES
+       NO RESULTS
     ====================================== */
 
     if (
@@ -504,7 +735,7 @@ function renderExtractedMedicines(
         medicines.length === 0
     ) {
 
-        extractedMedicines.innerHTML = `
+        container.innerHTML = `
 
             <div class="extracted-medicine">
 
@@ -514,11 +745,10 @@ function renderExtractedMedicines(
                         No medicines were identified.
                     </strong>
 
-                    <p>
-                        The prescription text could not
-                        be matched with medicines in the
-                        MediBridge database.
-                    </p>
+                    <span>
+                        We could not identify any medicines
+                        from the uploaded prescription.
+                    </span>
 
                 </div>
 
@@ -527,300 +757,664 @@ function renderExtractedMedicines(
         `;
 
 
-        extractedMedicinesCard.style.display =
+        card.style.display =
             "block";
 
 
-        extractedMedicinesCard.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
+        scrollToResults();
 
         return;
-
     }
 
 
     /* =====================================
-       MEDICINE RESULTS
+       LOOP THROUGH MEDICINES
     ====================================== */
 
-    extractedMedicines.innerHTML =
-        medicines
-            .map(
-                function (medicine) {
+    medicines.forEach(
+        function (medicine) {
 
-                    /*
-                     * Backward compatibility
-                     * if backend returns a string.
-                     */
+            if (!medicine) {
 
-                    if (
-                        typeof medicine ===
-                        "string"
-                    ) {
+                return;
+            }
 
-                        return `
 
-                            <article
-                                class="extracted-medicine"
-                            >
+            const status =
+                medicine.status ||
+                "not_available";
 
-                                <div
-                                    class="medicine-result-info"
-                                >
 
-                                    <strong>
-                                        ${escapeHTML(
-                                            medicine
-                                        )}
-                                    </strong>
+            const confidence =
+                medicine.confidence ||
+                "low";
 
-                                </div>
 
-                            </article>
+            const writtenName =
+                medicine.written_name ||
+                "Unknown medicine";
 
-                        `;
 
-                    }
+            /* =================================
+               MATCHED
+            ================================= */
 
+            if (
+                status === "matched" &&
+                medicine.matched_medicine
+            ) {
 
-                    const medicineId =
-                        medicine.medicine_id ||
-                        "";
+                renderMatchedMedicine(
+                    container,
+                    medicine
+                );
 
+                return;
+            }
 
-                    const brandName =
-                        medicine.brand_name ||
-                        "";
 
+            /* =================================
+               POSSIBLE MATCH
+            ================================= */
 
-                    const genericName =
-                        medicine.generic_name ||
-                        "";
+            if (
+                status === "possible_match"
+            ) {
 
+                renderPossibleMedicine(
+                    container,
+                    medicine
+                );
 
-                    const strength =
-                        medicine.strength ||
-                        "";
+                return;
+            }
 
 
-                    const confidence =
-                        medicine.confidence ??
-                        0;
+            /* =================================
+               MULTIPLE MATCHES
+            ================================= */
 
+            if (
+                status === "multiple_matches"
+            ) {
 
-                    /*
-                     * Availability will be
-                     * supplied by the backend
-                     * once inventory checking
-                     * is implemented.
-                     *
-                     * For now, if backend does
-                     * not send it, we treat it
-                     * as NOT_AVAILABLE.
-                     */
+                renderMultipleMatches(
+                    container,
+                    medicine
+                );
 
-                    const availability =
-                        medicine.availability ||
-                        "NOT_AVAILABLE";
+                return;
+            }
 
 
-                    let availabilityText =
-                        "Not available at MediBridge";
+            /* =================================
+               NOT AVAILABLE
+            ================================= */
 
+            renderUnavailableMedicine(
+                container,
+                medicine
+            );
 
-                    let availabilityClass =
-                        "availability-not-available";
+        }
+    );
 
 
-                    let canSelect =
-                        false;
-
-
-                    /* =================================
-                       AVAILABLE
-                    ================================= */
-
-                    if (
-                        availability ===
-                        "AVAILABLE"
-                    ) {
-
-                        availabilityText =
-                            "Available";
-
-
-                        availabilityClass =
-                            "availability-available";
-
-
-                        canSelect =
-                            true;
-
-                    }
-
-
-                    /* =================================
-                       OUT OF STOCK
-                    ================================= */
-
-                    else if (
-                        availability ===
-                        "OUT_OF_STOCK"
-                    ) {
-
-                        availabilityText =
-                            "Currently out of stock";
-
-
-                        availabilityClass =
-                            "availability-out-of-stock";
-
-                    }
-
-
-                    /* =================================
-                       NOT AVAILABLE
-                    ================================= */
-
-                    else {
-
-                        availabilityText =
-                            "Not available at MediBridge";
-
-
-                        availabilityClass =
-                            "availability-not-available";
-
-                    }
-
-
-                    return `
-
-                        <article
-                            class="
-                                extracted-medicine
-                                ${availabilityClass}
-                            "
-                            data-medicine-id="${escapeHTML(
-                                medicineId
-                            )}"
-                        >
-
-                            <div
-                                class="medicine-result-info"
-                            >
-
-                                <strong>
-                                    ${escapeHTML(
-                                        brandName ||
-                                        genericName ||
-                                        "Unknown medicine"
-                                    )}
-                                </strong>
-
-
-                                ${
-                                    genericName
-                                        ? `
-                                            <span>
-                                                ${escapeHTML(
-                                                    genericName
-                                                )}
-                                            </span>
-                                        `
-                                        : ""
-                                }
-
-
-                                ${
-                                    strength
-                                        ? `
-                                            <small>
-                                                ${escapeHTML(
-                                                    strength
-                                                )}
-                                            </small>
-                                        `
-                                        : ""
-                                }
-
-
-                                <small>
-                                    Match confidence:
-                                    ${escapeHTML(
-                                        confidence
-                                    )}%
-                                </small>
-
-
-                                <span
-                                    class="
-                                        medicine-availability
-                                        ${availabilityClass}
-                                    "
-                                >
-                                    ${availabilityText}
-                                </span>
-
-                            </div>
-
-
-                            ${
-                                canSelect
-                                    ? `
-
-                                        <label
-                                            class="medicine-select"
-                                        >
-
-                                            <input
-                                                type="checkbox"
-                                                class="medicine-checkbox"
-                                                value="${escapeHTML(
-                                                    medicineId
-                                                )}"
-                                            >
-
-                                            <span>
-                                                Select
-                                            </span>
-
-                                        </label>
-
-                                    `
-                                    : `
-
-                                        <span
-                                            class="
-                                                medicine-unavailable-label
-                                            "
-                                        >
-                                            Unavailable
-                                        </span>
-
-                                    `
-                            }
-
-                        </article>
-
-                    `;
-
-                }
-            )
-            .join("");
-
-
-    extractedMedicinesCard.style.display =
+    card.style.display =
         "block";
 
 
-    extractedMedicinesCard.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
+    scrollToResults();
+}
+
+
+/* =========================================
+   MATCHED MEDICINE
+========================================= */
+
+function renderMatchedMedicine(
+    container,
+    medicine
+) {
+
+    const matched =
+        medicine.matched_medicine;
+
+
+    const medicineId =
+        matched.id ||
+        "";
+
+
+    const brandName =
+        matched.brand_name ||
+        medicine.written_name ||
+        "Unknown medicine";
+
+
+    const genericName =
+        matched.generic_name ||
+        "";
+
+
+    const strength =
+        matched.strength ||
+        "";
+
+
+    const manufacturer =
+        matched.manufacturer ||
+        "";
+
+
+    const requiresPrescription =
+        matched.requires_prescription;
+
+
+    const confidence =
+        medicine.confidence ||
+        "low";
+
+
+    const writtenName =
+        medicine.written_name ||
+        brandName;
+
+
+    let prescriptionText =
+        "No prescription required";
+
+
+    if (
+        requiresPrescription
+    ) {
+
+        prescriptionText =
+            "Prescription required";
+    }
+
+
+    container.innerHTML += `
+
+        <article
+            class="
+                extracted-medicine
+                availability-available
+            "
+            data-medicine-id="${escapeHTML(
+                medicineId
+            )}"
+        >
+
+            <div
+                class="medicine-result-info"
+            >
+
+                <strong>
+                    ${escapeHTML(
+                        brandName
+                    )}
+                </strong>
+
+
+                ${
+                    genericName
+                        ? `
+                            <span>
+                                ${escapeHTML(
+                                    genericName
+                                )}
+                            </span>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    strength
+                        ? `
+                            <small>
+                                ${escapeHTML(
+                                    strength
+                                )}
+                            </small>
+                        `
+                        : ""
+                }
+
+
+                ${
+                    manufacturer
+                        ? `
+                            <small>
+                                Manufacturer:
+                                ${escapeHTML(
+                                    manufacturer
+                                )}
+                            </small>
+                        `
+                        : ""
+                }
+
+
+                <small>
+                    Written as:
+                    ${escapeHTML(
+                        writtenName
+                    )}
+                </small>
+
+
+                <small>
+                    AI confidence:
+                    ${escapeHTML(
+                        confidence
+                    )}
+                </small>
+
+
+                <span
+                    class="
+                        medicine-availability
+                        availability-available
+                    "
+                >
+                    Available at MediBridge
+                </span>
+
+
+                <small>
+                    ${escapeHTML(
+                        prescriptionText
+                    )}
+                </small>
+
+            </div>
+
+
+            <label
+                class="medicine-select"
+            >
+
+                <input
+                    type="checkbox"
+                    class="medicine-checkbox"
+                    value="${escapeHTML(
+                        medicineId
+                    )}"
+                >
+
+                <span>
+                    Select
+                </span>
+
+            </label>
+
+        </article>
+
+    `;
+}
+
+
+/* =========================================
+   POSSIBLE MATCH
+========================================= */
+
+function renderPossibleMedicine(
+    container,
+    medicine
+) {
+
+    const writtenName =
+        medicine.written_name ||
+        "Unknown medicine";
+
+
+    const confidence =
+        medicine.confidence ||
+        "low";
+
+
+    const possibleMatches =
+        medicine.possible_matches ||
+        [];
+
+
+    let matchesHTML =
+        "";
+
+
+    possibleMatches.forEach(
+        function (match) {
+
+            matchesHTML += `
+
+                <div
+                    class="possible-match"
+                >
+
+                    <strong>
+                        ${escapeHTML(
+                            match.brand_name ||
+                            "Unknown"
+                        )}
+                    </strong>
+
+
+                    ${
+                        match.generic_name
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        match.generic_name
+                                    )}
+                                </span>
+                            `
+                            : ""
+                    }
+
+
+                    ${
+                        match.score !== undefined
+                            ? `
+                                <small>
+                                    ${escapeHTML(
+                                        match.score
+                                    )}%
+                                </small>
+                            `
+                            : ""
+                    }
+
+                </div>
+
+            `;
+        }
+    );
+
+
+    container.innerHTML += `
+
+        <article
+            class="
+                extracted-medicine
+                availability-out-of-stock
+            "
+        >
+
+            <div
+                class="medicine-result-info"
+            >
+
+                <strong>
+                    ${escapeHTML(
+                        writtenName
+                    )}
+                </strong>
+
+
+                <small>
+                    AI confidence:
+                    ${escapeHTML(
+                        confidence
+                    )}
+                </small>
+
+
+                <span
+                    class="medicine-availability"
+                >
+                    Possible match
+                </span>
+
+
+                ${
+                    matchesHTML
+                        ? `
+                            <div
+                                class="possible-matches"
+                            >
+
+                                <small>
+                                    Possible matches:
+                                </small>
+
+                                ${matchesHTML}
+
+                            </div>
+                        `
+                        : ""
+                }
+
+            </div>
+
+
+            <span
+                class="medicine-unavailable-label"
+            >
+                Review
+            </span>
+
+        </article>
+
+    `;
+}
+
+
+/* =========================================
+   MULTIPLE MATCHES
+========================================= */
+
+function renderMultipleMatches(
+    container,
+    medicine
+) {
+
+    const writtenName =
+        medicine.written_name ||
+        "Unknown medicine";
+
+
+    const possibleMatches =
+        medicine.possible_matches ||
+        [];
+
+
+    let matchesHTML =
+        "";
+
+
+    possibleMatches.forEach(
+        function (match) {
+
+            matchesHTML += `
+
+                <div
+                    class="possible-match"
+                >
+
+                    <strong>
+                        ${escapeHTML(
+                            match.brand_name ||
+                            "Unknown"
+                        )}
+                    </strong>
+
+
+                    ${
+                        match.generic_name
+                            ? `
+                                <span>
+                                    ${escapeHTML(
+                                        match.generic_name
+                                    )}
+                                </span>
+                            `
+                            : ""
+                    }
+
+                </div>
+
+            `;
+        }
+    );
+
+
+    container.innerHTML += `
+
+        <article
+            class="
+                extracted-medicine
+                availability-out-of-stock
+            "
+        >
+
+            <div
+                class="medicine-result-info"
+            >
+
+                <strong>
+                    ${escapeHTML(
+                        writtenName
+                    )}
+                </strong>
+
+
+                <small>
+                    Multiple medicines in
+                    MediBridge match this name.
+                </small>
+
+
+                ${
+                    matchesHTML
+                        ? `
+                            <div
+                                class="possible-matches"
+                            >
+
+                                ${matchesHTML}
+
+                            </div>
+                        `
+                        : ""
+                }
+
+            </div>
+
+
+            <span
+                class="medicine-unavailable-label"
+            >
+                Review
+            </span>
+
+        </article>
+
+    `;
+}
+
+
+/* =========================================
+   UNAVAILABLE MEDICINE
+========================================= */
+
+function renderUnavailableMedicine(
+    container,
+    medicine
+) {
+
+    const writtenName =
+        medicine.written_name ||
+        "Unknown medicine";
+
+
+    const confidence =
+        medicine.confidence ||
+        "low";
+
+
+    container.innerHTML += `
+
+        <article
+            class="
+                extracted-medicine
+                availability-not-available
+            "
+        >
+
+            <div
+                class="medicine-result-info"
+            >
+
+                <strong>
+                    ${escapeHTML(
+                        writtenName
+                    )}
+                </strong>
+
+
+                <small>
+                    AI confidence:
+                    ${escapeHTML(
+                        confidence
+                    )}
+                </small>
+
+
+                <span
+                    class="medicine-availability"
+                >
+                    Not available at MediBridge
+                </span>
+
+            </div>
+
+
+            <span
+                class="medicine-unavailable-label"
+            >
+                Unavailable
+            </span>
+
+        </article>
+
+    `;
+}
+
+
+/* =========================================
+   SCROLL TO RESULTS
+========================================= */
+
+function scrollToResults() {
+
+    const card =
+        getElement(
+            "extractedMedicinesCard"
+        );
+
+
+    if (!card) {
+
+        return;
+    }
+
+
+    setTimeout(
+        function () {
+
+            card.scrollIntoView({
+
+                behavior: "smooth",
+
+                block: "center"
+
+            });
+
+        },
+        100
+    );
 
 }
 
@@ -836,7 +1430,6 @@ function formatFileSize(bytes) {
     ) {
 
         return `${bytes} B`;
-
     }
 
 
@@ -847,7 +1440,6 @@ function formatFileSize(bytes) {
         return `${(
             bytes / 1024
         ).toFixed(1)} KB`;
-
     }
 
 
@@ -855,7 +1447,6 @@ function formatFileSize(bytes) {
         bytes /
         (1024 * 1024)
     ).toFixed(1)} MB`;
-
 }
 
 
@@ -867,25 +1458,52 @@ function showPrescriptionError(
     message
 ) {
 
-    prescriptionError.textContent =
+    const errorElement =
+        getElement(
+            "prescriptionError"
+        );
+
+
+    if (!errorElement) {
+
+        console.error(
+            "Prescription error:",
+            message
+        );
+
+        return;
+    }
+
+
+    errorElement.textContent =
         message;
 
 
-    prescriptionError.style.display =
+    errorElement.style.display =
         "block";
-
 }
 
 
 function clearPrescriptionError() {
 
-    prescriptionError.textContent =
+    const errorElement =
+        getElement(
+            "prescriptionError"
+        );
+
+
+    if (!errorElement) {
+
+        return;
+    }
+
+
+    errorElement.textContent =
         "";
 
 
-    prescriptionError.style.display =
+    errorElement.style.display =
         "none";
-
 }
 
 
@@ -901,7 +1519,6 @@ function escapeHTML(value) {
     ) {
 
         return "";
-
     }
 
 
@@ -931,5 +1548,4 @@ function escapeHTML(value) {
             /'/g,
             "&#039;"
         );
-
 }

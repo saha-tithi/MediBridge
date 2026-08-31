@@ -23,7 +23,7 @@
 
 
     <!-- =========================================
-         HEADER
+         PAGE HEADER
     ========================================== -->
 
     <section class="prescription-header">
@@ -33,16 +33,15 @@
         </p>
 
         <h1>
-            Upload Prescription
+            Identify your medicines
         </h1>
 
         <p class="prescription-subtitle">
-            Upload your prescription and let MediBridge
-            identify the medicines for you.
+            Upload only the medicine portion of your prescription
+            and let MediBridge identify the medicines for you.
         </p>
 
     </section>
-
 
 
     <!-- =========================================
@@ -56,7 +55,6 @@
     ></div>
 
 
-
     <!-- =========================================
          UPLOAD CARD
     ========================================== -->
@@ -66,16 +64,45 @@
         class="upload-card"
     >
 
+
+        <!-- =====================================
+             UPLOAD INFORMATION
+        ====================================== -->
+
         <div class="upload-card-header">
 
-            <div>
+            <h2>
+                Upload your prescription
+            </h2>
 
-                <h2>
-                    Upload your prescription
-                </h2>
+            <p>
+                Choose a clear image or PDF containing
+                the medicine names.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================
+             CROP NOTICE
+        ====================================== -->
+
+        <div class="crop-notice">
+
+            <div class="crop-notice-icon">
+                ✦
+            </div>
+
+            <div class="crop-notice-content">
+
+                <strong>
+                    Upload only the medicine portion
+                </strong>
 
                 <p>
-                    Upload a clear image or PDF of your prescription.
+                    Crop out personal details, doctor information,
+                    diagnosis, and other unrelated information
+                    before uploading.
                 </p>
 
             </div>
@@ -84,7 +111,7 @@
 
 
         <!-- =====================================
-             FILE DROP AREA
+             FILE UPLOAD
         ====================================== -->
 
         <label
@@ -97,11 +124,11 @@
             </div>
 
             <strong>
-                Choose prescription file
+                Choose prescription
             </strong>
 
             <span>
-                JPG, PNG or PDF
+                JPG · PNG · PDF
             </span>
 
             <small>
@@ -116,7 +143,6 @@
             >
 
         </label>
-
 
 
         <!-- =====================================
@@ -161,9 +187,8 @@
         </div>
 
 
-
         <!-- =====================================
-             UPLOAD ACTION
+             UPLOAD BUTTON
         ====================================== -->
 
         <div class="upload-actions">
@@ -179,6 +204,34 @@
 
         </div>
 
+
+        <!-- =====================================
+             DISCLAIMER
+        ====================================== -->
+
+        <div class="prescription-disclaimer">
+
+            <div class="disclaimer-title">
+
+                <span>
+                    ⓘ
+                </span>
+
+                <strong>
+                    Important
+                </strong>
+
+            </div>
+
+            <p>
+                Medicine identification is AI-assisted and may
+                not always be accurate. Always verify the
+                identified medicines with your prescription
+                and a qualified pharmacist or doctor before
+                purchasing or taking any medicine.
+            </p>
+
+        </div>
 
 
         <!-- =====================================
@@ -202,7 +255,6 @@
     </section>
 
 
-
     <!-- =========================================
          UPLOADED PRESCRIPTION
     ========================================== -->
@@ -215,21 +267,17 @@
 
         <div class="uploaded-card-header">
 
-            <div>
+            <p class="card-eyebrow">
+                READY
+            </p>
 
-                <p class="card-eyebrow">
-                    UPLOADED
-                </p>
+            <h2>
+                Prescription uploaded
+            </h2>
 
-                <h2>
-                    Prescription uploaded
-                </h2>
-
-                <p>
-                    Your prescription has been saved successfully.
-                </p>
-
-            </div>
+            <p>
+                Your prescription is ready to be analyzed.
+            </p>
 
         </div>
 
@@ -247,7 +295,7 @@
                 </strong>
 
                 <span>
-                    Prescription ready for analysis
+                    Ready for medicine identification
                 </span>
 
             </div>
@@ -281,7 +329,7 @@
             <span class="loading-spinner"></span>
 
             <span>
-                Reading prescription...
+                Identifying medicines...
             </span>
 
         </div>
@@ -289,49 +337,8 @@
     </section>
 
 
-
     <!-- =========================================
-         OCR RESULT
-    ========================================== -->
-
-    <section
-        id="ocrResult"
-        class="ocr-card"
-        style="display: none;"
-    >
-
-        <div class="section-heading">
-
-            <div>
-
-                <p class="card-eyebrow">
-                    OCR RESULT
-                </p>
-
-                <h2>
-                    Extracted Text
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <div class="ocr-content">
-
-            <pre
-                id="ocrText"
-                class="ocr-text"
-            ></pre>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================================
-         EXTRACTED MEDICINES
+         MEDICINES
     ========================================== -->
 
     <section
@@ -342,21 +349,18 @@
 
         <div class="section-heading">
 
-            <div>
+            <p class="card-eyebrow">
+                RESULTS
+            </p>
 
-                <p class="card-eyebrow">
-                    MEDICINE IDENTIFICATION
-                </p>
+            <h2>
+                Medicines identified
+            </h2>
 
-                <h2>
-                    Identified Medicines
-                </h2>
-
-                <p>
-                    Review the medicines identified from your prescription.
-                </p>
-
-            </div>
+            <p>
+                Review the medicines identified from
+                your prescription.
+            </p>
 
         </div>
 
@@ -367,24 +371,25 @@
         ></div>
 
 
-        <div
-            class="medicine-selection-note"
-        >
-            Only medicines available at MediBridge can be selected.
+        <div class="medicine-selection-note">
+
+            Only medicines available at MediBridge
+            can be selected.
+
         </div>
 
     </section>
+
 
 </main>
 
 {% endblock %}
 
 
-
 {% block extra_js %}
 
 <script
-    src="{% static 'js/upload_prescription.js' %}"
+    src="{% static 'js/upload_prescription.js' %}?v=3"
 ></script>
 
 {% endblock %}

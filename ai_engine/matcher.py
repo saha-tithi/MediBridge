@@ -1,87 +1,360 @@
-from datetime import date
-
 from rapidfuzz import fuzz
 
 from medicine.models import Medicine
 
+from .utils import normalize_medicine_name
 
-def get_medicine_availability(medicine):
 
-    inventories = medicine.inventories.filter(
-        is_available=True,
-        stock__gt=0,
-        expiry_date__gte=date.today(),
+# =========================================
+# MATCH THRESHOLDS
+# =========================================
+
+POSSIBLE_THRESHOLD = 75
+
+
+# =========================================
+# FORMAT MEDICINE
+# =========================================
+
+def format_medicine(medicine, score=None):
+
+    data = {
+        "id": str(medicine.id),
+        "brand_name": medicine.brand_name,
+        "generic_name": medicine.generic_name,
+        "strength": medicine.strength,
+        "manufacturer": medicine.manufacturer,
+        "requires_prescription": medicine.requires_prescription,
+    }
+
+    if score is not None:
+        data["score"] = round(score, 2)
+
+    return data
+
+
+# =========================================
+# MATCH ONE MEDICINE
+# =========================================
+
+def match_one_medicine(medicine_data):
+
+    written_name = medicine_data.get(
+        "written_name",
+        ""
     )
 
-    if inventories.exists():
-        return "AVAILABLE"
+    medicine_name = medicine_data.get(
+        "medicine_name",
+        ""
+    )
 
-    return "OUT_OF_STOCK"
+    dosage_form = medicine_data.get(
+        "dosage_form"
+    )
+
+    prescription_strength = medicine_data.get(
+        "strength"
+    )
+
+    confidence = medicine_data.get(
+        "confidence",
+        "low"
+    )
 
 
-def match_medicines(text, threshold=80):
+    # =========================================
+    # USE CLEAN MEDICINE NAME
+    # =========================================
 
-    matches = []
+    search_name = (
+        medicine_name
+        or written_name
+    )
 
-    if not text:
-        return matches
+    normalized_name = normalize_medicine_name(
+        search_name
+    )
 
-    text = text.upper()
+
+    # =========================================
+    # UNCLEAR
+    # =========================================
+
+    if not normalized_name:
+
+        return {
+            "written_name": written_name,
+            "medicine_name": medicine_name,
+            "dosage_form": dosage_form,
+            "strength": prescription_strength,
+            "confidence": confidence,
+            "status": "unclear",
+            "matched_medicine": None,
+            "possible_matches": [],
+        }
+
+
+    # =========================================
+    # DATABASE
+    # =========================================
 
     medicines = Medicine.objects.all()
 
+    exact_matches = []
+
+    possible_matches = []
+
+
+    # =========================================
+    # SEARCH
+    # =========================================
+
     for medicine in medicines:
 
-        score_brand = fuzz.partial_ratio(
-            medicine.brand_name.upper(),
-            text,
+        brand_name = normalize_medicine_name(
+            medicine.brand_name
         )
 
-        score_generic = fuzz.partial_ratio(
-            medicine.generic_name.upper(),
-            text,
+        generic_name = normalize_medicine_name(
+            medicine.generic_name
         )
 
-        score = max(
-            score_brand,
-            score_generic,
+
+        # =====================================
+        # EXACT BRAND MATCH
+        # =====================================
+
+        if normalized_name == brand_name:
+
+            # If prescription strength is known,
+            # verify it against database strength.
+
+            if prescription_strength:
+
+                prescription_strength_normalized = (
+                    normalize_medicine_name(
+                        prescription_strength
+                    )
+                )
+
+                database_strength_normalized = (
+                    normalize_medicine_name(
+                        medicine.strength
+                    )
+                )
+
+                if (
+                    prescription_strength_normalized
+                    != database_strength_normalized
+                ):
+                    continue
+
+            exact_matches.append(
+                medicine
+            )
+
+            continue
+
+
+        # =====================================
+        # EXACT GENERIC MATCH
+        # =====================================
+
+        if normalized_name == generic_name:
+
+            if prescription_strength:
+
+                prescription_strength_normalized = (
+                    normalize_medicine_name(
+                        prescription_strength
+                    )
+                )
+
+                database_strength_normalized = (
+                    normalize_medicine_name(
+                        medicine.strength
+                    )
+                )
+
+                if (
+                    prescription_strength_normalized
+                    != database_strength_normalized
+                ):
+                    continue
+
+            exact_matches.append(
+                medicine
+            )
+
+            continue
+
+
+        # =====================================
+        # FUZZY BRAND MATCH
+        # =====================================
+
+        brand_score = fuzz.ratio(
+            normalized_name,
+            brand_name
         )
 
-        if score >= threshold:
 
-            availability = (
-                get_medicine_availability(
-                    medicine
+        # =====================================
+        # FUZZY GENERIC MATCH
+        # =====================================
+
+        generic_score = fuzz.ratio(
+            normalized_name,
+            generic_name
+        )
+
+
+        best_score = max(
+            brand_score,
+            generic_score
+        )
+
+
+        if best_score >= POSSIBLE_THRESHOLD:
+
+            possible_matches.append({
+                "medicine": medicine,
+                "score": best_score,
+            })
+
+
+    # =========================================
+    # ONE EXACT MATCH
+    # =========================================
+
+    if len(exact_matches) == 1:
+
+        medicine = exact_matches[0]
+
+        return {
+            "written_name": written_name,
+            "medicine_name": medicine_name,
+            "dosage_form": dosage_form,
+            "strength": prescription_strength,
+            "confidence": confidence,
+            "status": "matched",
+            "matched_medicine": format_medicine(
+                medicine
+            ),
+            "possible_matches": [],
+        }
+
+
+    # =========================================
+    # MULTIPLE EXACT MATCHES
+    # =========================================
+
+    if len(exact_matches) > 1:
+
+        duplicate_matches = []
+
+        for medicine in exact_matches:
+
+            duplicate_matches.append(
+                format_medicine(
+                    medicine,
+                    100
                 )
             )
 
-            matches.append(
-                {
-                    "medicine_id": str(
-                        medicine.id
-                    ),
 
-                    "brand_name":
-                        medicine.brand_name,
+        return {
+            "written_name": written_name,
+            "medicine_name": medicine_name,
+            "dosage_form": dosage_form,
+            "strength": prescription_strength,
+            "confidence": confidence,
+            "status": "multiple_matches",
+            "matched_medicine": None,
+            "possible_matches": duplicate_matches,
+        }
 
-                    "generic_name":
-                        medicine.generic_name,
 
-                    "strength":
-                        medicine.strength,
+    # =========================================
+    # SORT POSSIBLE MATCHES
+    # =========================================
 
-                    "confidence":
-                        score,
-
-                    "availability":
-                        availability,
-                }
-            )
-
-    matches.sort(
-        key=lambda item:
-            item["confidence"],
-        reverse=True,
+    possible_matches.sort(
+        key=lambda item: item["score"],
+        reverse=True
     )
 
-    return matches
+
+    possible_matches = possible_matches[:5]
+
+
+    # =========================================
+    # FORMAT POSSIBLE MATCHES
+    # =========================================
+
+    formatted_matches = []
+
+    for item in possible_matches:
+
+        formatted_matches.append(
+            format_medicine(
+                item["medicine"],
+                item["score"]
+            )
+        )
+
+
+    # =========================================
+    # POSSIBLE MATCH
+    # =========================================
+
+    if formatted_matches:
+
+        return {
+            "written_name": written_name,
+            "medicine_name": medicine_name,
+            "dosage_form": dosage_form,
+            "strength": prescription_strength,
+            "confidence": confidence,
+            "status": "possible_match",
+            "matched_medicine": None,
+            "possible_matches": formatted_matches,
+        }
+
+
+    # =========================================
+    # NOT AVAILABLE
+    # =========================================
+
+    return {
+        "written_name": written_name,
+        "medicine_name": medicine_name,
+        "dosage_form": dosage_form,
+        "strength": prescription_strength,
+        "confidence": confidence,
+        "status": "not_available",
+        "matched_medicine": None,
+        "possible_matches": [],
+    }
+
+
+# =========================================
+# MATCH ALL MEDICINES
+# =========================================
+
+def match_medicines(medicines):
+
+    results = []
+
+    for medicine in medicines:
+
+        result = match_one_medicine(
+            medicine
+        )
+
+        results.append(
+            result
+        )
+
+    return results

@@ -1,36 +1,73 @@
-from .ocr import extract_text
-from .utils import clean_text
+from .gemini import read_medicines_from_image
 from .matcher import match_medicines
 
 
-def process_prescription(prescription):
+# =========================================
+# PROCESS PRESCRIPTION
+# =========================================
 
-    # Uploaded prescription path
+def process_prescription(
+    prescription
+):
+
+    # =========================================
+    # GET FILE
+    # =========================================
+
     file_path = prescription.prescription.path
 
-    # OCR
-    extracted_text = extract_text(
+
+    # =========================================
+    # GEMINI
+    # =========================================
+
+    gemini_result = read_medicines_from_image(
         file_path
     )
 
-    # Clean OCR result
-    cleaned_text = clean_text(
-        extracted_text
+
+    # =========================================
+    # EXTRACT MEDICINES
+    # =========================================
+
+    medicines_from_gemini = (
+        gemini_result.get(
+            "medicines",
+            []
+        )
     )
 
-    # Match medicines
-    medicines = match_medicines(
-        cleaned_text
+
+    # =========================================
+    # MATCH DATABASE
+    # =========================================
+
+    matched_results = match_medicines(
+        medicines_from_gemini
     )
 
-    # Save results
+
+    # =========================================
+    # SAVE RAW AI RESULT
+    # =========================================
     prescription.extracted_text = (
-        extracted_text
+    "\n".join(
+        medicine.get("written_name", "")
+        for medicine in medicines_from_gemini
+        if medicine.get("written_name")
     )
+)
+   
+
+
+    # =========================================
+    # SAVE MATCHED RESULT
+    # =========================================
 
     prescription.extracted_medicines = (
-        medicines
+        matched_results
     )
+
 
     prescription.save(
         update_fields=[
@@ -39,7 +76,15 @@ def process_prescription(prescription):
         ]
     )
 
+
+    # =========================================
+    # RETURN
+    # =========================================
+
     return {
-        "extracted_text": extracted_text,
-        "medicines": medicines,
+        "extracted_text": (
+            prescription.extracted_text
+        ),
+
+        "medicines": matched_results,
     }
