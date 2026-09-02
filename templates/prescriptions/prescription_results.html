@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Prescription Results | MediBridge
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/prescription_results.css' %}"
+>
+{% endblock %}
+
+{% block content %}
+
+<main class="results-page">
+
+    <section class="results-intro">
+
+        <span class="results-label">
+            PRESCRIPTION
+        </span>
+
+        <h1>
+            Medicines found
+        </h1>
+
+        <p>
+            Review the medicines identified from your prescription
+            and select the ones you want to add to your cart.
+        </p>
+
+    </section>
+
+
+    <div
+        id="resultsError"
+        class="results-error"
+        style="display: none;"
+    ></div>
+
+
+    <section
+        id="loadingState"
+        class="results-loading"
+    >
+
+        <span class="loading-spinner"></span>
+
+        <p>
+            Loading identified medicines...
+        </p>
+
+    </section>
+
+
+    <section
+        id="medicinesContainer"
+        class="medicines-container"
+        style="display: none;"
+    >
+    </section>
+
+
+    <section
+        id="emptyState"
+        class="empty-results"
+        style="display: none;"
+    >
+
+        <div class="empty-icon">
+            !
+        </div>
+
+        <h2>
+            No medicines found
+        </h2>
+
+        <p>
+            We couldn't identify any medicines from this prescription.
+            Please upload a clearer image containing the medicine names.
+        </p>
+
+        <a
+            href="/upload-prescription/"
+            class="back-upload-button"
+        >
+            Upload Again
+        </a>
+
+    </section>
+
+
+    <div
+        id="cartAction"
+        class="cart-action"
+        style="display: none;"
+    >
+
+        <button
+            type="button"
+            id="addToCartButton"
+            class="add-cart-button"
+            disabled
+        >
+            Add Selected to Cart
+        </button>
+
+        <p id="selectionMessage">
+            Select an available medicine to continue.
+        </p>
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/prescription_results.js' %}?v=1"
+></script>
+
+{% endblock %}

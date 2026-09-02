@@ -1,1551 +1,368 @@
-/* =========================================
-   MEDIBRIDGE
-   PRESCRIPTION IDENTIFICATION
-========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+    const prescriptionFile =
+        document.getElementById("prescriptionFile");
+
+    const selectedFile =
+        document.getElementById("selectedFile");
+
+    const selectedFileName =
+        document.getElementById("selectedFileName");
+
+    const selectedFileSize =
+        document.getElementById("selectedFileSize");
+
+    const removeFileButton =
+        document.getElementById("removeFileButton");
+
+    const uploadButton =
+        document.getElementById("uploadButton");
+
+    const uploadButtonText =
+        document.getElementById("uploadButtonText");
+
+    const uploadSpinner =
+        document.getElementById("uploadSpinner");
+
+    const uploadStatus =
+        document.getElementById("uploadStatus");
+
+    const prescriptionError =
+        document.getElementById("prescriptionError");
 
 
-/* =========================================
-   ELEMENT HELPER
-========================================= */
-
-function getElement(id) {
-    return document.getElementById(id);
-}
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-const prescriptionFile =
-    getElement("prescriptionFile");
-
-const uploadButton =
-    getElement("uploadButton");
-
-const uploadArea =
-    getElement("uploadArea");
-
-const selectedFile =
-    getElement("selectedFile");
-
-const selectedFileName =
-    getElement("selectedFileName");
-
-const selectedFileSize =
-    getElement("selectedFileSize");
-
-const removeFileButton =
-    getElement("removeFileButton");
-
-const uploadStatus =
-    getElement("uploadStatus");
-
-const prescriptionError =
-    getElement("prescriptionError");
-
-const uploadedPrescription =
-    getElement("uploadedPrescription");
-
-const uploadedFileName =
-    getElement("uploadedFileName");
-
-const extractButton =
-    getElement("extractButton");
-
-const extractStatus =
-    getElement("extractStatus");
-
-const extractedMedicinesCard =
-    getElement("extractedMedicinesCard");
-
-const extractedMedicines =
-    getElement("extractedMedicines");
-
-
-/* =========================================
-   STATE
-========================================= */
-
-let selectedPrescription = null;
-
-let uploadedPrescriptionId = null;
-
-
-/* =========================================
-   CHECK PAGE ELEMENTS
-========================================= */
-
-console.log(
-    "MediBridge prescription page loaded."
-);
-
-console.log(
-    "Prescription file:",
-    prescriptionFile
-);
-
-console.log(
-    "Upload button:",
-    uploadButton
-);
-
-console.log(
-    "Extract button:",
-    extractButton
-);
-
-console.log(
-    "Medicines container:",
-    extractedMedicines
-);
-
-
-/* =========================================
-   FILE SELECTION
-========================================= */
-
-if (prescriptionFile) {
-
-    prescriptionFile.addEventListener(
-        "change",
-        function () {
-
-            const file =
-                this.files[0];
-
-            if (!file) {
-                return;
-            }
-
-            validateSelectedFile(file);
-        }
-    );
-
-}
-
-
-/* =========================================
-   VALIDATE FILE
-========================================= */
-
-function validateSelectedFile(file) {
-
-    clearPrescriptionError();
+    let selectedPrescription = null;
 
 
     const allowedTypes = [
-
         "image/jpeg",
-
         "image/png",
-
         "application/pdf"
-
     ];
 
-
-    if (
-        !allowedTypes.includes(
-            file.type
-        )
-    ) {
-
-        showPrescriptionError(
-            "Please select a JPG, PNG, or PDF file."
-        );
-
-        resetFileSelection();
-
-        return;
-    }
+    const maxFileSize = 10 * 1024 * 1024;
 
 
-    const maxSize =
-        10 * 1024 * 1024;
+    /* -----------------------------
+       ERROR
+    ----------------------------- */
 
+    function showError(message) {
 
-    if (
-        file.size > maxSize
-    ) {
-
-        showPrescriptionError(
-            "Prescription file must be smaller than 10 MB."
-        );
-
-        resetFileSelection();
-
-        return;
-    }
-
-
-    selectedPrescription =
-        file;
-
-
-    showSelectedFile(file);
-}
-
-
-/* =========================================
-   SHOW SELECTED FILE
-========================================= */
-
-function showSelectedFile(file) {
-
-    if (selectedFileName) {
-
-        selectedFileName.textContent =
-            file.name;
-    }
-
-
-    if (selectedFileSize) {
-
-        selectedFileSize.textContent =
-            formatFileSize(
-                file.size
-            );
-    }
-
-
-    if (selectedFile) {
-
-        selectedFile.style.display =
-            "flex";
-    }
-
-
-    if (uploadButton) {
-
-        uploadButton.disabled =
-            false;
-    }
-
-}
-
-
-/* =========================================
-   REMOVE FILE
-========================================= */
-
-if (removeFileButton) {
-
-    removeFileButton.addEventListener(
-        "click",
-        function () {
-
-            resetFileSelection();
-
+        if (!prescriptionError) {
+            return;
         }
-    );
 
-}
+        prescriptionError.textContent = message;
+        prescriptionError.style.display = "block";
+    }
 
 
-function resetFileSelection() {
+    function hideError() {
 
-    selectedPrescription =
-        null;
+        if (!prescriptionError) {
+            return;
+        }
 
+        prescriptionError.textContent = "";
+        prescriptionError.style.display = "none";
+    }
+
+
+    /* -----------------------------
+       FILE SIZE
+    ----------------------------- */
+
+    function formatFileSize(bytes) {
+
+        if (bytes < 1024) {
+            return `${bytes} B`;
+        }
+
+        if (bytes < 1024 * 1024) {
+            return `${(bytes / 1024).toFixed(1)} KB`;
+        }
+
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+
+    /* -----------------------------
+       RESET FILE
+    ----------------------------- */
+
+    function resetFile() {
+
+        selectedPrescription = null;
+
+        if (prescriptionFile) {
+            prescriptionFile.value = "";
+        }
+
+        if (selectedFile) {
+            selectedFile.style.display = "none";
+        }
+
+        if (uploadButton) {
+            uploadButton.disabled = true;
+        }
+
+        hideError();
+    }
+
+
+    /* -----------------------------
+       FILE SELECTION
+    ----------------------------- */
 
     if (prescriptionFile) {
 
-        prescriptionFile.value =
-            "";
-    }
+        prescriptionFile.addEventListener(
+            "change",
+            () => {
+
+                hideError();
+
+                const file =
+                    prescriptionFile.files[0];
 
 
-    if (selectedFile) {
-
-        selectedFile.style.display =
-            "none";
-    }
-
-
-    if (uploadButton) {
-
-        uploadButton.disabled =
-            true;
-    }
-
-}
+                if (!file) {
+                    resetFile();
+                    return;
+                }
 
 
-/* =========================================
-   UPLOAD PRESCRIPTION
-========================================= */
+                if (!allowedTypes.includes(file.type)) {
 
-if (uploadButton) {
-
-    uploadButton.addEventListener(
-        "click",
-        async function () {
-
-            if (!selectedPrescription) {
-
-                return;
-            }
-
-
-            clearPrescriptionError();
-
-
-            uploadButton.disabled =
-                true;
-
-
-            if (uploadStatus) {
-
-                uploadStatus.style.display =
-                    "flex";
-            }
-
-
-            const formData =
-                new FormData();
-
-
-            formData.append(
-                "prescription",
-                selectedPrescription
-            );
-
-
-            try {
-
-                const response =
-                    await apiRequest(
-                        "/prescriptions/upload/",
-                        {
-                            method: "POST",
-                            body: formData
-                        }
+                    showError(
+                        "Please upload a JPG, PNG, or PDF file."
                     );
 
-
-                console.log(
-                    "UPLOAD RESPONSE:",
-                    response
-                );
+                    resetFile();
+                    return;
+                }
 
 
-                /*
-                 * Depending on apiRequest(),
-                 * response may be:
-                 *
-                 * {
-                 *     id: "..."
-                 * }
-                 *
-                 * OR:
-                 *
-                 * {
-                 *     data: {
-                 *         id: "..."
-                 *     }
-                 * }
-                 */
+                if (file.size > maxFileSize) {
 
-
-                const prescription =
-                    response &&
-                    response.data
-                        ? response.data
-                        : response;
-
-
-                if (
-                    !prescription ||
-                    !prescription.id
-                ) {
-
-                    throw new Error(
-                        "Upload succeeded, but no prescription ID was returned."
+                    showError(
+                        "The file is too large. Maximum file size is 10 MB."
                     );
+
+                    resetFile();
+                    return;
                 }
 
 
-                uploadedPrescriptionId =
-                    prescription.id;
+                selectedPrescription = file;
 
 
-                if (uploadedFileName) {
-
-                    uploadedFileName.textContent =
-                        selectedPrescription.name;
+                if (selectedFileName) {
+                    selectedFileName.textContent =
+                        file.name;
                 }
 
 
-                if (uploadedPrescription) {
-
-                    uploadedPrescription.style.display =
-                        "block";
-                }
-
-
-                if (uploadStatus) {
-
-                    uploadStatus.style.display =
-                        "none";
-                }
-
-
-                if (uploadArea) {
-
-                    uploadArea.style.display =
-                        "none";
+                if (selectedFileSize) {
+                    selectedFileSize.textContent =
+                        formatFileSize(file.size);
                 }
 
 
                 if (selectedFile) {
-
-                    selectedFile.style.display =
-                        "none";
+                    selectedFile.style.display = "flex";
                 }
 
 
-                selectedPrescription =
-                    null;
+                if (uploadButton) {
+                    uploadButton.disabled = false;
+                }
+
+            }
+        );
+    }
 
 
-                if (uploadedPrescription) {
+    /* -----------------------------
+       REMOVE FILE
+    ----------------------------- */
 
-                    uploadedPrescription.scrollIntoView({
+    if (removeFileButton) {
 
-                        behavior: "smooth",
+        removeFileButton.addEventListener(
+            "click",
+            () => {
+                resetFile();
+            }
+        );
+    }
 
-                        block: "center"
 
-                    });
+    /* -----------------------------
+       UPLOAD + IDENTIFY
+    ----------------------------- */
 
+    if (uploadButton) {
+
+        uploadButton.addEventListener(
+            "click",
+            async () => {
+
+                if (!selectedPrescription) {
+
+                    showError(
+                        "Please choose a prescription first."
+                    );
+
+                    return;
                 }
 
 
-            } catch (error) {
+                hideError();
 
-                console.error(
-                    "UPLOAD ERROR:",
-                    error
-                );
+                uploadButton.disabled = true;
+
+
+                if (uploadButtonText) {
+                    uploadButtonText.textContent =
+                        "Uploading...";
+                }
+
+
+                if (uploadSpinner) {
+                    uploadSpinner.style.display =
+                        "inline-block";
+                }
 
 
                 if (uploadStatus) {
-
                     uploadStatus.style.display =
-                        "none";
+                        "flex";
                 }
 
 
-                uploadButton.disabled =
-                    false;
+                try {
 
+                    /* -----------------------------
+                       STEP 1 — UPLOAD
+                    ----------------------------- */
 
-                showPrescriptionError(
-                    error.message ||
-                    "Unable to upload prescription."
-                );
+                    const formData =
+                        new FormData();
 
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   IDENTIFY MEDICINES
-========================================= */
-
-if (extractButton) {
-
-    extractButton.addEventListener(
-        "click",
-        async function () {
-
-            if (!uploadedPrescriptionId) {
-
-                showPrescriptionError(
-                    "Prescription ID is missing."
-                );
-
-                return;
-            }
-
-
-            clearPrescriptionError();
-
-
-            extractButton.disabled =
-                true;
-
-
-            if (extractStatus) {
-
-                extractStatus.style.display =
-                    "flex";
-            }
-
-
-            try {
-
-                console.log(
-                    "Starting medicine identification..."
-                );
-
-
-                const response =
-                    await apiRequest(
-                        `/prescriptions/${uploadedPrescriptionId}/extract/`,
-                        {
-                            method: "POST"
-                        }
+                    formData.append(
+                        "prescription",
+                        selectedPrescription
                     );
 
 
-                console.log(
-                    "EXTRACTION RESPONSE:",
-                    response
-                );
+                    const uploadResult =
+                        await apiRequest(
+                            "/prescriptions/upload/",
+                            {
+                                method: "POST",
+                                body: formData
+                            }
+                        );
 
 
-                /* =================================
-                   GET ACTUAL DATA
-                ================================= */
+                    console.log(
+                        "Upload result:",
+                        uploadResult
+                    );
 
 
-                let result =
-                    response;
+                    /*
+                     * Your upload API may return the ID
+                     * either directly or inside data.
+                     */
+
+                    const prescriptionId =
+                        uploadResult.data?.id ||
+                        uploadResult.id ||
+                        uploadResult.prescription_id;
 
 
-                /*
-                 * Our backend returns:
-                 *
-                 * {
-                 *     success: true,
-                 *     message: "...",
-                 *     data: {
-                 *         extracted_text: "...",
-                 *         medicines: [...]
-                 *     }
-                 * }
-                 *
-                 * So if data exists, use it.
-                 */
+                    if (!prescriptionId) {
 
-                if (
-                    response &&
-                    response.data
-                ) {
+                        throw new Error(
+                            "Prescription was uploaded, but its ID was not returned."
+                        );
+                    }
 
-                    result =
-                        response.data;
+
+                    /* -----------------------------
+                       STEP 2 — IDENTIFY MEDICINES
+                    ----------------------------- */
+
+                    if (uploadButtonText) {
+                        uploadButtonText.textContent =
+                            "Identifying medicines...";
+                    }
+
+
+                    const extractResult =
+                        await apiRequest(
+                            `/prescriptions/${prescriptionId}/extract/`,
+                            {
+                                method: "POST"
+                            }
+                        );
+
+
+                    console.log(
+                        "Extraction result:",
+                        extractResult
+                    );
+
+
+                    /* -----------------------------
+                       STEP 3 — RESULTS PAGE
+                    ----------------------------- */
+
+                    window.location.href =
+                        `/prescription-results/${prescriptionId}/`;
+
                 }
+                catch (error) {
+
+                    console.error(
+                        "Prescription processing error:",
+                        error
+                    );
 
 
-                console.log(
-                    "ACTUAL RESULT:",
-                    result
-                );
+                    showError(
+                        error.message ||
+                        "Something went wrong while processing your prescription."
+                    );
 
 
-                /* =================================
-                   EXTRACTED TEXT
-                ================================= */
-
-                const extractedText =
-                    result &&
-                    result.extracted_text
-                        ? result.extracted_text
-                        : "No medicine text could be extracted.";
+                    uploadButton.disabled = false;
 
 
-                /*
-                 * IMPORTANT:
-                 *
-                 * Check the element before
-                 * setting textContent.
-                 */
-
-                if (ocrTextExists()) {
-
-                    const textElement =
-                        getElement("ocrText");
+                    if (uploadButtonText) {
+                        uploadButtonText.textContent =
+                            "Upload & Identify";
+                    }
 
 
-                    textElement.textContent =
-                        extractedText;
+                    if (uploadSpinner) {
+                        uploadSpinner.style.display =
+                            "none";
+                    }
 
 
-                    const resultCard =
-                        getElement("ocrResult");
-
-
-                    if (resultCard) {
-
-                        resultCard.style.display =
-                            "block";
+                    if (uploadStatus) {
+                        uploadStatus.style.display =
+                            "none";
                     }
 
                 }
 
-
-                /* =================================
-                   MEDICINES
-                ================================= */
-
-                const medicines =
-                    result &&
-                    Array.isArray(
-                        result.medicines
-                    )
-                        ? result.medicines
-                        : [];
-
-
-                console.log(
-                    "MEDICINES:",
-                    medicines
-                );
-
-
-                renderExtractedMedicines(
-                    medicines
-                );
-
-
-                /* =================================
-                   STOP LOADING
-                ================================= */
-
-                if (extractStatus) {
-
-                    extractStatus.style.display =
-                        "none";
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    "EXTRACTION ERROR:",
-                    error
-                );
-
-
-                if (extractStatus) {
-
-                    extractStatus.style.display =
-                        "none";
-                }
-
-
-                extractButton.disabled =
-                    false;
-
-
-                showPrescriptionError(
-                    error.message ||
-                    "Unable to identify medicines."
-                );
-
             }
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   CHECK OCR ELEMENT
-========================================= */
-
-function ocrTextExists() {
-
-    const element =
-        getElement("ocrText");
-
-
-    if (!element) {
-
-        console.warn(
-            "ocrText element was not found."
         );
-
-        return false;
     }
 
-
-    return true;
-}
-
-
-/* =========================================
-   RENDER MEDICINES
-========================================= */
-
-function renderExtractedMedicines(
-    medicines
-) {
-
-    const container =
-        getElement(
-            "extractedMedicines"
-        );
-
-
-    const card =
-        getElement(
-            "extractedMedicinesCard"
-        );
-
-
-    if (!container) {
-
-        console.error(
-            "ERROR: extractedMedicines element not found."
-        );
-
-        return;
-    }
-
-
-    if (!card) {
-
-        console.error(
-            "ERROR: extractedMedicinesCard element not found."
-        );
-
-        return;
-    }
-
-
-    container.innerHTML =
-        "";
-
-
-    /* =====================================
-       NO RESULTS
-    ====================================== */
-
-    if (
-        !medicines ||
-        medicines.length === 0
-    ) {
-
-        container.innerHTML = `
-
-            <div class="extracted-medicine">
-
-                <div class="medicine-result-info">
-
-                    <strong>
-                        No medicines were identified.
-                    </strong>
-
-                    <span>
-                        We could not identify any medicines
-                        from the uploaded prescription.
-                    </span>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        card.style.display =
-            "block";
-
-
-        scrollToResults();
-
-        return;
-    }
-
-
-    /* =====================================
-       LOOP THROUGH MEDICINES
-    ====================================== */
-
-    medicines.forEach(
-        function (medicine) {
-
-            if (!medicine) {
-
-                return;
-            }
-
-
-            const status =
-                medicine.status ||
-                "not_available";
-
-
-            const confidence =
-                medicine.confidence ||
-                "low";
-
-
-            const writtenName =
-                medicine.written_name ||
-                "Unknown medicine";
-
-
-            /* =================================
-               MATCHED
-            ================================= */
-
-            if (
-                status === "matched" &&
-                medicine.matched_medicine
-            ) {
-
-                renderMatchedMedicine(
-                    container,
-                    medicine
-                );
-
-                return;
-            }
-
-
-            /* =================================
-               POSSIBLE MATCH
-            ================================= */
-
-            if (
-                status === "possible_match"
-            ) {
-
-                renderPossibleMedicine(
-                    container,
-                    medicine
-                );
-
-                return;
-            }
-
-
-            /* =================================
-               MULTIPLE MATCHES
-            ================================= */
-
-            if (
-                status === "multiple_matches"
-            ) {
-
-                renderMultipleMatches(
-                    container,
-                    medicine
-                );
-
-                return;
-            }
-
-
-            /* =================================
-               NOT AVAILABLE
-            ================================= */
-
-            renderUnavailableMedicine(
-                container,
-                medicine
-            );
-
-        }
-    );
-
-
-    card.style.display =
-        "block";
-
-
-    scrollToResults();
-}
-
-
-/* =========================================
-   MATCHED MEDICINE
-========================================= */
-
-function renderMatchedMedicine(
-    container,
-    medicine
-) {
-
-    const matched =
-        medicine.matched_medicine;
-
-
-    const medicineId =
-        matched.id ||
-        "";
-
-
-    const brandName =
-        matched.brand_name ||
-        medicine.written_name ||
-        "Unknown medicine";
-
-
-    const genericName =
-        matched.generic_name ||
-        "";
-
-
-    const strength =
-        matched.strength ||
-        "";
-
-
-    const manufacturer =
-        matched.manufacturer ||
-        "";
-
-
-    const requiresPrescription =
-        matched.requires_prescription;
-
-
-    const confidence =
-        medicine.confidence ||
-        "low";
-
-
-    const writtenName =
-        medicine.written_name ||
-        brandName;
-
-
-    let prescriptionText =
-        "No prescription required";
-
-
-    if (
-        requiresPrescription
-    ) {
-
-        prescriptionText =
-            "Prescription required";
-    }
-
-
-    container.innerHTML += `
-
-        <article
-            class="
-                extracted-medicine
-                availability-available
-            "
-            data-medicine-id="${escapeHTML(
-                medicineId
-            )}"
-        >
-
-            <div
-                class="medicine-result-info"
-            >
-
-                <strong>
-                    ${escapeHTML(
-                        brandName
-                    )}
-                </strong>
-
-
-                ${
-                    genericName
-                        ? `
-                            <span>
-                                ${escapeHTML(
-                                    genericName
-                                )}
-                            </span>
-                        `
-                        : ""
-                }
-
-
-                ${
-                    strength
-                        ? `
-                            <small>
-                                ${escapeHTML(
-                                    strength
-                                )}
-                            </small>
-                        `
-                        : ""
-                }
-
-
-                ${
-                    manufacturer
-                        ? `
-                            <small>
-                                Manufacturer:
-                                ${escapeHTML(
-                                    manufacturer
-                                )}
-                            </small>
-                        `
-                        : ""
-                }
-
-
-                <small>
-                    Written as:
-                    ${escapeHTML(
-                        writtenName
-                    )}
-                </small>
-
-
-                <small>
-                    AI confidence:
-                    ${escapeHTML(
-                        confidence
-                    )}
-                </small>
-
-
-                <span
-                    class="
-                        medicine-availability
-                        availability-available
-                    "
-                >
-                    Available at MediBridge
-                </span>
-
-
-                <small>
-                    ${escapeHTML(
-                        prescriptionText
-                    )}
-                </small>
-
-            </div>
-
-
-            <label
-                class="medicine-select"
-            >
-
-                <input
-                    type="checkbox"
-                    class="medicine-checkbox"
-                    value="${escapeHTML(
-                        medicineId
-                    )}"
-                >
-
-                <span>
-                    Select
-                </span>
-
-            </label>
-
-        </article>
-
-    `;
-}
-
-
-/* =========================================
-   POSSIBLE MATCH
-========================================= */
-
-function renderPossibleMedicine(
-    container,
-    medicine
-) {
-
-    const writtenName =
-        medicine.written_name ||
-        "Unknown medicine";
-
-
-    const confidence =
-        medicine.confidence ||
-        "low";
-
-
-    const possibleMatches =
-        medicine.possible_matches ||
-        [];
-
-
-    let matchesHTML =
-        "";
-
-
-    possibleMatches.forEach(
-        function (match) {
-
-            matchesHTML += `
-
-                <div
-                    class="possible-match"
-                >
-
-                    <strong>
-                        ${escapeHTML(
-                            match.brand_name ||
-                            "Unknown"
-                        )}
-                    </strong>
-
-
-                    ${
-                        match.generic_name
-                            ? `
-                                <span>
-                                    ${escapeHTML(
-                                        match.generic_name
-                                    )}
-                                </span>
-                            `
-                            : ""
-                    }
-
-
-                    ${
-                        match.score !== undefined
-                            ? `
-                                <small>
-                                    ${escapeHTML(
-                                        match.score
-                                    )}%
-                                </small>
-                            `
-                            : ""
-                    }
-
-                </div>
-
-            `;
-        }
-    );
-
-
-    container.innerHTML += `
-
-        <article
-            class="
-                extracted-medicine
-                availability-out-of-stock
-            "
-        >
-
-            <div
-                class="medicine-result-info"
-            >
-
-                <strong>
-                    ${escapeHTML(
-                        writtenName
-                    )}
-                </strong>
-
-
-                <small>
-                    AI confidence:
-                    ${escapeHTML(
-                        confidence
-                    )}
-                </small>
-
-
-                <span
-                    class="medicine-availability"
-                >
-                    Possible match
-                </span>
-
-
-                ${
-                    matchesHTML
-                        ? `
-                            <div
-                                class="possible-matches"
-                            >
-
-                                <small>
-                                    Possible matches:
-                                </small>
-
-                                ${matchesHTML}
-
-                            </div>
-                        `
-                        : ""
-                }
-
-            </div>
-
-
-            <span
-                class="medicine-unavailable-label"
-            >
-                Review
-            </span>
-
-        </article>
-
-    `;
-}
-
-
-/* =========================================
-   MULTIPLE MATCHES
-========================================= */
-
-function renderMultipleMatches(
-    container,
-    medicine
-) {
-
-    const writtenName =
-        medicine.written_name ||
-        "Unknown medicine";
-
-
-    const possibleMatches =
-        medicine.possible_matches ||
-        [];
-
-
-    let matchesHTML =
-        "";
-
-
-    possibleMatches.forEach(
-        function (match) {
-
-            matchesHTML += `
-
-                <div
-                    class="possible-match"
-                >
-
-                    <strong>
-                        ${escapeHTML(
-                            match.brand_name ||
-                            "Unknown"
-                        )}
-                    </strong>
-
-
-                    ${
-                        match.generic_name
-                            ? `
-                                <span>
-                                    ${escapeHTML(
-                                        match.generic_name
-                                    )}
-                                </span>
-                            `
-                            : ""
-                    }
-
-                </div>
-
-            `;
-        }
-    );
-
-
-    container.innerHTML += `
-
-        <article
-            class="
-                extracted-medicine
-                availability-out-of-stock
-            "
-        >
-
-            <div
-                class="medicine-result-info"
-            >
-
-                <strong>
-                    ${escapeHTML(
-                        writtenName
-                    )}
-                </strong>
-
-
-                <small>
-                    Multiple medicines in
-                    MediBridge match this name.
-                </small>
-
-
-                ${
-                    matchesHTML
-                        ? `
-                            <div
-                                class="possible-matches"
-                            >
-
-                                ${matchesHTML}
-
-                            </div>
-                        `
-                        : ""
-                }
-
-            </div>
-
-
-            <span
-                class="medicine-unavailable-label"
-            >
-                Review
-            </span>
-
-        </article>
-
-    `;
-}
-
-
-/* =========================================
-   UNAVAILABLE MEDICINE
-========================================= */
-
-function renderUnavailableMedicine(
-    container,
-    medicine
-) {
-
-    const writtenName =
-        medicine.written_name ||
-        "Unknown medicine";
-
-
-    const confidence =
-        medicine.confidence ||
-        "low";
-
-
-    container.innerHTML += `
-
-        <article
-            class="
-                extracted-medicine
-                availability-not-available
-            "
-        >
-
-            <div
-                class="medicine-result-info"
-            >
-
-                <strong>
-                    ${escapeHTML(
-                        writtenName
-                    )}
-                </strong>
-
-
-                <small>
-                    AI confidence:
-                    ${escapeHTML(
-                        confidence
-                    )}
-                </small>
-
-
-                <span
-                    class="medicine-availability"
-                >
-                    Not available at MediBridge
-                </span>
-
-            </div>
-
-
-            <span
-                class="medicine-unavailable-label"
-            >
-                Unavailable
-            </span>
-
-        </article>
-
-    `;
-}
-
-
-/* =========================================
-   SCROLL TO RESULTS
-========================================= */
-
-function scrollToResults() {
-
-    const card =
-        getElement(
-            "extractedMedicinesCard"
-        );
-
-
-    if (!card) {
-
-        return;
-    }
-
-
-    setTimeout(
-        function () {
-
-            card.scrollIntoView({
-
-                behavior: "smooth",
-
-                block: "center"
-
-            });
-
-        },
-        100
-    );
-
-}
-
-
-/* =========================================
-   FILE SIZE
-========================================= */
-
-function formatFileSize(bytes) {
-
-    if (
-        bytes < 1024
-    ) {
-
-        return `${bytes} B`;
-    }
-
-
-    if (
-        bytes < 1024 * 1024
-    ) {
-
-        return `${(
-            bytes / 1024
-        ).toFixed(1)} KB`;
-    }
-
-
-    return `${(
-        bytes /
-        (1024 * 1024)
-    ).toFixed(1)} MB`;
-}
-
-
-/* =========================================
-   ERROR
-========================================= */
-
-function showPrescriptionError(
-    message
-) {
-
-    const errorElement =
-        getElement(
-            "prescriptionError"
-        );
-
-
-    if (!errorElement) {
-
-        console.error(
-            "Prescription error:",
-            message
-        );
-
-        return;
-    }
-
-
-    errorElement.textContent =
-        message;
-
-
-    errorElement.style.display =
-        "block";
-}
-
-
-function clearPrescriptionError() {
-
-    const errorElement =
-        getElement(
-            "prescriptionError"
-        );
-
-
-    if (!errorElement) {
-
-        return;
-    }
-
-
-    errorElement.textContent =
-        "";
-
-
-    errorElement.style.display =
-        "none";
-}
-
-
-/* =========================================
-   HTML ESCAPE
-========================================= */
-
-function escapeHTML(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-    }
-
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-}
+});

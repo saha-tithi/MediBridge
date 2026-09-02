@@ -1,134 +1,76 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block title %}
     Upload Prescription | MediBridge
 {% endblock %}
 
-
 {% block extra_css %}
-
 <link
     rel="stylesheet"
     href="{% static 'css/upload_prescription.css' %}"
 >
-
 {% endblock %}
-
 
 {% block content %}
 
 <main class="prescription-page">
 
+    <section class="prescription-intro">
 
-    <!-- =========================================
-         PAGE HEADER
-    ========================================== -->
-
-    <section class="prescription-header">
-
-        <p class="page-eyebrow">
+        <span class="prescription-label">
             PRESCRIPTION
-        </p>
+        </span>
 
         <h1>
             Identify your medicines
         </h1>
 
-        <p class="prescription-subtitle">
-            Upload only the medicine portion of your prescription
-            and let MediBridge identify the medicines for you.
+        <p>
+            Upload the medicine portion of your prescription
+            and we'll identify the medicines for you.
         </p>
 
     </section>
 
 
-    <!-- =========================================
-         ERROR
-    ========================================== -->
-
-    <div
-        id="prescriptionError"
-        class="prescription-error"
-        style="display: none;"
-    ></div>
-
-
-    <!-- =========================================
-         UPLOAD CARD
-    ========================================== -->
-
-    <section
-        id="uploadArea"
-        class="upload-card"
-    >
-
-
-        <!-- =====================================
-             UPLOAD INFORMATION
-        ====================================== -->
-
-        <div class="upload-card-header">
-
-            <h2>
-                Upload your prescription
-            </h2>
-
-            <p>
-                Choose a clear image or PDF containing
-                the medicine names.
-            </p>
-
-        </div>
-
-
-        <!-- =====================================
-             CROP NOTICE
-        ====================================== -->
+    <section class="upload-card">
 
         <div class="crop-notice">
 
-            <div class="crop-notice-icon">
+            <div class="crop-icon">
                 ✦
             </div>
 
-            <div class="crop-notice-content">
-
+            <div>
                 <strong>
                     Upload only the medicine portion
                 </strong>
 
                 <p>
-                    Crop out personal details, doctor information,
-                    diagnosis, and other unrelated information
-                    before uploading.
+                    Crop out your name, doctor details,
+                    diagnosis, and other personal information.
                 </p>
-
             </div>
 
         </div>
 
 
-        <!-- =====================================
-             FILE UPLOAD
-        ====================================== -->
-
         <label
             for="prescriptionFile"
-            class="upload-drop-area"
+            class="upload-area"
         >
 
             <div class="upload-icon">
-                +
+                ↑
             </div>
 
             <strong>
-                Choose prescription
+                Choose your prescription
             </strong>
 
             <span>
-                JPG · PNG · PDF
+                JPG, PNG or PDF
             </span>
 
             <small>
@@ -145,23 +87,19 @@
         </label>
 
 
-        <!-- =====================================
-             SELECTED FILE
-        ====================================== -->
-
         <div
             id="selectedFile"
             class="selected-file"
             style="display: none;"
         >
 
-            <div class="selected-file-info">
+            <div class="file-details">
 
                 <div class="file-icon">
                     FILE
                 </div>
 
-                <div>
+                <div class="file-text">
 
                     <strong id="selectedFileName">
                         prescription
@@ -187,199 +125,60 @@
         </div>
 
 
-        <!-- =====================================
-             UPLOAD BUTTON
-        ====================================== -->
-
-        <div class="upload-actions">
-
-            <button
-                type="button"
-                id="uploadButton"
-                class="upload-button"
-                disabled
-            >
-                Upload Prescription
-            </button>
-
-        </div>
-
-
-        <!-- =====================================
-             DISCLAIMER
-        ====================================== -->
-
-        <div class="prescription-disclaimer">
-
-            <div class="disclaimer-title">
-
-                <span>
-                    ⓘ
-                </span>
-
-                <strong>
-                    Important
-                </strong>
-
-            </div>
-
-            <p>
-                Medicine identification is AI-assisted and may
-                not always be accurate. Always verify the
-                identified medicines with your prescription
-                and a qualified pharmacist or doctor before
-                purchasing or taking any medicine.
-            </p>
-
-        </div>
-
-
-        <!-- =====================================
-             UPLOAD STATUS
-        ====================================== -->
-
         <div
-            id="uploadStatus"
-            class="processing-status"
+            id="prescriptionError"
+            class="prescription-error"
             style="display: none;"
-        >
-
-            <span class="loading-spinner"></span>
-
-            <span>
-                Uploading prescription...
-            </span>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================================
-         UPLOADED PRESCRIPTION
-    ========================================== -->
-
-    <section
-        id="uploadedPrescription"
-        class="uploaded-card"
-        style="display: none;"
-    >
-
-        <div class="uploaded-card-header">
-
-            <p class="card-eyebrow">
-                READY
-            </p>
-
-            <h2>
-                Prescription uploaded
-            </h2>
-
-            <p>
-                Your prescription is ready to be analyzed.
-            </p>
-
-        </div>
-
-
-        <div class="uploaded-file">
-
-            <div class="uploaded-file-icon">
-                ✓
-            </div>
-
-            <div class="uploaded-file-info">
-
-                <strong id="uploadedFileName">
-                    prescription
-                </strong>
-
-                <span>
-                    Ready for medicine identification
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="extract-actions">
-
-            <button
-                type="button"
-                id="extractButton"
-                class="extract-button"
-            >
-                Identify Medicines
-            </button>
-
-        </div>
-
-
-        <!-- =====================================
-             EXTRACTION STATUS
-        ====================================== -->
-
-        <div
-            id="extractStatus"
-            class="processing-status"
-            style="display: none;"
-        >
-
-            <span class="loading-spinner"></span>
-
-            <span>
-                Identifying medicines...
-            </span>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================================
-         MEDICINES
-    ========================================== -->
-
-    <section
-        id="extractedMedicinesCard"
-        class="medicines-card"
-        style="display: none;"
-    >
-
-        <div class="section-heading">
-
-            <p class="card-eyebrow">
-                RESULTS
-            </p>
-
-            <h2>
-                Medicines identified
-            </h2>
-
-            <p>
-                Review the medicines identified from
-                your prescription.
-            </p>
-
-        </div>
-
-
-        <div
-            id="extractedMedicines"
-            class="extracted-medicines"
         ></div>
 
 
-        <div class="medicine-selection-note">
+        <button
+            type="button"
+            id="uploadButton"
+            class="upload-button"
+            disabled
+        >
+            <span id="uploadButtonText">
+                Upload & Identify
+            </span>
 
-            Only medicines available at MediBridge
-            can be selected.
+            <span
+                id="uploadSpinner"
+                class="button-spinner"
+                style="display: none;"
+            ></span>
+        </button>
+
+
+        <div
+            id="uploadStatus"
+            class="upload-status"
+            style="display: none;"
+        >
+            <span class="loading-spinner"></span>
+
+            <span>
+                Reading your prescription...
+            </span>
+        </div>
+
+
+        <div class="prescription-disclaimer">
+
+            <span class="info-icon">
+                ⓘ
+            </span>
+
+            <p>
+                Medicine identification is AI-assisted and may
+                not always be accurate. Please verify the
+                identified medicines with your prescription
+                and a qualified pharmacist before purchasing.
+            </p>
 
         </div>
 
     </section>
-
 
 </main>
 
@@ -389,7 +188,7 @@
 {% block extra_js %}
 
 <script
-    src="{% static 'js/upload_prescription.js' %}?v=3"
+    src="{% static 'js/upload_prescription.js' %}?v=4"
 ></script>
 
 {% endblock %}

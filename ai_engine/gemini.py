@@ -1,5 +1,5 @@
 import json
-import os
+import time
 
 from PIL import Image
 from google import genai
@@ -20,12 +20,21 @@ if not API_KEY:
     )
 
 
-client = genai.Client(
-    api_key=API_KEY
-)
-
-
 MODEL_NAME = "gemini-3.6-flash"
+
+# 2 minutes per Gemini request
+GEMINI_TIMEOUT = 120000
+
+MAX_RETRIES = 3
+
+
+def create_client():
+    return genai.Client(
+        api_key=API_KEY,
+        http_options=types.HttpOptions(
+            timeout=GEMINI_TIMEOUT
+        )
+    )
 
 
 # =========================================
@@ -137,28 +146,104 @@ def read_medicines_from_image(file_path):
         "Starting Gemini prescription reading..."
     )
 
-    image = Image.open(
-        file_path
-    ).convert("RGB")
+
+    # =========================================
+    # OPEN IMAGE
+    # =========================================
+
+    try:
+
+        image = Image.open(
+            file_path
+        ).convert("RGB")
+
+    except Exception as error:
+
+        raise ValueError(
+            "Unable to open prescription image."
+        ) from error
 
 
     # =========================================
-    # SEND IMAGE TO GEMINI
+    # GEMINI REQUEST WITH RETRIES
     # =========================================
 
-    response = client.models.generate_content(
-        model=MODEL_NAME,
+    response = None
 
-        contents=[
-            PROMPT,
-            image,
-        ],
+    last_error = None
 
-        config=types.GenerateContentConfig(
-            temperature=0,
-            response_mime_type="application/json",
-        ),
-    )
+
+    for attempt in range(1, MAX_RETRIES + 1):
+
+        try:
+
+            print(
+                f"Gemini attempt {attempt}/{MAX_RETRIES}..."
+            )
+
+
+            # Create a fresh client for every attempt.
+            # This avoids reusing a broken HTTP connection.
+            client = create_client()
+
+
+            response = client.models.generate_content(
+
+                model=MODEL_NAME,
+
+                contents=[
+                    PROMPT,
+                    image,
+                ],
+
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                    response_mime_type="application/json",
+                ),
+            )
+
+
+            print(
+                "Gemini response received."
+            )
+
+            break
+
+
+        except Exception as error:
+
+            last_error = error
+
+            print(
+                f"Gemini attempt {attempt} failed:"
+            )
+
+            print(
+                repr(error)
+            )
+
+
+            if attempt < MAX_RETRIES:
+
+                delay = 3 * attempt
+
+                print(
+                    f"Retrying Gemini in {delay} seconds..."
+                )
+
+                time.sleep(delay)
+
+
+    # =========================================
+    # ALL ATTEMPTS FAILED
+    # =========================================
+
+    if response is None:
+
+        raise RuntimeError(
+            "Gemini could not process the prescription "
+            "after multiple attempts."
+        ) from last_error
 
 
     # =========================================
@@ -166,6 +251,22 @@ def read_medicines_from_image(file_path):
     # =========================================
 
     response_text = response.text.strip()
+
+
+    if not response_text:
+
+        raise ValueError(
+            "Gemini returned an empty response."
+        )
+
+
+    print(
+        "Gemini raw response:"
+    )
+
+    print(
+        response_text
+    )
 
 
     # =========================================
@@ -181,7 +282,7 @@ def read_medicines_from_image(file_path):
     except json.JSONDecodeError as error:
 
         raise ValueError(
-            "Gemini returned invalid JSON"
+            "Gemini returned invalid JSON."
         ) from error
 
 
@@ -192,14 +293,14 @@ def read_medicines_from_image(file_path):
     if not isinstance(result, dict):
 
         raise ValueError(
-            "Gemini response must be a JSON object"
+            "Gemini response must be a JSON object."
         )
 
 
     if "medicines" not in result:
 
         raise ValueError(
-            "Gemini response does not contain medicines"
+            "Gemini response does not contain medicines."
         )
 
 
@@ -209,7 +310,7 @@ def read_medicines_from_image(file_path):
     ):
 
         raise ValueError(
-            "medicines must be a list"
+            "medicines must be a list."
         )
 
 
@@ -218,6 +319,7 @@ def read_medicines_from_image(file_path):
     # =========================================
 
     medicines = []
+
 
     for medicine in result["medicines"]:
 
@@ -259,6 +361,15 @@ def read_medicines_from_image(file_path):
                 ),
 
         })
+
+
+    print(
+        "Gemini medicines:"
+    )
+
+    print(
+        medicines
+    )
 
 
     return {

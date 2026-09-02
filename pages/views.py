@@ -55,3 +55,11 @@ def upload_prescription_page(request):
         request,
         "prescriptions/upload_prescription.html"
     )
+def prescription_results_page(request, pk):
+    return render(
+        request,
+        "prescriptions/prescription_results.html",
+        {
+            "prescription_id": pk,
+        }
+    )
