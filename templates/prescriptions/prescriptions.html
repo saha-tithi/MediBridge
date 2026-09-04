@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Prescriptions | MediBridge{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/prescriptions.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<main class="prescriptions-page">
+
+    <section class="prescriptions-header">
+        <div>
+            <h1>My Prescriptions</h1>
+            <p>Your uploaded prescriptions</p>
+        </div>
+    </section>
+
+    <section id="prescriptionsContainer" class="prescriptions-list">
+        <!-- Prescription cards will be added here -->
+    </section>
+
+    <section id="loadingState" class="prescriptions-state">
+        <div class="loading-spinner"></div>
+        <p>Loading your prescriptions...</p>
+    </section>
+
+    <section id="emptyState" class="prescriptions-state empty-state hidden">
+        <div class="empty-icon">📄</div>
+        <h2>No prescriptions yet</h2>
+        <p>Upload a prescription and it will appear here.</p>
+
+        <a href="/upload-prescription/" class="upload-prescription-btn">
+            Upload Prescription
+        </a>
+    </section>
+
+    <section id="errorState" class="prescriptions-state error-state hidden">
+        <div class="error-icon">!</div>
+        <p id="errorMessage">Unable to load your prescriptions.</p>
+
+        <button id="retryBtn" class="retry-btn">
+            Try Again
+        </button>
+    </section>
+
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/prescriptions.js' %}"></script>
+{% endblock %}

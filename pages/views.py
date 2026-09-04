@@ -63,3 +63,8 @@ def prescription_results_page(request, pk):
             "prescription_id": pk,
         }
     )
+def prescriptions_page(request):
+    return render(
+        request,
+        "prescriptions/prescriptions.html"
+    )
