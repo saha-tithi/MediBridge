@@ -64,10 +64,30 @@ loginForm.addEventListener("submit", async function (event) {
         loginMessage.textContent =
             "Login successful. Redirecting...";
 
-
+        console.log("LOGIN ROLE:", data.data.user.role);
         setTimeout(function () {
 
-            window.location.href = "/medicines/";
+            const user =
+                data.data.user;
+
+            const role =
+                user.role;
+
+
+            if (
+                role === "PHARMACIST" ||
+                role === "ADMIN"
+            ) {
+
+                window.location.href =
+                    "/pharmacist/";
+
+            } else {
+
+                window.location.href =
+                    "/medicines/";
+
+            }
 
         }, 500);
 

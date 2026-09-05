@@ -1,0 +1,550 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}
+Pharmacy Overview | MediBridge
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pharmacist_overview.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="pharmacy-dashboard">
+
+
+    <!-- =====================================================
+         DASHBOARD HEADER
+         ===================================================== -->
+
+    <section class="dashboard-hero">
+
+        <div class="dashboard-heading">
+
+            <p class="dashboard-eyebrow">
+                PHARMACY
+            </p>
+
+            <h1>
+                Pharmacy Overview
+            </h1>
+
+            <p class="dashboard-subtitle">
+                Here's what's happening with your pharmacy today.
+            </p>
+
+        </div>
+
+
+        <!-- Decorative pharmacy visual -->
+
+        <div class="dashboard-visual">
+
+            <div class="visual-circle visual-circle-one"></div>
+
+            <div class="visual-circle visual-circle-two"></div>
+
+            <div class="visual-card visual-card-one">
+                +
+            </div>
+
+            <div class="visual-card visual-card-two">
+                ▦
+            </div>
+
+            <div class="visual-cross">
+                +
+            </div>
+
+            <div class="visual-message">
+
+                <span>
+                    Safe
+                </span>
+
+                <span>
+                    Access
+                </span>
+
+                <span>
+                    Better
+                </span>
+
+                <span>
+                    Tomorrows
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STATISTICS
+         ===================================================== -->
+
+    <section class="overview-stats">
+
+
+        <!-- TOTAL ORDERS -->
+
+        <article class="stat-card">
+
+            <div class="stat-icon orders-icon">
+                ▱
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Total Orders
+                </span>
+
+                <strong id="totalOrders">
+                    —
+                </strong>
+
+            </div>
+
+            <div class="stat-trend positive">
+                ↑ +12%
+            </div>
+
+            <span class="stat-period">
+                vs last week
+            </span>
+
+        </article>
+
+
+
+        <!-- TO PROCESS -->
+
+        <article class="stat-card">
+
+            <div class="stat-icon processing-icon">
+                ◷
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    To Process
+                </span>
+
+                <strong id="ordersToProcess">
+                    —
+                </strong>
+
+            </div>
+
+            <div class="stat-trend neutral">
+                —
+            </div>
+
+            <span class="stat-period">
+                vs last week
+            </span>
+
+        </article>
+
+
+
+        <!-- PRESCRIPTIONS -->
+
+        <article class="stat-card">
+
+            <div class="stat-icon prescription-icon">
+                □
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Prescriptions
+                </span>
+
+                <strong id="prescriptionOrders">
+                    —
+                </strong>
+
+            </div>
+
+            <div class="stat-trend neutral">
+                —
+            </div>
+
+            <span class="stat-period">
+                vs last week
+            </span>
+
+        </article>
+
+
+
+        <!-- PAYMENTS -->
+
+        <article class="stat-card">
+
+            <div class="stat-icon payment-icon">
+                ₹
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-label">
+                    Pending Payments
+                </span>
+
+                <strong id="pendingPayments">
+                    —
+                </strong>
+
+            </div>
+
+            <div class="stat-trend neutral">
+                —
+            </div>
+
+            <span class="stat-period">
+                vs last week
+            </span>
+
+        </article>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD GRID
+         ===================================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =================================================
+             RECENT ORDERS
+             ================================================= -->
+
+        <section class="dashboard-card recent-orders-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Recent Orders
+                    </h2>
+
+                    <p>
+                        Latest orders received
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="/pharmacist/orders/"
+                    class="view-all-link"
+                >
+                    View all
+                    <span>→</span>
+                </a>
+
+            </div>
+
+
+
+            <!-- TABLE HEADER -->
+
+            <div class="orders-table-header">
+
+                <span>
+                    Order
+                </span>
+
+                <span>
+                    Date
+                </span>
+
+                <span>
+                    Amount
+                </span>
+
+                <span>
+                    Status
+                </span>
+
+            </div>
+
+
+
+            <!-- ORDERS -->
+
+            <div
+                id="recentOrders"
+                class="recent-orders"
+            >
+            </div>
+
+
+
+            <!-- EMPTY -->
+
+            <div
+                id="ordersEmpty"
+                class="overview-empty"
+                style="display: none;"
+            >
+
+                <div class="empty-symbol">
+                    ▱
+                </div>
+
+                <strong>
+                    No orders yet
+                </strong>
+
+                <span>
+                    New orders will appear here.
+                </span>
+
+            </div>
+
+
+
+            <!-- LOADING -->
+
+            <div
+                id="ordersLoading"
+                class="overview-loading"
+            >
+
+                <div class="loading-line"></div>
+
+                <div class="loading-line"></div>
+
+                <div class="loading-line"></div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ORDER STATUS
+             ================================================= -->
+
+        <section class="dashboard-card status-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Order Status
+                    </h2>
+
+                    <p>
+                        Current order distribution
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                id="orderStatusList"
+                class="order-status-list"
+            >
+            </div>
+
+
+
+            <div
+                id="statusEmpty"
+                class="overview-empty"
+                style="display: none;"
+            >
+
+                <div class="empty-symbol">
+                    ◷
+                </div>
+
+                <strong>
+                    No order activity
+                </strong>
+
+                <span>
+                    Status information will appear here.
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+         ===================================================== -->
+
+    <section class="quick-actions-section">
+
+
+        <div class="quick-actions-heading">
+
+            <div>
+
+                <h2>
+                    Quick Actions
+                </h2>
+
+                <p>
+                    Manage your pharmacy efficiently.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+
+            <a
+                href="/pharmacist/orders/"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+                    ▱
+                </div>
+
+                <div>
+
+                    <strong>
+                        Manage Orders
+                    </strong>
+
+                    <span>
+                        Review and process orders
+                    </span>
+
+                </div>
+
+                <span class="quick-action-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="/pharmacist/prescriptions/"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+                    □
+                </div>
+
+                <div>
+
+                    <strong>
+                        Review Prescriptions
+                    </strong>
+
+                    <span>
+                        Verify pending prescriptions
+                    </span>
+
+                </div>
+
+                <span class="quick-action-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="/pharmacist/inventory/"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+                    ▦
+                </div>
+
+                <div>
+
+                    <strong>
+                        Inventory
+                    </strong>
+
+                    <span>
+                        Check medicine stock
+                    </span>
+
+                </div>
+
+                <span class="quick-action-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ERROR -->
+
+    <div
+        id="overviewError"
+        class="overview-error"
+        style="display: none;"
+    >
+    </div>
+
+
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/pharmacist_overview.js' %}"></script>
+
+{% endblock %}

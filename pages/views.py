@@ -68,3 +68,8 @@ def prescriptions_page(request):
         request,
         "prescriptions/prescriptions.html"
     )
+def pharmacist_overview_page(request):
+    return render(
+        request,
+        "pharmacist/overview.html"
+    )

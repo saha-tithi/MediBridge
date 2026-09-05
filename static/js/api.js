@@ -1,4 +1,4 @@
-const API_BASE_URL = "/api/v1";
+var API_BASE_URL = "/api/v1";
 
 
 async function apiRequest(endpoint, options = {}) {

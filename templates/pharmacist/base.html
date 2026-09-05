@@ -1,0 +1,234 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}MediBridge Pharmacy{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/base.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pharmacist_base.css' %}"
+    >
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body class="pharmacist-layout">
+
+
+<!-- =====================================================
+     PHARMACIST NAVBAR
+     ===================================================== -->
+
+<nav class="pharmacist-navbar">
+
+
+    <!-- LOGO -->
+
+    <a
+        href="/pharmacist/"
+        class="pharmacist-logo"
+    >
+
+        <span class="logo-shield">
+            +
+        </span>
+
+        <span class="logo-text">
+
+            <strong>
+                MediBridge
+            </strong>
+
+            <small>
+                PHARMACY
+            </small>
+
+        </span>
+
+    </a>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="pharmacist-nav-links">
+
+
+        <a
+            href="/pharmacist/"
+            class="pharmacist-nav-link
+            {% if request.resolver_match.url_name == 'pharmacist-overview-page' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="nav-icon">
+                ⌂
+            </span>
+
+            <span>
+                Overview
+            </span>
+
+        </a>
+
+
+        <a
+            href="/pharmacist/orders/"
+            class="pharmacist-nav-link
+            {% if request.resolver_match.url_name == 'pharmacist-order-list-page' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="nav-icon">
+                ▣
+            </span>
+
+            <span>
+                Orders
+            </span>
+
+        </a>
+
+
+        <a
+            href="/pharmacist/prescriptions/"
+            class="pharmacist-nav-link
+            {% if request.resolver_match.url_name == 'pharmacist-prescription-list-page' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="nav-icon">
+                □
+            </span>
+
+            <span>
+                Prescriptions
+            </span>
+
+        </a>
+
+
+        <a
+            href="/pharmacist/inventory/"
+            class="pharmacist-nav-link
+            {% if request.resolver_match.url_name == 'pharmacist-inventory-page' %}
+                active
+            {% endif %}"
+        >
+
+            <span class="nav-icon">
+                ▦
+            </span>
+
+            <span>
+                Inventory
+            </span>
+
+        </a>
+
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+
+    <div class="pharmacist-navbar-right">
+
+
+        <!-- NOTIFICATIONS -->
+
+        <button
+            type="button"
+            class="pharmacist-notification-button"
+            aria-label="Notifications"
+        >
+
+            <span class="notification-icon">
+                ♢
+            </span>
+
+            <span class="notification-dot"></span>
+
+        </button>
+
+
+        <!-- PROFILE -->
+
+        <div class="pharmacist-profile">
+
+            <div class="pharmacist-avatar">
+                P
+            </div>
+
+            <div class="pharmacist-profile-info">
+
+                <strong>
+                    Pharmacist
+                </strong>
+
+                <span>
+                    Pharmacy Team
+                </span>
+
+            </div>
+
+            <span class="profile-arrow">
+                ⌄
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+</nav>
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="pharmacist-main">
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script src="{% static 'js/api.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>
