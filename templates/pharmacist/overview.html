@@ -1,9 +1,12 @@
 {% extends "pharmacist/base.html" %}
+
 {% load static %}
 
+
 {% block title %}
-Pharmacy Overview | MediBridge
+Pharmacy Dashboard | MediBridge
 {% endblock %}
+
 
 
 {% block extra_css %}
@@ -16,73 +19,40 @@ Pharmacy Overview | MediBridge
 {% endblock %}
 
 
+
 {% block content %}
 
-<main class="pharmacy-dashboard">
+<div class="pharmacy-dashboard">
 
 
     <!-- =====================================================
-         DASHBOARD HEADER
+         DASHBOARD TITLE
          ===================================================== -->
 
-    <section class="dashboard-hero">
+    <section class="dashboard-title-row">
 
-        <div class="dashboard-heading">
+        <div>
 
-            <p class="dashboard-eyebrow">
+            <span class="dashboard-eyebrow">
                 PHARMACY
-            </p>
+            </span>
 
             <h1>
-                Pharmacy Overview
+                Dashboard
             </h1>
-
-            <p class="dashboard-subtitle">
-                Here's what's happening with your pharmacy today.
-            </p>
 
         </div>
 
 
-        <!-- Decorative pharmacy visual -->
+        <div class="dashboard-date">
 
-        <div class="dashboard-visual">
+            <span>
+                TODAY
+            </span>
 
-            <div class="visual-circle visual-circle-one"></div>
-
-            <div class="visual-circle visual-circle-two"></div>
-
-            <div class="visual-card visual-card-one">
-                +
-            </div>
-
-            <div class="visual-card visual-card-two">
-                ▦
-            </div>
-
-            <div class="visual-cross">
-                +
-            </div>
-
-            <div class="visual-message">
-
-                <span>
-                    Safe
-                </span>
-
-                <span>
-                    Access
-                </span>
-
-                <span>
-                    Better
-                </span>
-
-                <span>
-                    Tomorrows
-                </span>
-
-            </div>
+            <strong id="currentDate">
+                —
+            </strong>
 
         </div>
 
@@ -101,29 +71,32 @@ Pharmacy Overview | MediBridge
 
         <article class="stat-card">
 
-            <div class="stat-icon orders-icon">
-                ▱
-            </div>
+            <div class="stat-card-top">
 
-            <div class="stat-content">
+                <div class="stat-icon orders-stat-icon">
 
-                <span class="stat-label">
+                    <span class="icon-box"></span>
+
+                </div>
+
+                <span class="stat-title">
                     Total Orders
                 </span>
+
+            </div>
+
+
+            <div class="stat-value-row">
 
                 <strong id="totalOrders">
                     —
                 </strong>
 
-            </div>
+                <span class="stat-description">
+                    All orders
+                </span>
 
-            <div class="stat-trend positive">
-                ↑ +12%
             </div>
-
-            <span class="stat-period">
-                vs last week
-            </span>
 
         </article>
 
@@ -133,29 +106,32 @@ Pharmacy Overview | MediBridge
 
         <article class="stat-card">
 
-            <div class="stat-icon processing-icon">
-                ◷
-            </div>
+            <div class="stat-card-top">
 
-            <div class="stat-content">
+                <div class="stat-icon processing-stat-icon">
 
-                <span class="stat-label">
+                    <span class="icon-clock"></span>
+
+                </div>
+
+                <span class="stat-title">
                     To Process
                 </span>
+
+            </div>
+
+
+            <div class="stat-value-row">
 
                 <strong id="ordersToProcess">
                     —
                 </strong>
 
-            </div>
+                <span class="stat-description">
+                    Need attention
+                </span>
 
-            <div class="stat-trend neutral">
-                —
             </div>
-
-            <span class="stat-period">
-                vs last week
-            </span>
 
         </article>
 
@@ -165,29 +141,32 @@ Pharmacy Overview | MediBridge
 
         <article class="stat-card">
 
-            <div class="stat-icon prescription-icon">
-                □
-            </div>
+            <div class="stat-card-top">
 
-            <div class="stat-content">
+                <div class="stat-icon prescription-stat-icon">
 
-                <span class="stat-label">
+                    <span class="icon-document"></span>
+
+                </div>
+
+                <span class="stat-title">
                     Prescriptions
                 </span>
+
+            </div>
+
+
+            <div class="stat-value-row">
 
                 <strong id="prescriptionOrders">
                     —
                 </strong>
 
-            </div>
+                <span class="stat-description">
+                    Prescription orders
+                </span>
 
-            <div class="stat-trend neutral">
-                —
             </div>
-
-            <span class="stat-period">
-                vs last week
-            </span>
 
         </article>
 
@@ -197,29 +176,34 @@ Pharmacy Overview | MediBridge
 
         <article class="stat-card">
 
-            <div class="stat-icon payment-icon">
-                ₹
-            </div>
+            <div class="stat-card-top">
 
-            <div class="stat-content">
+                <div class="stat-icon payment-stat-icon">
 
-                <span class="stat-label">
+                    <span class="icon-rupee">
+                        ₹
+                    </span>
+
+                </div>
+
+                <span class="stat-title">
                     Pending Payments
                 </span>
+
+            </div>
+
+
+            <div class="stat-value-row">
 
                 <strong id="pendingPayments">
                     —
                 </strong>
 
-            </div>
+                <span class="stat-description">
+                    Awaiting payment
+                </span>
 
-            <div class="stat-trend neutral">
-                —
             </div>
-
-            <span class="stat-period">
-                vs last week
-            </span>
 
         </article>
 
@@ -229,29 +213,31 @@ Pharmacy Overview | MediBridge
 
 
     <!-- =====================================================
-         MAIN DASHBOARD GRID
+         MAIN DASHBOARD
          ===================================================== -->
 
-    <section class="dashboard-grid">
+    <section class="dashboard-main-grid">
 
 
-        <!-- =================================================
-             RECENT ORDERS
-             ================================================= -->
+        <!-- ORDERS -->
 
-        <section class="dashboard-card recent-orders-card">
+        <section class="dashboard-panel attention-panel">
 
 
-            <div class="card-header">
+            <div class="panel-header">
 
                 <div>
 
+                    <span class="panel-eyebrow">
+                        WORK QUEUE
+                    </span>
+
                     <h2>
-                        Recent Orders
+                        Orders needing attention
                     </h2>
 
                     <p>
-                        Latest orders received
+                        Orders that require action from the pharmacy team.
                     </p>
 
                 </div>
@@ -259,86 +245,102 @@ Pharmacy Overview | MediBridge
 
                 <a
                     href="/pharmacist/orders/"
-                    class="view-all-link"
+                    class="panel-link"
                 >
-                    View all
-                    <span>→</span>
+
+                    View all orders
+
+                    <span>
+                        →
+                    </span>
+
                 </a>
 
             </div>
 
 
-
-            <!-- TABLE HEADER -->
-
-            <div class="orders-table-header">
-
-                <span>
-                    Order
-                </span>
-
-                <span>
-                    Date
-                </span>
-
-                <span>
-                    Amount
-                </span>
-
-                <span>
-                    Status
-                </span>
-
-            </div>
-
-
-
-            <!-- ORDERS -->
-
             <div
                 id="recentOrders"
-                class="recent-orders"
+                class="orders-list"
             >
             </div>
 
-
-
-            <!-- EMPTY -->
-
-            <div
-                id="ordersEmpty"
-                class="overview-empty"
-                style="display: none;"
-            >
-
-                <div class="empty-symbol">
-                    ▱
-                </div>
-
-                <strong>
-                    No orders yet
-                </strong>
-
-                <span>
-                    New orders will appear here.
-                </span>
-
-            </div>
-
-
-
-            <!-- LOADING -->
 
             <div
                 id="ordersLoading"
-                class="overview-loading"
+                class="orders-loading"
             >
 
-                <div class="loading-line"></div>
+                <div class="loading-order">
 
-                <div class="loading-line"></div>
+                    <span></span>
 
-                <div class="loading-line"></div>
+                    <div>
+
+                        <b></b>
+
+                        <small></small>
+
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+
+                <div class="loading-order">
+
+                    <span></span>
+
+                    <div>
+
+                        <b></b>
+
+                        <small></small>
+
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+
+                <div class="loading-order">
+
+                    <span></span>
+
+                    <div>
+
+                        <b></b>
+
+                        <small></small>
+
+                    </div>
+
+                    <i></i>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="ordersEmpty"
+                class="dashboard-empty"
+                style="display: none;"
+            >
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <strong>
+                    All caught up
+                </strong>
+
+                <span>
+                    There are no orders waiting for attention.
+                </span>
 
             </div>
 
@@ -347,23 +349,25 @@ Pharmacy Overview | MediBridge
 
 
 
-        <!-- =================================================
-             ORDER STATUS
-             ================================================= -->
+        <!-- ORDER STATUS -->
 
-        <section class="dashboard-card status-card">
+        <section class="dashboard-panel status-panel">
 
 
-            <div class="card-header">
+            <div class="panel-header">
 
                 <div>
 
+                    <span class="panel-eyebrow">
+                        ORDER OVERVIEW
+                    </span>
+
                     <h2>
-                        Order Status
+                        Order status
                     </h2>
 
                     <p>
-                        Current order distribution
+                        Current distribution of orders.
                     </p>
 
                 </div>
@@ -371,23 +375,21 @@ Pharmacy Overview | MediBridge
             </div>
 
 
-
             <div
                 id="orderStatusList"
-                class="order-status-list"
+                class="status-list"
             >
             </div>
 
 
-
             <div
                 id="statusEmpty"
-                class="overview-empty"
+                class="dashboard-empty"
                 style="display: none;"
             >
 
-                <div class="empty-symbol">
-                    ◷
+                <div class="empty-icon">
+                    —
                 </div>
 
                 <strong>
@@ -415,17 +417,17 @@ Pharmacy Overview | MediBridge
     <section class="quick-actions-section">
 
 
-        <div class="quick-actions-heading">
+        <div class="section-heading">
 
             <div>
 
-                <h2>
-                    Quick Actions
-                </h2>
+                <span class="panel-eyebrow">
+                    SHORTCUTS
+                </span>
 
-                <p>
-                    Manage your pharmacy efficiently.
-                </p>
+                <h2>
+                    Quick actions
+                </h2>
 
             </div>
 
@@ -435,26 +437,32 @@ Pharmacy Overview | MediBridge
         <div class="quick-actions">
 
 
+            <!-- ORDERS -->
+
             <a
                 href="/pharmacist/orders/"
                 class="quick-action"
             >
 
                 <div class="quick-action-icon">
-                    ▱
+
+                    <span class="icon-box"></span>
+
                 </div>
 
-                <div>
+
+                <div class="quick-action-content">
 
                     <strong>
-                        Manage Orders
+                        Manage orders
                     </strong>
 
                     <span>
-                        Review and process orders
+                        Review, process and update orders
                     </span>
 
                 </div>
+
 
                 <span class="quick-action-arrow">
                     →
@@ -463,6 +471,8 @@ Pharmacy Overview | MediBridge
             </a>
 
 
+
+            <!-- PRESCRIPTIONS -->
 
             <a
                 href="/pharmacist/prescriptions/"
@@ -470,20 +480,24 @@ Pharmacy Overview | MediBridge
             >
 
                 <div class="quick-action-icon">
-                    □
+
+                    <span class="icon-document"></span>
+
                 </div>
 
-                <div>
+
+                <div class="quick-action-content">
 
                     <strong>
-                        Review Prescriptions
+                        Review prescriptions
                     </strong>
 
                     <span>
-                        Verify pending prescriptions
+                        Verify customer prescriptions
                     </span>
 
                 </div>
+
 
                 <span class="quick-action-arrow">
                     →
@@ -493,26 +507,32 @@ Pharmacy Overview | MediBridge
 
 
 
+            <!-- INVENTORY -->
+
             <a
                 href="/pharmacist/inventory/"
                 class="quick-action"
             >
 
                 <div class="quick-action-icon">
-                    ▦
+
+                    <span class="icon-grid"></span>
+
                 </div>
 
-                <div>
+
+                <div class="quick-action-content">
 
                     <strong>
-                        Inventory
+                        Check inventory
                     </strong>
 
                     <span>
-                        Check medicine stock
+                        Monitor stock and availability
                     </span>
 
                 </div>
+
 
                 <span class="quick-action-arrow">
                     →
@@ -523,7 +543,6 @@ Pharmacy Overview | MediBridge
 
         </div>
 
-
     </section>
 
 
@@ -532,19 +551,46 @@ Pharmacy Overview | MediBridge
 
     <div
         id="overviewError"
-        class="overview-error"
+        class="dashboard-error"
         style="display: none;"
     >
     </div>
 
 
-</main>
+</div>
 
 {% endblock %}
+
 
 
 {% block extra_js %}
 
 <script src="{% static 'js/pharmacist_overview.js' %}"></script>
+
+
+<script>
+
+    const dateElement =
+        document.getElementById("currentDate");
+
+
+    if (dateElement) {
+
+        const today = new Date();
+
+
+        dateElement.textContent =
+            today.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+    }
+
+</script>
 
 {% endblock %}

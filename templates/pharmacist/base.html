@@ -13,18 +13,27 @@
     >
 
     <title>
-        {% block title %}MediBridge Pharmacy{% endblock %}
+        {% block title %}
+            MediBridge Pharmacy
+        {% endblock %}
     </title>
+
+
+    <!-- Base CSS -->
 
     <link
         rel="stylesheet"
         href="{% static 'css/base.css' %}"
     >
 
+
+    <!-- Pharmacist CSS -->
+
     <link
         rel="stylesheet"
         href="{% static 'css/pharmacist_base.css' %}"
     >
+
 
     {% block extra_css %}
     {% endblock %}
@@ -32,198 +41,251 @@
 </head>
 
 
-<body class="pharmacist-layout">
+<body class="pharmacist-app">
 
 
-<!-- =====================================================
-     PHARMACIST NAVBAR
-     ===================================================== -->
-
-<nav class="pharmacist-navbar">
+<div class="pharmacist-shell">
 
 
-    <!-- LOGO -->
+    <!-- =====================================================
+         NAVBAR
+         ===================================================== -->
 
-    <a
-        href="/pharmacist/"
-        class="pharmacist-logo"
-    >
+    <header class="pharmacist-header">
 
-        <span class="logo-shield">
-            +
-        </span>
-
-        <span class="logo-text">
-
-            <strong>
-                MediBridge
-            </strong>
-
-            <small>
-                PHARMACY
-            </small>
-
-        </span>
-
-    </a>
+        <div class="pharmacist-header-inner">
 
 
-    <!-- NAVIGATION -->
+            <!-- =================================================
+                 MEDIBRIDGE LOGO
+                 ================================================= -->
 
-    <div class="pharmacist-nav-links">
+            <a
+                href="/pharmacist/"
+                class="pharmacist-brand"
+            >
 
-
-        <a
-            href="/pharmacist/"
-            class="pharmacist-nav-link
-            {% if request.resolver_match.url_name == 'pharmacist-overview-page' %}
-                active
-            {% endif %}"
-        >
-
-            <span class="nav-icon">
-                ⌂
-            </span>
-
-            <span>
-                Overview
-            </span>
-
-        </a>
-
-
-        <a
-            href="/pharmacist/orders/"
-            class="pharmacist-nav-link
-            {% if request.resolver_match.url_name == 'pharmacist-order-list-page' %}
-                active
-            {% endif %}"
-        >
-
-            <span class="nav-icon">
-                ▣
-            </span>
-
-            <span>
-                Orders
-            </span>
-
-        </a>
-
-
-        <a
-            href="/pharmacist/prescriptions/"
-            class="pharmacist-nav-link
-            {% if request.resolver_match.url_name == 'pharmacist-prescription-list-page' %}
-                active
-            {% endif %}"
-        >
-
-            <span class="nav-icon">
-                □
-            </span>
-
-            <span>
-                Prescriptions
-            </span>
-
-        </a>
-
-
-        <a
-            href="/pharmacist/inventory/"
-            class="pharmacist-nav-link
-            {% if request.resolver_match.url_name == 'pharmacist-inventory-page' %}
-                active
-            {% endif %}"
-        >
-
-            <span class="nav-icon">
-                ▦
-            </span>
-
-            <span>
-                Inventory
-            </span>
-
-        </a>
-
-
-    </div>
-
-
-    <!-- RIGHT SIDE -->
-
-    <div class="pharmacist-navbar-right">
-
-
-        <!-- NOTIFICATIONS -->
-
-        <button
-            type="button"
-            class="pharmacist-notification-button"
-            aria-label="Notifications"
-        >
-
-            <span class="notification-icon">
-                ♢
-            </span>
-
-            <span class="notification-dot"></span>
-
-        </button>
-
-
-        <!-- PROFILE -->
-
-        <div class="pharmacist-profile">
-
-            <div class="pharmacist-avatar">
-                P
-            </div>
-
-            <div class="pharmacist-profile-info">
-
-                <strong>
-                    Pharmacist
-                </strong>
-
-                <span>
-                    Pharmacy Team
+                <span class="brand-shield">
+                    +
                 </span>
 
+                <span class="brand-name">
+
+                    <strong>
+                        MediBridge
+                    </strong>
+
+                    <small>
+                        PHARMACY
+                    </small>
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 PHARMACIST NAVIGATION
+                 ================================================= -->
+
+            <nav
+                class="pharmacist-navigation"
+                aria-label="Pharmacist navigation"
+            >
+
+
+                <!-- DASHBOARD -->
+
+                <a
+                    href="/pharmacist/"
+                    class="pharmacist-nav-item
+                    {% if request.resolver_match.url_name == 'pharmacist-overview-page' %}
+                        active
+                    {% endif %}"
+                >
+
+                    <span class="nav-item-icon dashboard-icon"></span>
+
+                    <span class="nav-item-label">
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+
+                <!-- ORDERS -->
+
+                <a
+                    href="/pharmacist/orders/"
+                    class="pharmacist-nav-item
+                    {% if request.resolver_match.url_name == 'pharmacist-order-list-page' %}
+                        active
+                    {% endif %}"
+                >
+
+                    <span class="nav-item-icon orders-icon"></span>
+
+                    <span class="nav-item-label">
+                        Orders
+                    </span>
+
+                </a>
+
+
+
+                <!-- PRESCRIPTIONS -->
+
+                <a
+                    href="/pharmacist/prescriptions/"
+                    class="pharmacist-nav-item
+                    {% if request.resolver_match.url_name == 'pharmacist-prescription-list-page' %}
+                        active
+                    {% endif %}"
+                >
+
+                    <span class="nav-item-icon prescription-icon"></span>
+
+                    <span class="nav-item-label">
+                        Prescriptions
+                    </span>
+
+                </a>
+
+
+
+                <!-- INVENTORY -->
+
+                <a
+                    href="/pharmacist/inventory/"
+                    class="pharmacist-nav-item
+                    {% if request.resolver_match.url_name == 'pharmacist-inventory-page' %}
+                        active
+                    {% endif %}"
+                >
+
+                    <span class="nav-item-icon inventory-icon"></span>
+
+                    <span class="nav-item-label">
+                        Inventory
+                    </span>
+
+                </a>
+
+
+
+                <!-- MEDICINES -->
+
+                <a
+                    href="/pharmacist/medicines/"
+                    class="pharmacist-nav-item
+                    {% if request.resolver_match.url_name == 'pharmacist-medicine-list-page' %}
+                        active
+                    {% endif %}"
+                >
+
+                    <span class="nav-item-icon medicine-icon"></span>
+
+                    <span class="nav-item-label">
+                        Medicines
+                    </span>
+
+                </a>
+
+
+            </nav>
+
+
+
+            <!-- =================================================
+                 RIGHT SIDE
+                 ================================================= -->
+
+            <div class="pharmacist-header-actions">
+
+
+                <!-- =================================================
+                     NOTIFICATIONS
+                     ================================================= -->
+
+                <a
+                    href="/pharmacist/notifications/"
+                    class="notification-button"
+                    aria-label="Notifications"
+                    title="Notifications"
+                >
+
+                    <span class="notification-icon"></span>
+
+                    <span class="notification-indicator"></span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     PROFILE
+                     ================================================= -->
+
+                <a
+                    href="/pharmacist/profile/"
+                    class="pharmacist-profile-button"
+                    aria-label="Pharmacist profile"
+                >
+
+                    <span class="profile-avatar">
+                        P
+                    </span>
+
+                    <span class="profile-details">
+
+                        <strong>
+                            Pharmacist
+                        </strong>
+
+                        <small>
+                            Pharmacy Team
+                        </small>
+
+                    </span>
+
+                    <span class="profile-chevron"></span>
+
+                </a>
+
+
             </div>
 
-            <span class="profile-arrow">
-                ⌄
-            </span>
 
         </div>
 
-
-    </div>
-
-
-</nav>
+    </header>
 
 
-<!-- =====================================================
-     MAIN
-     ===================================================== -->
 
-<main class="pharmacist-main">
+    <!-- =====================================================
+         PAGE CONTENT
+         ===================================================== -->
 
-    {% block content %}
-    {% endblock %}
+    <main class="pharmacist-content">
 
-</main>
+        {% block content %}
+        {% endblock %}
+
+    </main>
 
 
-<!-- =====================================================
+</div>
+
+
+
+<!-- =========================================================
      JAVASCRIPT
-     ===================================================== -->
+     ========================================================= -->
 
 <script src="{% static 'js/api.js' %}"></script>
+
 
 {% block extra_js %}
 {% endblock %}
