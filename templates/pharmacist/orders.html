@@ -1,0 +1,205 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}Orders | MediBridge Pharmacy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pharmacist_orders.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="pharmacist-orders-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <section class="orders-page-header">
+
+        <div>
+            <span class="page-eyebrow">PHARMACY</span>
+
+            <h1>Orders</h1>
+
+            <p>
+                Review and manage customer orders.
+            </p>
+        </div>
+
+        <div class="orders-summary">
+            <span>Total orders</span>
+            <strong id="ordersTotal">—</strong>
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FILTER BAR
+         ===================================================== -->
+
+    <section class="orders-toolbar">
+
+        <div class="orders-search">
+
+            <span class="search-icon"></span>
+
+            <input
+                type="text"
+                id="orderSearch"
+                placeholder="Search by order ID..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div class="orders-filters">
+
+            <select id="statusFilter">
+                <option value="ALL">All statuses</option>
+                <option value="PLACED">Placed</option>
+                <option value="PROCESSING">Processing</option>
+                <option value="PACKED">Packed</option>
+                <option value="SHIPPED">Shipped</option>
+                <option value="DELIVERED">Delivered</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+
+
+            <select id="paymentFilter">
+                <option value="ALL">All payments</option>
+                <option value="PENDING">Pending</option>
+                <option value="PAID">Paid</option>
+                <option value="FAILED">Failed</option>
+            </select>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ORDERS PANEL
+         ===================================================== -->
+
+    <section class="orders-panel">
+
+        <div class="orders-panel-header">
+
+            <div>
+                <span class="panel-eyebrow">ORDER MANAGEMENT</span>
+
+                <h2>All orders</h2>
+
+                <p>
+                    View order details and take action when required.
+                </p>
+            </div>
+
+            <div id="ordersResultCount" class="orders-result-count">
+                —
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOADING
+             ================================================= -->
+
+        <div id="ordersLoading" class="orders-loading">
+
+            <div class="order-loading-row">
+                <span></span>
+                <div>
+                    <b></b>
+                    <small></small>
+                </div>
+                <i></i>
+            </div>
+
+            <div class="order-loading-row">
+                <span></span>
+                <div>
+                    <b></b>
+                    <small></small>
+                </div>
+                <i></i>
+            </div>
+
+            <div class="order-loading-row">
+                <span></span>
+                <div>
+                    <b></b>
+                    <small></small>
+                </div>
+                <i></i>
+            </div>
+
+            <div class="order-loading-row">
+                <span></span>
+                <div>
+                    <b></b>
+                    <small></small>
+                </div>
+                <i></i>
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ORDERS LIST
+             ================================================= -->
+
+        <div
+            id="ordersList"
+            class="orders-list"
+        ></div>
+
+
+        <!-- =================================================
+             EMPTY STATE
+             ================================================= -->
+
+        <div
+            id="ordersEmpty"
+            class="orders-empty"
+            style="display: none;"
+        >
+
+            <div class="empty-icon">
+                —
+            </div>
+
+            <strong>No orders found</strong>
+
+            <span>
+                There are no orders matching your current filters.
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             ERROR
+             ================================================= -->
+
+        <div
+            id="ordersError"
+            class="orders-error"
+            style="display: none;"
+        ></div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/pharmacist_orders.js' %}"></script>
+{% endblock %}

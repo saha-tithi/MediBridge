@@ -1,0 +1,809 @@
+/* =========================================================
+   MEDIBRIDGE PHARMACY
+   PHARMACIST ORDER DETAIL
+   ========================================================= */
+
+.pharmacist-order-detail-page {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    color: #233b40;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.order-detail-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.order-detail-heading {
+    min-width: 0;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 17px;
+    color: #6d8084;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.18s ease;
+}
+
+.back-link:hover {
+    color: #438f89;
+}
+
+.back-link span {
+    font-size: 16px;
+}
+
+.order-detail-heading .page-eyebrow {
+    margin-bottom: 7px;
+    color: #438f89;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.order-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.order-title-row h1 {
+    margin: 0;
+    color: #173f4a;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.6px;
+}
+
+.order-detail-heading > p {
+    margin: 8px 0 0;
+    color: #7a8b8f;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.status-placed {
+    background: #eef5fb;
+    color: #4b7ba0;
+}
+
+.status-processing {
+    background: #fff6e8;
+    color: #b27a2c;
+}
+
+.status-packed {
+    background: #f1edfb;
+    color: #765ca6;
+}
+
+.status-shipped {
+    background: #eaf5f3;
+    color: #438f89;
+}
+
+.status-delivered {
+    background: #eaf6ee;
+    color: #4d8b63;
+}
+
+.status-cancelled {
+    background: #fbeeee;
+    color: #c46363;
+}
+
+
+/* =========================================================
+   HEADER TOTAL
+   ========================================================= */
+
+.order-header-total {
+    min-width: 145px;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: 1px solid #e2ebeb;
+    border-radius: 10px;
+    text-align: right;
+}
+
+.order-header-total span {
+    display: block;
+    margin-bottom: 4px;
+    color: #809094;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+}
+
+.order-header-total strong {
+    color: #173f4a;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.order-detail-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.order-detail-main,
+.order-detail-sidebar {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.detail-panel {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e2ebeb;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.detail-panel-header {
+    min-height: 88px;
+    padding: 21px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid #e8eeee;
+}
+
+.detail-panel-header .panel-eyebrow {
+    margin-bottom: 6px;
+    color: #438f89;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.detail-panel-header h2 {
+    margin: 0;
+    color: #173f4a;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.detail-panel-header p {
+    margin: 6px 0 0;
+    color: #7b8c90;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.panel-count {
+    padding: 6px 9px;
+    background: #eef7f5;
+    border-radius: 7px;
+    color: #438f89;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   DELIVERY INFORMATION
+   ========================================================= */
+
+.delivery-information {
+    padding: 22px 25px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.delivery-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef7f5;
+    border-radius: 10px;
+    color: #438f89;
+    font-size: 20px;
+}
+
+.delivery-content {
+    min-width: 0;
+}
+
+.detail-label {
+    display: block;
+    margin-bottom: 7px;
+    color: #9aa8aa;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.delivery-content p {
+    margin: 0;
+    max-width: 650px;
+    color: #40585c;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+
+/* =========================================================
+   ORDER ITEMS
+   ========================================================= */
+
+.order-items {
+    width: 100%;
+}
+
+.order-item {
+    min-height: 82px;
+    padding: 15px 25px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 75px 105px;
+    align-items: center;
+    gap: 18px;
+    border-bottom: 1px solid #edf2f1;
+}
+
+.order-item:last-child {
+    border-bottom: 0;
+}
+
+.order-item-main {
+    min-width: 0;
+}
+
+.order-item-name {
+    display: block;
+    margin-bottom: 5px;
+    color: #30494d;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.order-item-price {
+    color: #87979a;
+    font-size: 10px;
+}
+
+.order-item-quantity {
+    color: #627477;
+    font-size: 11px;
+    text-align: center;
+}
+
+.order-item-subtotal {
+    color: #173f4a;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+}
+
+.item-prescription-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    padding: 4px 7px;
+    background: #f4f0fb;
+    border-radius: 5px;
+    color: #725ca5;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.item-prescription-tag::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* =========================================================
+   PRESCRIPTION
+   ========================================================= */
+
+.prescription-panel {
+    border-color: #ddd8ea;
+}
+
+.prescription-items {
+    width: 100%;
+}
+
+.prescription-item {
+    padding: 17px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border-bottom: 1px solid #eeeaf3;
+}
+
+.prescription-item:last-child {
+    border-bottom: 0;
+}
+
+.prescription-item-info {
+    min-width: 0;
+}
+
+.prescription-item-info strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #4a405d;
+    font-size: 12px;
+}
+
+.prescription-item-info span {
+    color: #8a8098;
+    font-size: 10px;
+}
+
+.prescription-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 8px 11px;
+    background: #f7f4fb;
+    border: 1px solid #e8e1f0;
+    border-radius: 7px;
+    color: #725ca5;
+    font-size: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.prescription-file:hover {
+    background: #f0ebf7;
+    border-color: #d8cce5;
+}
+
+.prescription-status {
+    padding: 6px 9px;
+    border-radius: 7px;
+    background: #fff6e8;
+    color: #b27a2c;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.prescription-status.verified {
+    background: #eaf6ee;
+    color: #4d8b63;
+}
+
+.prescription-status.rejected {
+    background: #fbeeee;
+    color: #c46363;
+}
+
+
+/* =========================================================
+   PAYMENT
+   ========================================================= */
+
+.payment-details {
+    padding: 8px 25px 20px;
+}
+
+.payment-row {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.payment-row span {
+    color: #7d8d90;
+    font-size: 11px;
+}
+
+.payment-row strong {
+    color: #40585c;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.payment-value {
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+
+.payment-pending {
+    background: #fff6e8;
+    color: #b27a2c !important;
+}
+
+.payment-paid {
+    background: #eaf6ee;
+    color: #4d8b63 !important;
+}
+
+.payment-failed {
+    background: #fbeeee;
+    color: #c46363 !important;
+}
+
+.payment-divider {
+    height: 1px;
+    margin: 8px 0;
+    background: #edf2f1;
+}
+
+.payment-row.total-row {
+    min-height: 48px;
+}
+
+.payment-row.total-row span {
+    color: #536a6d;
+    font-weight: 600;
+}
+
+.payment-row.total-row strong {
+    color: #173f4a;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.order-actions {
+    padding: 20px 25px 23px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.action-button {
+    width: 100%;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+}
+
+.primary-action-button {
+    background: #438f89;
+    color: #ffffff;
+}
+
+.primary-action-button:hover {
+    background: #367d77;
+}
+
+.secondary-action-button {
+    background: #eef7f5;
+    color: #438f89;
+    border: 1px solid #d8eae7;
+}
+
+.secondary-action-button:hover {
+    background: #e3f2ef;
+}
+
+.action-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.action-note {
+    margin: 3px 0 0;
+    color: #8b999b;
+    font-size: 10px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* =========================================================
+   STATUS UPDATE
+   ========================================================= */
+
+.status-update-content {
+    padding: 20px 25px 23px;
+}
+
+.status-update-content label {
+    display: block;
+    margin-bottom: 7px;
+    color: #687a7e;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-update-content select {
+    width: 100%;
+    height: 41px;
+    padding: 0 12px;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border: 1px solid #dfe9e8;
+    border-radius: 8px;
+    outline: none;
+    color: #536a6d;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.status-update-content select:focus {
+    border-color: #a8ceca;
+}
+
+.status-update-content .secondary-action-button {
+    width: 100%;
+    min-height: 40px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.detail-loading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
+    gap: 18px;
+}
+
+.detail-loading-card {
+    height: 300px;
+    background: #ffffff;
+    border: 1px solid #e2ebeb;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+}
+
+.detail-loading-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #f2f6f6,
+        transparent
+    );
+    animation: loadingShimmer 1.3s infinite;
+}
+
+@keyframes loadingShimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.detail-error {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: #fff4f4;
+    border: 1px solid #f0dada;
+    border-radius: 9px;
+    color: #bd5c5c;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   EMPTY PRESCRIPTION
+   ========================================================= */
+
+.no-prescription {
+    padding: 25px;
+    color: #8a999b;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .order-detail-content,
+    .detail-loading {
+        grid-template-columns: 1fr;
+    }
+
+    .order-detail-sidebar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+
+    .order-detail-sidebar .order-actions-panel,
+    .order-detail-sidebar .status-update-panel {
+        min-width: 0;
+    }
+}
+
+
+@media (max-width: 750px) {
+
+    .order-detail-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .order-header-total {
+        width: 100%;
+        text-align: left;
+    }
+
+    .order-detail-sidebar {
+        display: flex;
+    }
+
+    .order-item {
+        grid-template-columns: minmax(0, 1fr) 55px 85px;
+        gap: 10px;
+        padding: 15px 20px;
+    }
+
+    .detail-panel-header {
+        padding: 20px;
+    }
+
+    .delivery-information {
+        padding: 20px;
+    }
+
+    .prescription-item {
+        padding: 16px 20px;
+    }
+
+    .order-actions,
+    .status-update-content,
+    .payment-details {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+
+@media (max-width: 560px) {
+
+    .order-title-row h1 {
+        font-size: 25px;
+    }
+
+    .order-status {
+        font-size: 9px;
+    }
+
+    .order-item {
+        grid-template-columns: 1fr auto;
+    }
+
+    .order-item-quantity {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .order-item-subtotal {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .order-item-main {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+    }
+
+    .prescription-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .prescription-file {
+        width: 100%;
+        justify-content: center;
+    }
+    .prescription-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+    flex-shrink: 0;
+}
+
+    .detail-panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .panel-count,
+    .prescription-status {
+        align-self: flex-start;
+    }
+}

@@ -1,0 +1,414 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}Order Details | MediBridge Pharmacy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pharmacist_order_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="pharmacist-order-detail-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <section class="order-detail-header">
+
+        <div class="order-detail-heading">
+
+            <a href="/pharmacist/orders/" class="back-link">
+                <span>←</span>
+                Back to orders
+            </a>
+
+            <span class="page-eyebrow">ORDER DETAILS</span>
+
+            <div class="order-title-row">
+
+                <h1 id="orderTitle">
+                    Order —
+                </h1>
+
+                <span
+                    id="orderStatus"
+                    class="order-status status-placed"
+                >
+                    —
+                </span>
+
+            </div>
+
+            <p id="orderDate">
+                Loading order information...
+            </p>
+
+        </div>
+
+        <div class="order-header-total">
+
+            <span>Total amount</span>
+
+            <strong id="orderTotal">
+                ₹—
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOADING
+         ===================================================== -->
+
+    <section
+        id="detailLoading"
+        class="detail-loading"
+    >
+
+        <div class="detail-loading-card"></div>
+
+        <div class="detail-loading-card"></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ERROR
+         ===================================================== -->
+
+    <div
+        id="detailError"
+        class="detail-error"
+        style="display: none;"
+    ></div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <div
+        id="orderContent"
+        class="order-detail-content"
+        style="display: none;"
+    >
+
+        <!-- =================================================
+             LEFT COLUMN
+             ================================================= -->
+
+        <div class="order-detail-main">
+
+            <!-- =============================================
+                 CUSTOMER / DELIVERY
+                 ============================================= -->
+
+            <section class="detail-panel">
+
+                <div class="detail-panel-header">
+
+                    <div>
+                        <span class="panel-eyebrow">
+                            CUSTOMER
+                        </span>
+
+                        <h2>
+                            Delivery information
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div class="delivery-information">
+
+                    <div class="delivery-icon">
+                        <span>⌂</span>
+                    </div>
+
+                    <div class="delivery-content">
+
+                        <span class="detail-label">
+                            Shipping address
+                        </span>
+
+                        <p id="shippingAddress">
+                            —
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 ORDER ITEMS
+                 ============================================= -->
+
+            <section class="detail-panel">
+
+                <div class="detail-panel-header">
+
+                    <div>
+                        <span class="panel-eyebrow">
+                            ORDER
+                        </span>
+
+                        <h2>
+                            Medicines
+                        </h2>
+                    </div>
+
+                    <span
+                        id="itemCount"
+                        class="panel-count"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="orderItems"
+                    class="order-items"
+                ></div>
+
+            </section>
+
+
+            <!-- =============================================
+                 PRESCRIPTION
+                 ============================================= -->
+
+            <section
+                id="prescriptionPanel"
+                class="detail-panel prescription-panel"
+                style="display: none;"
+            >
+
+                <div class="detail-panel-header">
+
+                    <div>
+                        <span class="panel-eyebrow">
+                            PRESCRIPTION
+                        </span>
+
+                        <h2>
+                            Attached prescription
+                        </h2>
+
+                        <p>
+                            Review the prescription before
+                            processing this order.
+                        </p>
+                    </div>
+
+                    <span
+                        id="prescriptionStatus"
+                        class="prescription-status"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="prescriptionItems"
+                    class="prescription-items"
+                ></div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+             ================================================= -->
+
+        <aside class="order-detail-sidebar">
+
+            <!-- =============================================
+                 PAYMENT
+                 ============================================= -->
+
+            <section class="detail-panel payment-panel">
+
+                <div class="detail-panel-header">
+
+                    <div>
+                        <span class="panel-eyebrow">
+                            PAYMENT
+                        </span>
+
+                        <h2>
+                            Payment details
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-details">
+
+                    <div class="payment-row">
+
+                        <span>
+                            Payment method
+                        </span>
+
+                        <strong id="paymentMethod">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-row">
+
+                        <span>
+                            Payment status
+                        </span>
+
+                        <strong
+                            id="paymentStatus"
+                            class="payment-value"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-divider"></div>
+
+
+                    <div class="payment-row total-row">
+
+                        <span>
+                            Order total
+                        </span>
+
+                        <strong id="paymentTotal">
+                            ₹—
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 ORDER ACTIONS
+                 ============================================= -->
+
+            <section
+                id="orderActionsPanel"
+                class="detail-panel order-actions-panel"
+            >
+
+                <div class="detail-panel-header">
+
+                    <div>
+                        <span class="panel-eyebrow">
+                            ACTIONS
+                        </span>
+
+                        <h2>
+                            Order actions
+                        </h2>
+
+                        <p id="actionDescription">
+                            Review the order before taking
+                            action.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="orderActions"
+                    class="order-actions"
+                ></div>
+
+            </section>
+
+
+            <!-- =============================================
+                 STATUS UPDATE
+                 ============================================= -->
+
+            <section class="detail-panel status-update-panel">
+
+                <div class="detail-panel-header">
+
+                    <div>
+                        <span class="panel-eyebrow">
+                            STATUS
+                        </span>
+
+                        <h2>
+                            Update order
+                        </h2>
+                    </div>
+
+                </div>
+
+
+                <div class="status-update-content">
+
+                    <label for="newOrderStatus">
+                        Change status
+                    </label>
+
+                    <select id="newOrderStatus">
+
+                        <option value="">
+                            Select status
+                        </option>
+
+                        <option value="SHIPPED">
+                            Shipped
+                        </option>
+
+                        <option value="DELIVERED">
+                            Delivered
+                        </option>
+
+                    </select>
+
+
+                    <button
+                        type="button"
+                        id="updateStatusButton"
+                        class="secondary-action-button"
+                    >
+                        Update status
+                    </button>
+
+                </div>
+
+            </section>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/pharmacist_order_detail.js' %}"></script>
+{% endblock %}
