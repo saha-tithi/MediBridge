@@ -69,6 +69,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const prescriptionStatus =
         document.getElementById("prescriptionStatus");
 
+    const prescriptionActions =
+        document.getElementById("prescriptionActions");
+
+    const verifyPrescriptionButton =
+        document.getElementById("verifyPrescriptionButton");
+
+    const rejectPrescriptionButton =
+        document.getElementById("rejectPrescriptionButton");
+
     const orderActions =
         document.getElementById("orderActions");
 
@@ -83,6 +92,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     let currentOrder = null;
+
+    let currentPrescriptions = [];
 
 
     /* =====================================================
@@ -218,11 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
         orderItems.innerHTML =
             items.map(function (item) {
 
-                const hasPrescription =
-                    item.is_prescription_item === true ||
-                    item.prescription !== null;
-
-
                 return `
                     <div class="order-item">
 
@@ -241,18 +247,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 )}
                                 per item
                             </span>
-
-                            ${
-                                hasPrescription
-                                    ? `
-                                        <span
-                                            class="item-prescription-tag"
-                                        >
-                                            Prescription required
-                                        </span>
-                                    `
-                                    : ""
-                            }
 
                         </div>
 
@@ -320,131 +314,493 @@ document.addEventListener("DOMContentLoaded", function () {
                 : [];
 
 
-        const prescriptionItemsList =
-            items.filter(function (item) {
+        /*
+         * Find every prescription actually attached
+         * to an order item.
+         */
 
-                return (
-                    item.is_prescription_item === true ||
-                    item.prescription !== null
-                );
+        currentPrescriptions = [];
 
-            });
+        items.forEach(function (item) {
+
+            if (
+                item.prescription &&
+                item.prescription.id
+            ) {
+
+                const alreadyExists =
+                    currentPrescriptions.some(
+                        function (prescription) {
+
+                            return (
+                                prescription.id ===
+                                item.prescription.id
+                            );
+
+                        }
+                    );
 
 
-        if (prescriptionItemsList.length === 0) {
+                if (!alreadyExists) {
+
+                    currentPrescriptions.push({
+                        id: item.prescription.id,
+                        file_url: item.prescription.file_url,
+                        status: item.prescription.status,
+                        medicine_name: item.medicine_name
+                    });
+
+                }
+
+            }
+
+        });
+
+
+        /*
+         * No prescription attached
+         */
+
+        if (currentPrescriptions.length === 0) {
 
             prescriptionPanel.style.display =
                 "none";
 
+            if (prescriptionActions) {
+
+                prescriptionActions.style.display =
+                    "none";
+
+            }
+
             return;
         }
 
+
+        /*
+         * Prescription attached
+         */
 
         prescriptionPanel.style.display =
             "block";
 
 
         prescriptionItems.innerHTML =
-            prescriptionItemsList
-                .map(function (item) {
+            currentPrescriptions
+                .map(function (prescription) {
 
                     return createPrescriptionItem(
-                        item
+                        prescription
                     );
 
                 })
                 .join("");
 
 
-        /*
-         * At this stage the Order API gives us
-         * the prescription ID through the item.
-         *
-         * The actual prescription file URL depends
-         * on the Prescription serializer.
-         *
-         * Therefore we don't invent a file URL here.
-         */
-        prescriptionStatus.textContent =
-            "Attached";
+        updatePrescriptionUI();
     }
 
-function createPrescriptionItem(item) {
 
-    const prescription = item.prescription;
-
-    if (!prescription) {
-        return "";
-    }
-
-    const fileUrl = prescription.file_url;
-    const status = prescription.status || "PENDING";
-
-    const statusClass =
-        status === "VERIFIED"
-            ? "verified"
-            : status === "REJECTED"
-                ? "rejected"
-                : "";
-
-    const statusText =
-        status === "VERIFIED"
-            ? "Verified"
-            : status === "REJECTED"
-                ? "Rejected"
-                : "Pending review";
-
-    return `
-        <div class="prescription-item">
-
-            <div class="prescription-item-info">
-
-                <strong>
-                    ${escapeHtml(
-                        item.medicine_name ||
-                        "Prescription medicine"
-                    )}
-                </strong>
-
-                <span>
-                    Prescription attached to this order
-                </span>
-
-            </div>
-
-            <div class="prescription-item-actions">
-
-                <span class="prescription-status ${statusClass}">
-                    ${statusText}
-                </span>
-
-                ${
-                    fileUrl
-                        ? `
-                            <a
-                                href="${escapeHtml(fileUrl)}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="prescription-file"
-                            >
-                                View prescription
-                                <span>↗</span>
-                            </a>
-                        `
-                        : `
-                            <span class="prescription-file">
-                                File unavailable
-                            </span>
-                        `
-                }
-
-            </div>
-
-        </div>
-    `;
-}
     /* =====================================================
-       ACTIONS
+       CREATE PRESCRIPTION ITEM
+       ===================================================== */
+
+    function createPrescriptionItem(
+        prescription
+    ) {
+
+        const fileUrl =
+            prescription.file_url;
+
+
+        const status =
+            prescription.status || "PENDING";
+
+
+        const statusClass =
+            status === "VERIFIED"
+                ? "verified"
+                : status === "REJECTED"
+                    ? "rejected"
+                    : "";
+
+
+        const statusText =
+            status === "VERIFIED"
+                ? "Verified"
+                : status === "REJECTED"
+                    ? "Rejected"
+                    : "Pending review";
+
+
+        return `
+            <div class="prescription-item">
+
+                <div class="prescription-item-info">
+
+                    <strong>
+                        ${escapeHtml(
+                            prescription.medicine_name ||
+                            "Prescription"
+                        )}
+                    </strong>
+
+                    <span>
+                        Prescription attached to this order
+                    </span>
+
+                </div>
+
+
+                <div class="prescription-item-actions">
+
+                    <span
+                        class="prescription-status ${statusClass}"
+                    >
+                        ${statusText}
+                    </span>
+
+
+                    ${
+                        fileUrl
+                            ? `
+                                <a
+                                    href="${escapeHtml(fileUrl)}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="prescription-file"
+                                >
+                                    View prescription
+                                    <span>↗</span>
+                                </a>
+                            `
+                            : `
+                                <span class="prescription-file">
+                                    File unavailable
+                                </span>
+                            `
+                    }
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+    /* =====================================================
+       PRESCRIPTION UI
+       ===================================================== */
+
+    function updatePrescriptionUI() {
+
+        if (!prescriptionActions) {
+            return;
+        }
+
+
+        const hasPendingPrescription =
+            currentPrescriptions.some(
+                function (prescription) {
+
+                    return prescription.status === "PENDING";
+
+                }
+            );
+
+
+        if (hasPendingPrescription) {
+
+            prescriptionActions.style.display =
+                "flex";
+
+            if (verifyPrescriptionButton) {
+
+                verifyPrescriptionButton.disabled =
+                    false;
+
+            }
+
+            if (rejectPrescriptionButton) {
+
+                rejectPrescriptionButton.disabled =
+                    false;
+
+            }
+
+        }
+        else {
+
+            prescriptionActions.style.display =
+                "none";
+        }
+
+
+        /*
+         * Overall prescription status
+         */
+
+        const hasRejected =
+            currentPrescriptions.some(
+                function (prescription) {
+
+                    return prescription.status === "REJECTED";
+
+                }
+            );
+
+
+        const allVerified =
+            currentPrescriptions.every(
+                function (prescription) {
+
+                    return prescription.status === "VERIFIED";
+
+                }
+            );
+
+
+        if (hasRejected) {
+
+            prescriptionStatus.textContent =
+                "Rejected";
+
+        }
+        else if (allVerified) {
+
+            prescriptionStatus.textContent =
+                "Verified";
+
+        }
+        else {
+
+            prescriptionStatus.textContent =
+                "Attached";
+
+        }
+    }
+
+
+    /* =====================================================
+       VERIFY PRESCRIPTION
+       ===================================================== */
+
+    if (verifyPrescriptionButton) {
+
+        verifyPrescriptionButton.addEventListener(
+            "click",
+            function () {
+
+                updatePrescriptionStatus(
+                    "VERIFIED"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       REJECT PRESCRIPTION
+       ===================================================== */
+
+    if (rejectPrescriptionButton) {
+
+        rejectPrescriptionButton.addEventListener(
+            "click",
+            function () {
+
+                updatePrescriptionStatus(
+                    "REJECTED"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       UPDATE PRESCRIPTION STATUS
+       ===================================================== */
+
+    async function updatePrescriptionStatus(
+        newStatus
+    ) {
+
+        const pendingPrescriptions =
+            currentPrescriptions.filter(
+                function (prescription) {
+
+                    return prescription.status === "PENDING";
+
+                }
+            );
+
+
+        if (pendingPrescriptions.length === 0) {
+
+            return;
+        }
+
+
+        let pharmacistNote = "";
+
+
+        if (newStatus === "REJECTED") {
+
+            pharmacistNote =
+                window.prompt(
+                    "Enter a reason for rejecting the prescription:"
+                );
+
+
+            if (pharmacistNote === null) {
+
+                return;
+            }
+
+
+            pharmacistNote =
+                pharmacistNote.trim();
+
+
+            if (!pharmacistNote) {
+
+                showActionError(
+                    "Please provide a reason for rejecting the prescription."
+                );
+
+                return;
+            }
+
+        }
+        else {
+
+            const confirmed =
+                window.confirm(
+                    "Verify this prescription?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+            }
+
+
+            pharmacistNote =
+                window.prompt(
+                    "Add an optional note:",
+                    ""
+                );
+
+
+            if (pharmacistNote === null) {
+
+                pharmacistNote = "";
+
+            }
+
+        }
+
+
+        if (verifyPrescriptionButton) {
+
+            verifyPrescriptionButton.disabled =
+                true;
+
+        }
+
+
+        if (rejectPrescriptionButton) {
+
+            rejectPrescriptionButton.disabled =
+                true;
+
+        }
+
+
+        try {
+
+            /*
+             * At the moment all attached order items
+             * should point to the same uploaded
+             * prescription.
+             *
+             * We therefore update each pending
+             * prescription returned by the order.
+             */
+
+            for (
+                const prescription
+                of pendingPrescriptions
+            ) {
+
+                await apiRequest(
+                    `/prescriptions/pharmacist/${prescription.id}/verify/`,
+                    {
+                        method: "PATCH",
+
+                        body: JSON.stringify({
+
+                            status: newStatus,
+
+                            pharmacist_note:
+                                pharmacistNote
+
+                        })
+                    }
+                );
+
+            }
+
+
+            /*
+             * Reload the order so the UI gets the
+             * latest prescription status.
+             */
+
+            await loadOrder();
+
+
+        } catch (error) {
+
+            console.error(
+                "Failed to update prescription:",
+                error
+            );
+
+
+            showActionError(
+                error.message ||
+                "Unable to update the prescription."
+            );
+
+
+            if (verifyPrescriptionButton) {
+
+                verifyPrescriptionButton.disabled =
+                    false;
+
+            }
+
+
+            if (rejectPrescriptionButton) {
+
+                rejectPrescriptionButton.disabled =
+                    false;
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ORDER ACTIONS
        ===================================================== */
 
     function renderActions(order) {
@@ -463,7 +819,7 @@ function createPrescriptionItem(item) {
         if (status === "PLACED") {
 
             actionDescription.textContent =
-                "Review the order and prescription before processing.";
+                "Review the order and attached prescription before processing.";
 
             orderActions.innerHTML = `
                 <button
@@ -476,19 +832,22 @@ function createPrescriptionItem(item) {
 
                 <p class="action-note">
                     Processing will check stock and
-                    prescription requirements.
+                    prescription verification.
                 </p>
             `;
+
 
             const processButton =
                 document.getElementById(
                     "processOrderButton"
                 );
 
+
             processButton.addEventListener(
                 "click",
                 processOrder
             );
+
 
             return;
         }
@@ -721,6 +1080,7 @@ function createPrescriptionItem(item) {
                     `/orders/pharmacist/${orderId}/status/`,
                     {
                         method: "PATCH",
+
                         body: JSON.stringify({
                             status: newStatus
                         })

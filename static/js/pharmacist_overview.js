@@ -140,14 +140,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================
-       RECENT ORDERS
+       ORDERS NEEDING ATTENTION
     ========================================== */
 
     function renderRecentOrders(orders) {
 
         recentOrdersElement.innerHTML = "";
 
-        if (orders.length === 0) {
+
+        /*
+         * Only show orders that still need
+         * pharmacist action.
+         *
+         * PLACED     → needs processing
+         * PROCESSING → needs processing
+         *
+         * PACKED      → no longer needs attention
+         * SHIPPED     → no longer needs attention
+         * DELIVERED   → no longer needs attention
+         * CANCELLED   → no longer needs attention
+         */
+
+        const attentionOrders =
+            orders.filter(function (order) {
+
+                return (
+                    order.status === "PLACED" ||
+                    order.status === "PROCESSING"
+                );
+
+            }).slice(0, 5);
+
+
+        if (attentionOrders.length === 0) {
 
             ordersEmpty.style.display =
                 "flex";
@@ -156,15 +181,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
+
         ordersEmpty.style.display =
             "none";
 
 
-        const recentOrders =
-            orders.slice(0, 5);
-
-
-        recentOrders.forEach(function (order) {
+        attentionOrders.forEach(function (order) {
 
             const orderElement =
                 document.createElement("a");

@@ -63,18 +63,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
 
-            /*
-             * apiRequest() already:
-             *
-             * 1. Adds the access token
-             * 2. Sends the request
-             * 3. Parses JSON
-             * 4. Handles HTTP errors
-             *
-             * So we DO NOT use response.json()
-             * or response.ok here.
-             */
-
             const result = await apiRequest(
                 `/prescriptions/${prescriptionId}/`
             );
@@ -85,12 +73,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 result
             );
 
-
-            /*
-             * Depending on your serializer,
-             * the data may be returned directly
-             * or inside "data".
-             */
 
             const prescription =
                 result.data || result;
@@ -505,16 +487,29 @@ document.addEventListener("DOMContentLoaded", async () => {
                             checkbox.dataset.medicineId;
 
 
+                        /*
+                         * The prescription ID comes
+                         * from the current prescription
+                         * results page URL.
+                         *
+                         * This is the important fix.
+                         */
+
                         await apiRequest(
                             "/cart/items/",
                             {
                                 method: "POST",
 
                                 body: JSON.stringify({
+
                                     medicine_id:
                                         medicineId,
 
-                                    quantity: 1
+                                    quantity: 1,
+
+                                    prescription_id:
+                                        prescriptionId
+
                                 })
                             }
                         );

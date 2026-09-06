@@ -52,10 +52,39 @@ class PharmacistPrescriptionVerifyAPIView(APIView):
     permission_classes = [IsPharmacistOrAdmin]
 
     def patch(self, request, pk):
-        prescription = generics.get_object_or_404(Prescription,pk=pk,)
 
-        prescription.status = Prescription.Status.VERIFIED
-        prescription.pharmacist_note = request.data.get("pharmacist_note","",)
+        prescription = generics.get_object_or_404(
+            Prescription,
+            pk=pk,
+        )
+
+        new_status = request.data.get("status")
+        pharmacist_note = request.data.get(
+            "pharmacist_note",
+            "",
+        )
+
+        allowed_statuses = [
+            Prescription.Status.VERIFIED,
+            Prescription.Status.REJECTED,
+        ]
+
+        if new_status not in allowed_statuses:
+
+            return Response(
+                {
+                    "success": False,
+                    "message": (
+                        "Invalid prescription status. "
+                        "Use VERIFIED or REJECTED."
+                    ),
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        prescription.status = new_status
+
+        prescription.pharmacist_note = pharmacist_note
 
         prescription.save(
             update_fields=[
@@ -65,12 +94,26 @@ class PharmacistPrescriptionVerifyAPIView(APIView):
             ]
         )
 
-        serializer = PrescriptionDetailSerializer(prescription)
+        serializer = PrescriptionDetailSerializer(
+            prescription
+        )
+
+        if new_status == Prescription.Status.VERIFIED:
+
+            message = (
+                "Prescription verified successfully."
+            )
+
+        else:
+
+            message = (
+                "Prescription rejected successfully."
+            )
 
         return Response(
             {
                 "success": True,
-                "message": "Prescription verified successfully.",
+                "message": message,
                 "data": serializer.data,
             },
             status=status.HTTP_200_OK,
