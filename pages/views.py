@@ -77,3 +77,8 @@ def pharmacist_orders_page(request):
     return render(request, "pharmacist/orders.html")
 def pharmacist_order_detail_page(request, pk):
     return render(request, "pharmacist/order_detail.html")
+def pharmacist_inventory_page(request):
+    return render(
+        request,
+        "pharmacist/inventory.html",
+    )

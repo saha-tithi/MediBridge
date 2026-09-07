@@ -1,0 +1,345 @@
+{% extends "pharmacist/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Inventory | MediBridge Pharmacy
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pharmacist_inventory.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="inventory-page">
+
+    <!-- =========================================
+         PAGE HEADER
+    ========================================== -->
+
+    <div class="inventory-page-header">
+
+        <div>
+            <p class="inventory-eyebrow">
+                PHARMACY MANAGEMENT
+            </p>
+
+            <h1>
+                Inventory
+            </h1>
+
+            <p class="inventory-subtitle">
+                Monitor medicine stock, batches, prices and expiry dates.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         STATISTICS
+    ========================================== -->
+
+    <section class="inventory-stat-grid">
+
+        <div class="inventory-stat-card">
+
+            <div class="inventory-stat-icon total-icon">
+                ◫
+            </div>
+
+            <div class="inventory-stat-content">
+
+                <span class="inventory-stat-label">
+                    Total Items
+                </span>
+
+                <strong
+                    id="totalInventory"
+                    class="inventory-stat-value"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="inventory-stat-card">
+
+            <div class="inventory-stat-icon stock-icon">
+                ✓
+            </div>
+
+            <div class="inventory-stat-content">
+
+                <span class="inventory-stat-label">
+                    In Stock
+                </span>
+
+                <strong
+                    id="inStockInventory"
+                    class="inventory-stat-value"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="inventory-stat-card">
+
+            <div class="inventory-stat-icon low-stock-icon">
+                !
+            </div>
+
+            <div class="inventory-stat-content">
+
+                <span class="inventory-stat-label">
+                    Low Stock
+                </span>
+
+                <strong
+                    id="lowStockInventory"
+                    class="inventory-stat-value"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="inventory-stat-card">
+
+            <div class="inventory-stat-icon out-stock-icon">
+                ×
+            </div>
+
+            <div class="inventory-stat-content">
+
+                <span class="inventory-stat-label">
+                    Out of Stock
+                </span>
+
+                <strong
+                    id="outOfStockInventory"
+                    class="inventory-stat-value"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         INVENTORY PANEL
+    ========================================== -->
+
+    <section class="inventory-panel">
+
+        <div class="inventory-panel-header">
+
+            <div>
+
+                <h2>
+                    Medicine Inventory
+                </h2>
+
+                <p>
+                    View current stock across all medicine batches.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             FILTERS
+        ====================================== -->
+
+        <div class="inventory-toolbar">
+
+            <div class="inventory-search">
+
+                <span class="inventory-search-icon">
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="inventorySearch"
+                    placeholder="Search medicine, generic name or batch..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="inventory-filter">
+
+                <select id="inventoryFilter">
+
+                    <option value="ALL">
+                        All inventory
+                    </option>
+
+                    <option value="IN_STOCK">
+                        In stock
+                    </option>
+
+                    <option value="LOW_STOCK">
+                        Low stock
+                    </option>
+
+                    <option value="OUT_OF_STOCK">
+                        Out of stock
+                    </option>
+
+                    <option value="UNAVAILABLE">
+                        Unavailable
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             ERROR
+        ====================================== -->
+
+        <div
+            id="inventoryError"
+            class="inventory-message inventory-error"
+            style="display: none;"
+        ></div>
+
+
+        <!-- =====================================
+             LOADING
+        ====================================== -->
+
+        <div
+            id="inventoryLoading"
+            class="inventory-loading"
+        >
+
+            <div class="inventory-spinner"></div>
+
+            <p>
+                Loading inventory...
+            </p>
+
+        </div>
+
+
+        <!-- =====================================
+             TABLE
+        ====================================== -->
+
+        <div
+            id="inventoryTableWrapper"
+            class="inventory-table-wrapper"
+            style="display: none;"
+        >
+
+            <table class="inventory-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Medicine
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Batch
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Expiry
+                        </th>
+
+                        <th>
+                            Availability
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="inventoryTableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =====================================
+             EMPTY
+        ====================================== -->
+
+        <div
+            id="inventoryEmpty"
+            class="inventory-empty"
+            style="display: none;"
+        >
+
+            <div class="inventory-empty-icon">
+                ◫
+            </div>
+
+            <h3>
+                No inventory found
+            </h3>
+
+            <p>
+                No medicines match your current search or filter.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================
+             RESULTS COUNT
+        ====================================== -->
+
+        <div
+            id="inventoryResults"
+            class="inventory-results"
+            style="display: none;"
+        ></div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/pharmacist_inventory.js' %}"></script>
+{% endblock %}

@@ -74,3 +74,39 @@ class MedicineCreateUpdateSerializer(serializers.ModelSerializer):
             "requires_prescription",
             "image",
         )
+
+class PharmacistInventorySerializer(serializers.ModelSerializer):
+    medicine_id = serializers.UUIDField(
+        source="medicine.id",
+        read_only=True,
+    )
+
+    medicine_name = serializers.CharField(
+        source="medicine.brand_name",
+        read_only=True,
+    )
+
+    generic_name = serializers.CharField(
+        source="medicine.generic_name",
+        read_only=True,
+    )
+
+    strength = serializers.CharField(
+        source="medicine.strength",
+        read_only=True,
+    )
+
+    class Meta:
+        model = Inventory
+        fields = (
+            "id",
+            "medicine_id",
+            "medicine_name",
+            "generic_name",
+            "strength",
+            "stock",
+            "selling_price",
+            "batch_number",
+            "expiry_date",
+            "is_available",
+        )

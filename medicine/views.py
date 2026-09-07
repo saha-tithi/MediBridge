@@ -1,10 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework.permissions import AllowAny
-from .models import Medicine
-from .serializers import (MedicineListSerializer,MedicineDetailSerializer,)
+from .models import Medicine,Inventory
+from .serializers import (MedicineListSerializer,MedicineDetailSerializer,PharmacistInventorySerializer)
 from django.shortcuts import render
-
+from orders.permissions import IsPharmacistOrAdmin
 
 class MedicineListAPIView(generics.ListAPIView):
     
@@ -67,3 +67,14 @@ def medicine_detail_page(request, pk):
             "medicine": medicine,
         },
     )
+
+class PharmacistInventoryListAPIView(generics.ListAPIView):
+
+    queryset = (
+        Inventory.objects
+        .select_related("medicine")
+        .all()
+    )
+
+    serializer_class = PharmacistInventorySerializer
+    permission_classes = [IsPharmacistOrAdmin]
