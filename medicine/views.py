@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework.permissions import AllowAny
-from .models import Medicine,Inventory
-from .serializers import (MedicineListSerializer,MedicineDetailSerializer,PharmacistInventorySerializer)
+from .models import Medicine,Inventory,Category
+from .serializers import (CategorySerializer,MedicineListSerializer,MedicineDetailSerializer,PharmacistInventorySerializer,PharmacistCreateProductSerializer,PharmacistInventoryUpdateSerializer)
 from django.shortcuts import render
 from orders.permissions import IsPharmacistOrAdmin
 
@@ -77,4 +77,46 @@ class PharmacistInventoryListAPIView(generics.ListAPIView):
     )
 
     serializer_class = PharmacistInventorySerializer
+    permission_classes = [IsPharmacistOrAdmin]
+
+
+class PharmacistCategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsPharmacistOrAdmin]
+
+class PharmacistInventoryUpdateAPIView(
+    generics.UpdateAPIView
+):
+
+    queryset = Inventory.objects.select_related(
+        "medicine"
+    ).all()
+
+    serializer_class = (
+        PharmacistInventoryUpdateSerializer
+    )
+
+    permission_classes = [
+        IsPharmacistOrAdmin
+    ]
+
+    http_method_names = [
+        "patch",
+    ]
+
+class PharmacistCreateProductAPIView(
+    generics.CreateAPIView
+):
+
+    serializer_class = (
+        PharmacistCreateProductSerializer
+    )
+
+    permission_classes = [
+        IsPharmacistOrAdmin
+    ]
+
+class PharmacistCategoryCreateAPIView(generics.CreateAPIView):
+    serializer_class = CategorySerializer
     permission_classes = [IsPharmacistOrAdmin]

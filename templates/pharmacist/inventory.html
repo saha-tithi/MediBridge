@@ -25,14 +25,21 @@
                 PHARMACY MANAGEMENT
             </p>
 
-            <h1>
-                Inventory
-            </h1>
+            <h1>Inventory</h1>
 
             <p class="inventory-subtitle">
                 Monitor medicine stock, batches, prices and expiry dates.
             </p>
         </div>
+
+        <button
+            type="button"
+            id="addProductButton"
+            class="add-product-button"
+        >
+            <span class="add-product-icon">+</span>
+            <span>Add New Product</span>
+        </button>
 
     </div>
 
@@ -156,7 +163,7 @@
                 </h2>
 
                 <p>
-                    View current stock across all medicine batches.
+                    View and manage current medicine batches.
                 </p>
 
             </div>
@@ -164,9 +171,7 @@
         </div>
 
 
-        <!-- =====================================
-             FILTERS
-        ====================================== -->
+        <!-- TOOLBAR -->
 
         <div class="inventory-toolbar">
 
@@ -217,9 +222,7 @@
         </div>
 
 
-        <!-- =====================================
-             ERROR
-        ====================================== -->
+        <!-- ERROR -->
 
         <div
             id="inventoryError"
@@ -228,9 +231,7 @@
         ></div>
 
 
-        <!-- =====================================
-             LOADING
-        ====================================== -->
+        <!-- LOADING -->
 
         <div
             id="inventoryLoading"
@@ -246,9 +247,7 @@
         </div>
 
 
-        <!-- =====================================
-             TABLE
-        ====================================== -->
+        <!-- TABLE -->
 
         <div
             id="inventoryTableWrapper"
@@ -262,45 +261,26 @@
 
                     <tr>
 
-                        <th>
-                            Medicine
-                        </th>
-
-                        <th>
-                            Stock
-                        </th>
-
-                        <th>
-                            Batch
-                        </th>
-
-                        <th>
-                            Price
-                        </th>
-
-                        <th>
-                            Expiry
-                        </th>
-
-                        <th>
-                            Availability
-                        </th>
+                        <th>Medicine</th>
+                        <th>Stock</th>
+                        <th>Batch</th>
+                        <th>Price</th>
+                        <th>Expiry</th>
+                        <th>Availability</th>
+                        <th>Action</th>
 
                     </tr>
 
                 </thead>
 
-                <tbody id="inventoryTableBody">
-                </tbody>
+                <tbody id="inventoryTableBody"></tbody>
 
             </table>
 
         </div>
 
 
-        <!-- =====================================
-             EMPTY
-        ====================================== -->
+        <!-- EMPTY -->
 
         <div
             id="inventoryEmpty"
@@ -323,9 +303,7 @@
         </div>
 
 
-        <!-- =====================================
-             RESULTS COUNT
-        ====================================== -->
+        <!-- RESULTS -->
 
         <div
             id="inventoryResults"
@@ -337,9 +315,671 @@
 
 </div>
 
+
+
+<!-- =====================================================
+     ADD PRODUCT MODAL
+====================================================== -->
+
+<div
+    id="productModal"
+    class="product-modal-overlay"
+    style="display: none;"
+>
+
+    <div
+        class="product-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="productModalTitle"
+    >
+
+        <div class="product-modal-header">
+
+            <div>
+
+                <p class="product-modal-eyebrow">
+                    INVENTORY
+                </p>
+
+                <h2 id="productModalTitle">
+                    Add New Product
+                </h2>
+
+                <p>
+                    Add a medicine and its first inventory batch.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeProductModal"
+                class="product-modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="productForm"
+            class="product-form"
+        >
+
+            <!-- MEDICINE INFORMATION -->
+
+            <div class="product-form-section">
+
+                <div class="product-form-section-title">
+                    Medicine Information
+                </div>
+
+
+                <div class="product-form-grid">
+
+                    <div class="product-form-field">
+
+                        <label for="productBrandName">
+                            Brand Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productBrandName"
+                            name="brand_name"
+                            placeholder="e.g. Crocin"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="productGenericName">
+                            Generic Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productGenericName"
+                            name="generic_name"
+                            placeholder="e.g. Paracetamol"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="productStrength">
+                            Strength
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productStrength"
+                            name="strength"
+                            placeholder="e.g. 500 mg"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="productManufacturer">
+                            Manufacturer
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productManufacturer"
+                            name="manufacturer"
+                            placeholder="e.g. GSK"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="product-form-field product-category-field">
+
+                        <label for="productCategory">
+                            Category
+                        </label>
+
+                        <div class="category-select-row">
+
+                            <select
+                                id="productCategory"
+                                name="category"
+                                required
+                            >
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                type="button"
+                                id="addCategoryButton"
+                                class="add-category-button"
+                            >
+                                <span>+</span>
+                                New
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-form-field product-form-field-full">
+
+                        <label for="productDescription">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="productDescription"
+                            name="description"
+                            rows="3"
+                            placeholder="Enter a short description..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <label class="product-checkbox">
+
+                    <input
+                        type="checkbox"
+                        id="productPrescription"
+                        name="requires_prescription"
+                    >
+
+                    <span>
+                        This medicine requires a prescription
+                    </span>
+
+                </label>
+
+            </div>
+
+
+
+            <!-- INVENTORY INFORMATION -->
+
+            <div class="product-form-section">
+
+                <div class="product-form-section-title">
+                    Initial Inventory
+                </div>
+
+
+                <div class="product-form-grid">
+
+                    <div class="product-form-field">
+
+                        <label for="productStock">
+                            Initial Stock
+                        </label>
+
+                        <input
+                            type="number"
+                            id="productStock"
+                            name="stock"
+                            min="0"
+                            placeholder="e.g. 50"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="productPrice">
+                            Selling Price
+                        </label>
+
+                        <div class="product-price-input">
+
+                            <span>₹</span>
+
+                            <input
+                                type="number"
+                                id="productPrice"
+                                name="selling_price"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 120.00"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="productBatch">
+                            Batch Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="productBatch"
+                            name="batch_number"
+                            placeholder="e.g. BTH-2026-01"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="productExpiry">
+                            Expiry Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="productExpiry"
+                            name="expiry_date"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <label class="product-checkbox">
+
+                    <input
+                        type="checkbox"
+                        id="productAvailable"
+                        name="is_available"
+                        checked
+                    >
+
+                    <span>
+                        Make this product available immediately
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- FORM MESSAGE -->
+
+            <div
+                id="productFormMessage"
+                class="product-form-message"
+                style="display: none;"
+            ></div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="product-form-actions">
+
+                <button
+                    type="button"
+                    id="cancelProductButton"
+                    class="product-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveProductButton"
+                    class="product-save-button"
+                >
+                    Add Product
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     NEW CATEGORY MODAL
+====================================================== -->
+
+<div
+    id="categoryModal"
+    class="category-modal-overlay"
+    style="display: none;"
+>
+
+    <div
+        class="category-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="categoryModalTitle"
+    >
+
+        <div class="category-modal-header">
+
+            <div>
+
+                <p class="category-modal-eyebrow">
+                    PRODUCT SETUP
+                </p>
+
+                <h2 id="categoryModalTitle">
+                    New Category
+                </h2>
+
+                <p>
+                    Create a category for your medicines.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeCategoryModal"
+                class="category-modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="categoryForm">
+
+            <div class="category-form-body">
+
+                <div class="category-form-field">
+
+                    <label for="categoryName">
+                        Category Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="categoryName"
+                        name="name"
+                        placeholder="e.g. Pain Relief"
+                        maxlength="100"
+                        required
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div class="category-form-field">
+
+                    <label for="categoryDescription">
+                        Description
+                        <span>Optional</span>
+                    </label>
+
+                    <textarea
+                        id="categoryDescription"
+                        name="description"
+                        rows="3"
+                        placeholder="Briefly describe this category..."
+                    ></textarea>
+
+                </div>
+
+
+                <div
+                    id="categoryFormMessage"
+                    class="category-form-message"
+                    style="display: none;"
+                ></div>
+
+            </div>
+
+
+            <div class="category-form-actions">
+
+                <button
+                    type="button"
+                    id="cancelCategoryButton"
+                    class="category-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveCategoryButton"
+                    class="category-save-button"
+                >
+                    Create Category
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MANAGE INVENTORY MODAL
+====================================================== -->
+
+<div
+    id="manageInventoryModal"
+    class="manage-modal-overlay"
+    style="display: none;"
+>
+
+    <div
+        class="manage-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="manageModalTitle"
+    >
+
+        <div class="manage-modal-header">
+
+            <div>
+
+                <p class="manage-modal-eyebrow">
+                    INVENTORY MANAGEMENT
+                </p>
+
+                <h2 id="manageModalTitle">
+                    Manage Inventory
+                </h2>
+
+                <p id="manageMedicineName">
+                    Medicine
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeManageModal"
+                class="manage-modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="manageInventoryForm">
+
+            <div class="manage-form-body">
+
+                <div class="manage-info-grid">
+
+                    <div class="manage-info-card">
+
+                        <span>
+                            Batch
+                        </span>
+
+                        <strong id="manageBatch">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="manage-info-card">
+
+                        <span>
+                            Expiry
+                        </span>
+
+                        <strong id="manageExpiry">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="manage-form-grid">
+
+                    <div class="manage-form-field">
+
+                        <label for="manageStock">
+                            Stock Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="manageStock"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="manage-form-field">
+
+                        <label for="managePrice">
+                            Selling Price
+                        </label>
+
+                        <div class="manage-price-input">
+
+                            <span>₹</span>
+
+                            <input
+                                type="number"
+                                id="managePrice"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <label class="manage-availability">
+
+                    <input
+                        type="checkbox"
+                        id="manageAvailable"
+                    >
+
+                    <span class="manage-availability-text">
+
+                        <strong>
+                            Available for sale
+                        </strong>
+
+                        <small>
+                            Customers can purchase this medicine.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <div
+                    id="manageFormMessage"
+                    class="manage-form-message"
+                    style="display: none;"
+                ></div>
+
+            </div>
+
+
+            <div class="manage-form-actions">
+
+                <button
+                    type="button"
+                    id="cancelManageButton"
+                    class="manage-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveManageButton"
+                    class="manage-save-button"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
 {% endblock %}
 
 
 {% block extra_js %}
+
 <script src="{% static 'js/pharmacist_inventory.js' %}"></script>
+
 {% endblock %}
