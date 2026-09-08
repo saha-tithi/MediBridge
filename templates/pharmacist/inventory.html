@@ -32,14 +32,27 @@
             </p>
         </div>
 
-        <button
-            type="button"
-            id="addProductButton"
-            class="add-product-button"
-        >
-            <span class="add-product-icon">+</span>
-            <span>Add New Product</span>
-        </button>
+        <div class="inventory-header-actions">
+
+            <button
+                type="button"
+                id="addProductButton"
+                class="add-product-button"
+            >
+                <span class="add-product-icon">+</span>
+                <span>Add New Product</span>
+            </button>
+
+            <button
+                type="button"
+                id="addBatchButton"
+                class="add-product-button"
+            >
+                <span class="add-product-icon">+</span>
+                <span>Add New Batch</span>
+            </button>
+
+        </div>
 
     </div>
 
@@ -171,55 +184,59 @@
         </div>
 
 
-        <!-- TOOLBAR -->
+       <!-- TOOLBAR -->
 
-        <div class="inventory-toolbar">
+<div class="inventory-toolbar">
 
-            <div class="inventory-search">
+    <div class="inventory-search">
 
-                <span class="inventory-search-icon">
-                    ⌕
-                </span>
+        <span class="inventory-search-icon">
+            ⌕
+        </span>
 
-                <input
-                    type="text"
-                    id="inventorySearch"
-                    placeholder="Search medicine, generic name or batch..."
-                    autocomplete="off"
-                >
+        <input
+            type="text"
+            id="inventorySearch"
+            placeholder="Search medicine, generic name or batch..."
+            autocomplete="off"
+        >
 
-            </div>
+    </div>
 
 
-            <div class="inventory-filter">
+    <div class="inventory-filter">
 
-                <select id="inventoryFilter">
+        <select id="inventoryFilter">
 
-                    <option value="ALL">
-                        All inventory
-                    </option>
+            <option value="ACTIVE">
+                Active inventory
+            </option>
 
-                    <option value="IN_STOCK">
-                        In stock
-                    </option>
+            <option value="ALL">
+                All inventory
+            </option>
 
-                    <option value="LOW_STOCK">
-                        Low stock
-                    </option>
+            <option value="IN_STOCK">
+                In stock
+            </option>
 
-                    <option value="OUT_OF_STOCK">
-                        Out of stock
-                    </option>
+            <option value="LOW_STOCK">
+                Low stock
+            </option>
 
-                    <option value="UNAVAILABLE">
-                        Unavailable
-                    </option>
+            <option value="OUT_OF_STOCK">
+                Out of stock
+            </option>
 
-                </select>
+            <option value="UNAVAILABLE">
+                Unavailable
+            </option>
 
-            </div>
+        </select>
 
-        </div>
+    </div>
+
+</div>
 
 
         <!-- ERROR -->
@@ -368,6 +385,7 @@
         <form
             id="productForm"
             class="product-form"
+            enctype="multipart/form-data"
         >
 
             <!-- MEDICINE INFORMATION -->
@@ -498,6 +516,29 @@
                             rows="3"
                             placeholder="Enter a short description..."
                         ></textarea>
+
+                    </div>
+
+
+                    <!-- PRODUCT IMAGE -->
+
+                    <div class="product-form-field product-form-field-full">
+
+                        <label for="productImage">
+                            Product Image
+                        </label>
+
+                        <input
+                            type="file"
+                            id="productImage"
+                            name="image"
+                            accept="image/*"
+                        >
+
+                        <div
+                            id="productImagePreview"
+                            class="product-image-preview"
+                        ></div>
 
                     </div>
 
@@ -656,6 +697,221 @@
                     class="product-save-button"
                 >
                     Add Product
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ADD NEW BATCH MODAL
+====================================================== -->
+
+<div
+    id="batchModal"
+    class="product-modal-overlay"
+    style="display: none;"
+>
+
+    <div
+        class="product-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="batchModalTitle"
+    >
+
+        <div class="product-modal-header">
+
+            <div>
+
+                <p class="product-modal-eyebrow">
+                    INVENTORY
+                </p>
+
+                <h2 id="batchModalTitle">
+                    Add New Batch
+                </h2>
+
+                <p>
+                    Add a new stock batch for an existing medicine.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeBatchModal"
+                class="product-modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            id="batchForm"
+            class="product-form"
+        >
+
+            <!-- BATCH INFORMATION -->
+
+            <div class="product-form-section">
+
+                <div class="product-form-section-title">
+                    Batch Information
+                </div>
+
+
+                <div class="product-form-grid">
+
+                    <div class="product-form-field product-form-field-full">
+
+                        <label for="batchMedicine">
+                            Medicine
+                        </label>
+
+                        <select
+                            id="batchMedicine"
+                            required
+                        >
+
+                            <option value="">
+                                Select medicine
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="batchStock">
+                            Stock
+                        </label>
+
+                        <input
+                            type="number"
+                            id="batchStock"
+                            min="0"
+                            placeholder="e.g. 50"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="batchPrice">
+                            Selling Price
+                        </label>
+
+                        <div class="product-price-input">
+
+                            <span>₹</span>
+
+                            <input
+                                type="number"
+                                id="batchPrice"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 120.00"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="batchNumber">
+                            Batch Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="batchNumber"
+                            maxlength="100"
+                            placeholder="e.g. BTH-2026-02"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="product-form-field">
+
+                        <label for="batchExpiry">
+                            Expiry Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="batchExpiry"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <label class="product-checkbox">
+
+                    <input
+                        type="checkbox"
+                        id="batchAvailable"
+                        checked
+                    >
+
+                    <span>
+                        Make this batch available immediately
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- FORM MESSAGE -->
+
+            <div
+                id="batchFormMessage"
+                class="product-form-message"
+                style="display: none;"
+            ></div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="product-form-actions">
+
+                <button
+                    type="button"
+                    id="cancelBatchButton"
+                    class="product-cancel-button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveBatchButton"
+                    class="product-save-button"
+                >
+                    Add Batch
                 </button>
 
             </div>

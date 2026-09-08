@@ -24,11 +24,7 @@
 <main class="medicine-detail-page">
 
 
-   
     <div class="medicine-detail-container">
-
-
-       
 
 
         <section class="medicine-detail">
@@ -59,12 +55,9 @@
 
 
 
-           
-
             <div class="medicine-detail-info">
 
 
-                
                 <span class="medicine-category">
 
                     {{ medicine.category.name }}
@@ -85,6 +78,7 @@
 
                 </p>
 
+
                 {% if medicine.requires_prescription %}
 
                     <div class="prescription-badge">
@@ -101,12 +95,9 @@
 
 
 
-               
-
-                {% with inventory=medicine.inventories.first %}
+                {% with inventory=active_inventory %}
 
 
-                   
                     <div class="medicine-info-grid">
 
 
@@ -165,8 +156,6 @@
 
 
 
-                    
-
                     {% if medicine.description %}
 
                         <div class="medicine-description">
@@ -185,14 +174,11 @@
 
 
 
-                    
                     <div class="medicine-purchase">
 
 
                         {% if inventory and inventory.is_available and inventory.stock > 0 %}
 
-
-            
 
                             <div class="purchase-price">
 
@@ -208,12 +194,11 @@
 
 
 
-                            
                             <div
                                 id="medicineCartAction"
                                 class="medicine-cart-action"
                                 data-medicine-id="{{ medicine.id }}"
-                                data-stock="{{ inventory.stock }}"
+                                data-stock="{{ medicine.available_stock }}"
                             >
 
                                 <button
@@ -232,7 +217,6 @@
                         {% else %}
 
 
-                           
                             <div class="unavailable-message">
 
                                 Currently unavailable

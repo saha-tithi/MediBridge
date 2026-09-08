@@ -9,7 +9,7 @@ from prescriptions.models import Prescription
 from .models import Cart, CartItem
 
 
-def get_available_inventory(medicine):
+def get_available_inventories(medicine):
 
     return (
         Inventory.objects.filter(
@@ -19,7 +19,18 @@ def get_available_inventory(medicine):
             expiry_date__gte=timezone.now().date(),
         )
         .order_by("expiry_date")
-        .first()
+    )
+
+
+def get_total_available_stock(medicine):
+
+    inventories = get_available_inventories(
+        medicine
+    )
+
+    return sum(
+        inventory.stock
+        for inventory in inventories
     )
 
 
@@ -87,22 +98,22 @@ def add_to_cart(
     # INVENTORY
     # -----------------------------------------
 
-    inventory = get_available_inventory(
-        medicine
+    total_available_stock = (
+        get_total_available_stock(medicine)
     )
 
 
-    if inventory is None:
+    if total_available_stock <= 0:
 
         raise ValueError(
             "Medicine is currently unavailable."
         )
 
 
-    if quantity > inventory.stock:
+    if quantity > total_available_stock:
 
         raise ValueError(
-            f"Only {inventory.stock} item(s) available."
+            f"Only {total_available_stock} item(s) available."
         )
 
 
@@ -125,6 +136,17 @@ def add_to_cart(
 
 
     # -----------------------------------------
+    # GET ACTIVE INVENTORY FOR PRICE
+    # -----------------------------------------
+
+    inventories = get_available_inventories(
+        medicine
+    )
+
+    active_inventory = inventories.first()
+
+
+    # -----------------------------------------
     # CREATE / GET CART ITEM
     # -----------------------------------------
 
@@ -134,9 +156,10 @@ def add_to_cart(
         prescription=prescription,
         defaults={
             "quantity": quantity,
-            "unit_price": inventory.selling_price,
+            "unit_price": active_inventory.selling_price,
             "subtotal": (
-                inventory.selling_price * quantity
+                active_inventory.selling_price
+                * quantity
             ),
             "is_prescription_item": (
                 is_prescription_item
@@ -156,10 +179,10 @@ def add_to_cart(
         )
 
 
-        if new_quantity > inventory.stock:
+        if new_quantity > total_available_stock:
 
             raise ValueError(
-                f"Only {inventory.stock} item(s) available."
+                f"Only {total_available_stock} item(s) available."
             )
 
 
@@ -188,24 +211,34 @@ def update_cart_item(
     quantity,
 ):
 
-    inventory = get_available_inventory(
-        cart_item.medicine
+    # -----------------------------------------
+    # TOTAL AVAILABLE STOCK
+    # -----------------------------------------
+
+    total_available_stock = (
+        get_total_available_stock(
+            cart_item.medicine
+        )
     )
 
 
-    if inventory is None:
+    if total_available_stock <= 0:
 
         raise ValueError(
             "Medicine is unavailable."
         )
 
 
-    if quantity > inventory.stock:
+    if quantity > total_available_stock:
 
         raise ValueError(
-            f"Only {inventory.stock} item(s) available."
+            f"Only {total_available_stock} item(s) available."
         )
 
+
+    # -----------------------------------------
+    # UPDATE CART ITEM
+    # -----------------------------------------
 
     cart_item.quantity = quantity
 

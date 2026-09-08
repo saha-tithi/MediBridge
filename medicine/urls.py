@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import (MedicineListAPIView,MedicineDetailAPIView,PharmacistCategoryListAPIView,PharmacistCategoryCreateAPIView,PharmacistInventoryListAPIView,PharmacistCreateProductAPIView,PharmacistInventoryUpdateAPIView)
+from .views import (MedicineListAPIView,MedicineDetailAPIView,PharmacistCategoryListAPIView,PharmacistCategoryCreateAPIView,PharmacistInventoryListAPIView,PharmacistCreateProductAPIView,PharmacistInventoryUpdateAPIView,PharmacistCreateBatchAPIView)
 
 urlpatterns = [
     path("",MedicineListAPIView.as_view(),name="medicine-list",),
@@ -12,4 +12,5 @@ urlpatterns = [
     path("pharmacist/inventory/<int:pk>/",PharmacistInventoryUpdateAPIView.as_view(),name="pharmacist-inventory-update",),
 
     path("pharmacist/products/",PharmacistCreateProductAPIView.as_view(),name="pharmacist-product-create",),
+    path("pharmacist/batches/",PharmacistCreateBatchAPIView.as_view(),name="pharmacist-batch-create",),
 ]

@@ -1,407 +1,740 @@
-document.addEventListener("DOMContentLoaded", function () {
+/* =========================================================
+   PHARMACIST INVENTORY
+========================================================= */
 
-    /* =========================================
-       INVENTORY ELEMENTS
-    ========================================== */
+let inventoryData = [];
 
-    const totalInventory =
-        document.getElementById("totalInventory");
+let isSubmittingProduct = false;
+let isSubmittingCategory = false;
+let isSubmittingInventory = false;
+let isSubmittingBatch = false;
 
-    const inStockInventory =
-        document.getElementById("inStockInventory");
 
-    const lowStockInventory =
-        document.getElementById("lowStockInventory");
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-    const outOfStockInventory =
-        document.getElementById("outOfStockInventory");
+const inventorySearch =
+    document.getElementById("inventorySearch");
 
-    const searchInput =
-        document.getElementById("inventorySearch");
+const inventoryFilter =
+    document.getElementById("inventoryFilter");
 
-    const filterSelect =
-        document.getElementById("inventoryFilter");
+const inventoryTableBody =
+    document.getElementById("inventoryTableBody");
 
-    const tableWrapper =
-        document.getElementById("inventoryTableWrapper");
+const inventoryTableWrapper =
+    document.getElementById("inventoryTableWrapper");
 
-    const tableBody =
-        document.getElementById("inventoryTableBody");
+const inventoryLoading =
+    document.getElementById("inventoryLoading");
 
-    const loading =
-        document.getElementById("inventoryLoading");
+const inventoryError =
+    document.getElementById("inventoryError");
 
-    const empty =
-        document.getElementById("inventoryEmpty");
+const inventoryEmpty =
+    document.getElementById("inventoryEmpty");
 
-    const errorMessage =
-        document.getElementById("inventoryError");
+const inventoryResults =
+    document.getElementById("inventoryResults");
 
-    const results =
-        document.getElementById("inventoryResults");
+const totalInventory =
+    document.getElementById("totalInventory");
 
+const inStockInventory =
+    document.getElementById("inStockInventory");
 
-    /* =========================================
-       PRODUCT MODAL
-    ========================================== */
+const lowStockInventory =
+    document.getElementById("lowStockInventory");
 
-    const addProductButton =
-        document.getElementById("addProductButton");
+const outOfStockInventory =
+    document.getElementById("outOfStockInventory");
 
-    const productModal =
-        document.getElementById("productModal");
 
-    const closeProductModal =
-        document.getElementById("closeProductModal");
+/* =========================================================
+   ADD PRODUCT MODAL
+========================================================= */
 
-    const cancelProductButton =
-        document.getElementById("cancelProductButton");
+const addProductButton =
+    document.getElementById("addProductButton");
 
-    const productForm =
-        document.getElementById("productForm");
+const productModal =
+    document.getElementById("productModal");
 
-    const productFormMessage =
-        document.getElementById("productFormMessage");
+const closeProductModal =
+    document.getElementById("closeProductModal");
 
-    const saveProductButton =
-        document.getElementById("saveProductButton");
+const cancelProductButton =
+    document.getElementById("cancelProductButton");
 
-    const productCategory =
-        document.getElementById("productCategory");
+const productForm =
+    document.getElementById("productForm");
 
-    const addCategoryButton =
-        document.getElementById("addCategoryButton");
+const saveProductButton =
+    document.getElementById("saveProductButton");
 
-    const productBrandName =
-        document.getElementById("productBrandName");
+const productFormMessage =
+    document.getElementById("productFormMessage");
 
-    const productGenericName =
-        document.getElementById("productGenericName");
+const productBrandName =
+    document.getElementById("productBrandName");
 
-    const productStrength =
-        document.getElementById("productStrength");
+const productGenericName =
+    document.getElementById("productGenericName");
 
-    const productManufacturer =
-        document.getElementById("productManufacturer");
+const productStrength =
+    document.getElementById("productStrength");
 
-    const productDescription =
-        document.getElementById("productDescription");
+const productManufacturer =
+    document.getElementById("productManufacturer");
 
-    const productPrescription =
-        document.getElementById("productPrescription");
+const productCategory =
+    document.getElementById("productCategory");
 
-    const productStock =
-        document.getElementById("productStock");
+const productDescription =
+    document.getElementById("productDescription");
 
-    const productPrice =
-        document.getElementById("productPrice");
+const productPrescription =
+    document.getElementById("productPrescription");
 
-    const productBatch =
-        document.getElementById("productBatch");
+const productStock =
+    document.getElementById("productStock");
 
-    const productExpiry =
-        document.getElementById("productExpiry");
+const productPrice =
+    document.getElementById("productPrice");
 
-    const productAvailable =
-        document.getElementById("productAvailable");
+const productBatch =
+    document.getElementById("productBatch");
 
+const productExpiry =
+    document.getElementById("productExpiry");
 
-    /* =========================================
-       CATEGORY MODAL
-    ========================================== */
+const productAvailable =
+    document.getElementById("productAvailable");
 
-    const categoryModal =
-        document.getElementById("categoryModal");
 
-    const closeCategoryModal =
-        document.getElementById("closeCategoryModal");
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
 
-    const cancelCategoryButton =
-        document.getElementById("cancelCategoryButton");
+const productImage =
+    document.getElementById("productImage");
 
-    const categoryForm =
-        document.getElementById("categoryForm");
+const productImagePreview =
+    document.getElementById("productImagePreview");
 
-    const categoryName =
-        document.getElementById("categoryName");
 
-    const categoryDescription =
-        document.getElementById("categoryDescription");
+/* =========================================================
+   CATEGORY MODAL
+========================================================= */
 
-    const categoryFormMessage =
-        document.getElementById("categoryFormMessage");
+const addCategoryButton =
+    document.getElementById("addCategoryButton");
 
-    const saveCategoryButton =
-        document.getElementById("saveCategoryButton");
+const categoryModal =
+    document.getElementById("categoryModal");
 
+const closeCategoryModal =
+    document.getElementById("closeCategoryModal");
 
-    /* =========================================
-       MANAGE MODAL
-    ========================================== */
+const cancelCategoryButton =
+    document.getElementById("cancelCategoryButton");
 
-    const manageInventoryModal =
-        document.getElementById("manageInventoryModal");
+const categoryForm =
+    document.getElementById("categoryForm");
 
-    const closeManageModal =
-        document.getElementById("closeManageModal");
+const categoryName =
+    document.getElementById("categoryName");
 
-    const cancelManageButton =
-        document.getElementById("cancelManageButton");
+const categoryDescription =
+    document.getElementById("categoryDescription");
 
-    const manageInventoryForm =
-        document.getElementById("manageInventoryForm");
+const categoryFormMessage =
+    document.getElementById("categoryFormMessage");
 
-    const manageMedicineName =
-        document.getElementById("manageMedicineName");
+const saveCategoryButton =
+    document.getElementById("saveCategoryButton");
 
-    const manageBatch =
-        document.getElementById("manageBatch");
 
-    const manageExpiry =
-        document.getElementById("manageExpiry");
+/* =========================================================
+   MANAGE INVENTORY MODAL
+========================================================= */
 
-    const manageStock =
-        document.getElementById("manageStock");
+const manageInventoryModal =
+    document.getElementById("manageInventoryModal");
 
-    const managePrice =
-        document.getElementById("managePrice");
+const closeManageModal =
+    document.getElementById("closeManageModal");
 
-    const manageAvailable =
-        document.getElementById("manageAvailable");
+const cancelManageButton =
+    document.getElementById("cancelManageButton");
 
-    const manageFormMessage =
-        document.getElementById("manageFormMessage");
+const manageInventoryForm =
+    document.getElementById("manageInventoryForm");
 
-    const saveManageButton =
-        document.getElementById("saveManageButton");
+const manageMedicineName =
+    document.getElementById("manageMedicineName");
 
+const manageBatch =
+    document.getElementById("manageBatch");
 
-    /* =========================================
-       STATE
-    ========================================== */
+const manageExpiry =
+    document.getElementById("manageExpiry");
 
-    let inventory = [];
-    let categories = [];
+const manageStock =
+    document.getElementById("manageStock");
 
-    let selectedInventoryId = null;
+const managePrice =
+    document.getElementById("managePrice");
 
-    let isSubmittingProduct = false;
-    let isSubmittingCategory = false;
-    let isSubmittingInventory = false;
+const manageAvailable =
+    document.getElementById("manageAvailable");
 
+const manageFormMessage =
+    document.getElementById("manageFormMessage");
 
-    /* =========================================
-       LOAD INVENTORY
-    ========================================== */
+const saveManageButton =
+    document.getElementById("saveManageButton");
 
-    async function loadInventory() {
+let selectedInventoryId = null;
 
-        showLoading();
 
-        try {
+/* =========================================================
+   ADD NEW BATCH MODAL
+========================================================= */
 
-            const response = await apiRequest(
-                "/medicine/pharmacist/inventory/",
-                {
-                    method: "GET"
-                }
+const addBatchButton =
+    document.getElementById("addBatchButton");
+
+const batchModal =
+    document.getElementById("batchModal");
+
+const closeBatchModal =
+    document.getElementById("closeBatchModal");
+
+const cancelBatchButton =
+    document.getElementById("cancelBatchButton");
+
+const batchForm =
+    document.getElementById("batchForm");
+
+const batchMedicine =
+    document.getElementById("batchMedicine");
+
+const batchStock =
+    document.getElementById("batchStock");
+
+const batchPrice =
+    document.getElementById("batchPrice");
+
+const batchNumber =
+    document.getElementById("batchNumber");
+
+const batchExpiry =
+    document.getElementById("batchExpiry");
+
+const batchAvailable =
+    document.getElementById("batchAvailable");
+
+const batchFormMessage =
+    document.getElementById("batchFormMessage");
+
+const saveBatchButton =
+    document.getElementById("saveBatchButton");
+
+
+/* =========================================================
+   LOAD INVENTORY
+========================================================= */
+
+async function loadInventory() {
+
+    showInventoryLoading();
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/medicine/pharmacist/inventory/"
             );
 
+        inventoryData =
+            extractData(response);
 
-            if (Array.isArray(response)) {
+        updateInventoryStatistics();
 
-                inventory = response;
+        renderInventory();
 
-            } else {
+        hideInventoryLoading();
 
-                inventory =
-                    response.results ||
-                    response.data ||
-                    [];
+    } catch (error) {
 
-            }
+        hideInventoryLoading();
 
-
-            if (!Array.isArray(inventory)) {
-
-                throw new Error(
-                    "Invalid inventory data received."
-                );
-
-            }
+        showInventoryError(
+            error.message ||
+            "Unable to load inventory."
+        );
+    }
+}
 
 
-            updateStatistics();
-            renderInventory();
-            hideLoading();
+/* =========================================================
+   EXTRACT API DATA
+========================================================= */
 
-        } catch (error) {
+function extractData(response) {
 
-            console.error(
-                "Pharmacist inventory error:",
-                error
-            );
+    if (Array.isArray(response)) {
 
-            showError(
-                error.message ||
-                "Unable to load inventory."
-            );
-
-        }
-
+        return response;
     }
 
 
-    /* =========================================
-       STATISTICS
-    ========================================== */
+    if (
+        response &&
+        Array.isArray(response.data)
+    ) {
 
-    function updateStatistics() {
-
-        const total =
-            inventory.length;
-
-
-        const inStock =
-            inventory.filter(function (item) {
-
-                return (
-                    Number(item.stock) > 0 &&
-                    item.is_available === true
-                );
-
-            }).length;
+        return response.data;
+    }
 
 
-        const lowStock =
-            inventory.filter(function (item) {
+    if (
+        response &&
+        response.data &&
+        Array.isArray(response.data.results)
+    ) {
+
+        return response.data.results;
+    }
+
+
+    if (
+        response &&
+        Array.isArray(response.results)
+    ) {
+
+        return response.results;
+    }
+
+
+    return [];
+}
+
+
+/* =========================================================
+   INVENTORY LOADING STATE
+========================================================= */
+
+function showInventoryLoading() {
+
+    inventoryLoading.style.display =
+        "flex";
+
+    inventoryError.style.display =
+        "none";
+
+    inventoryEmpty.style.display =
+        "none";
+
+    inventoryTableWrapper.style.display =
+        "none";
+
+    inventoryResults.style.display =
+        "none";
+}
+
+
+function hideInventoryLoading() {
+
+    inventoryLoading.style.display =
+        "none";
+}
+
+
+/* =========================================================
+   INVENTORY ERROR
+========================================================= */
+
+function showInventoryError(message) {
+
+    inventoryError.textContent =
+        message;
+
+    inventoryError.style.display =
+        "block";
+
+    inventoryTableWrapper.style.display =
+        "none";
+
+    inventoryEmpty.style.display =
+        "none";
+
+    inventoryResults.style.display =
+        "none";
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateInventoryStatistics() {
+
+    /*
+     * Inventory contains one row per batch.
+     * Statistics should be calculated per medicine,
+     * using the combined stock of all its batches.
+     */
+
+    const medicineStock = {};
+
+
+    inventoryData.forEach(function (item) {
+
+        const medicineId =
+            String(item.medicine_id);
+
+
+        if (!medicineStock[medicineId]) {
+
+            medicineStock[medicineId] = 0;
+        }
+
+
+        medicineStock[medicineId] +=
+            Number(item.stock) || 0;
+    });
+
+
+    const medicineStocks =
+        Object.values(medicineStock);
+
+
+    const total =
+        medicineStocks.length;
+
+
+    const inStock =
+        medicineStocks.filter(function (stock) {
+
+            return stock > 10;
+
+        }).length;
+
+
+    const lowStock =
+        medicineStocks.filter(function (stock) {
+
+            return stock > 0 && stock <= 10;
+
+        }).length;
+
+
+    const outOfStock =
+        medicineStocks.filter(function (stock) {
+
+            return stock === 0;
+
+        }).length;
+
+
+    totalInventory.textContent =
+        total;
+
+    inStockInventory.textContent =
+        inStock;
+
+    lowStockInventory.textContent =
+        lowStock;
+
+    outOfStockInventory.textContent =
+        outOfStock;
+}
+
+/* =========================================================
+   RENDER INVENTORY
+========================================================= */
+
+function renderInventory() {
+
+    const searchTerm =
+        inventorySearch.value
+            .trim()
+            .toLowerCase();
+
+    const filter =
+        inventoryFilter.value;
+
+
+    const filteredItems =
+        inventoryData.filter(
+            function (item) {
+
+                const medicineName =
+                    String(
+                        item.medicine_name || ""
+                    ).toLowerCase();
+
+
+                const genericName =
+                    String(
+                        item.generic_name || ""
+                    ).toLowerCase();
+
+
+                const strength =
+                    String(
+                        item.strength || ""
+                    ).toLowerCase();
+
+
+                const batchNumber =
+                    String(
+                        item.batch_number || ""
+                    ).toLowerCase();
+
+
+                const matchesSearch =
+                    medicineName.includes(searchTerm) ||
+                    genericName.includes(searchTerm) ||
+                    strength.includes(searchTerm) ||
+                    batchNumber.includes(searchTerm);
+
 
                 const stock =
                     Number(item.stock);
 
+
+                let matchesFilter = true;
+
+
+                /* =========================================
+                   INVENTORY FILTERS
+                ========================================== */
+
+                if (
+                    filter === "ACTIVE"
+                ) {
+
+                    /*
+                     * Active inventory:
+                     * - Stock must be greater than 0
+                     * - Batch must be available
+                     */
+
+                    matchesFilter =
+                        stock > 0 &&
+                        item.is_available === true;
+
+                } else if (
+                    filter === "IN_STOCK"
+                ) {
+
+                    matchesFilter =
+                        stock > 10;
+
+                } else if (
+                    filter === "LOW_STOCK"
+                ) {
+
+                    matchesFilter =
+                        stock > 0 &&
+                        stock <= 10;
+
+                } else if (
+                    filter === "OUT_OF_STOCK"
+                ) {
+
+                    matchesFilter =
+                        stock === 0;
+
+                } else if (
+                    filter === "UNAVAILABLE"
+                ) {
+
+                    /*
+                     * This includes:
+                     *
+                     * 1. Existing batches marked unavailable
+                     * 2. Medicines with NO inventory
+                     *
+                     * The backend sends is_available=false
+                     * for medicines without inventory.
+                     */
+
+                    matchesFilter =
+                        item.is_available === false;
+                }
+
+
                 return (
-                    stock > 0 &&
-                    stock <= 10 &&
-                    item.is_available === true
+                    matchesSearch &&
+                    matchesFilter
                 );
-
-            }).length;
-
-
-        const outOfStock =
-            inventory.filter(function (item) {
-
-                return Number(item.stock) === 0;
-
-            }).length;
+            }
+        );
 
 
-        totalInventory.textContent =
-            total;
+    inventoryTableBody.innerHTML =
+        "";
 
-        inStockInventory.textContent =
-            inStock;
 
-        lowStockInventory.textContent =
-            lowStock;
+    if (filteredItems.length === 0) {
 
-        outOfStockInventory.textContent =
-            outOfStock;
+        inventoryTableWrapper.style.display =
+            "none";
 
+        inventoryEmpty.style.display =
+            "block";
+
+        inventoryResults.style.display =
+            "none";
+
+        return;
     }
 
 
-    /* =========================================
-       RENDER INVENTORY
-    ========================================== */
+    inventoryEmpty.style.display =
+        "none";
 
-    function renderInventory() {
+    inventoryTableWrapper.style.display =
+        "block";
 
-        tableBody.innerHTML = "";
-
-        const filteredInventory =
-            getFilteredInventory();
+    inventoryResults.style.display =
+        "block";
 
 
-        if (filteredInventory.length === 0) {
-
-            tableWrapper.style.display =
-                "none";
-
-            results.style.display =
-                "none";
-
-            empty.style.display =
-                "flex";
-
-            return;
-
-        }
-
-
-        empty.style.display =
-            "none";
-
-        tableWrapper.style.display =
-            "block";
-
-        results.style.display =
-            "block";
-
-
-        filteredInventory.forEach(function (item) {
+    filteredItems.forEach(
+        function (item) {
 
             const row =
                 document.createElement("tr");
 
 
-            const medicineName =
-                item.medicine_name ||
-                "Unknown medicine";
-
-
-            const genericName =
-                item.generic_name ||
-                "";
-
-
-            const strength =
-                item.strength ||
-                "";
-
-
             const stock =
-                Number(item.stock) || 0;
+                Number(item.stock);
 
 
-            const stockClass =
-                getStockClass(stock);
+            let stockClass =
+                "stock-good";
 
 
-            const expiry =
-                formatExpiry(
-                    item.expiry_date
-                );
+            if (stock === 0) {
+
+                stockClass =
+                    "stock-out";
+
+            } else if (stock <= 10) {
+
+                stockClass =
+                    "stock-low";
+            }
 
 
-            const availability =
-                item.is_available === true;
+            /* =========================================
+               AVAILABILITY
+            ========================================== */
+
+            let availabilityClass;
+
+            let availabilityText;
+
+
+            if (stock === 0) {
+
+                availabilityClass =
+                    "unavailable";
+
+                availabilityText =
+                    "Out of Stock";
+
+            } else if (!item.is_available) {
+
+                availabilityClass =
+                    "unavailable";
+
+                availabilityText =
+                    "Unavailable";
+
+            } else {
+
+                availabilityClass =
+                    "available";
+
+                availabilityText =
+                    "Available";
+            }
+
+
+            /* =========================================
+               ACTION
+            ========================================== */
+
+            let actionHtml;
+
+
+            if (item.id) {
+
+                /*
+                 * Normal inventory batch.
+                 * It has an Inventory record, so it can
+                 * be managed.
+                 */
+
+                actionHtml = `
+                    <button
+                        type="button"
+                        class="inventory-manage-button"
+                        data-id="${item.id}"
+                    >
+                        Manage
+                    </button>
+                `;
+
+            } else {
+
+                /*
+                 * Medicine exists but has no Inventory
+                 * record yet.
+                 */
+
+                actionHtml = `
+                    <span class="inventory-no-batch">
+                        No batch
+                    </span>
+                `;
+            }
 
 
             row.innerHTML = `
 
                 <td>
 
-                    <div class="inventory-medicine">
+                    <div class="medicine-table-info">
 
-                        <span class="inventory-medicine-name">
-                            ${escapeHtml(medicineName)}
-                        </span>
+                        <strong>
+                            ${escapeHtml(
+                                item.medicine_name ||
+                                "—"
+                            )}
+                        </strong>
 
-                        <span class="inventory-medicine-details">
-                            ${escapeHtml(genericName)}
-                            ${genericName && strength ? " · " : ""}
-                            ${escapeHtml(strength)}
+                        <span>
+                            ${escapeHtml(
+                                item.generic_name ||
+                                ""
+                            )}
+
+                            ${
+                                item.strength
+                                    ? " · " +
+                                      escapeHtml(
+                                          item.strength
+                                      )
+                                    : ""
+                            }
                         </span>
 
                     </div>
@@ -411,7 +744,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <td>
 
-                    <span class="inventory-stock ${stockClass}">
+                    <span
+                        class="inventory-stock ${stockClass}"
+                    >
                         ${stock}
                     </span>
 
@@ -419,731 +754,334 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 <td>
-
-                    <span class="inventory-batch">
-                        ${escapeHtml(
-                            item.batch_number || "—"
-                        )}
-                    </span>
-
+                    ${escapeHtml(
+                        item.batch_number ||
+                        "—"
+                    )}
                 </td>
 
 
                 <td>
-
-                    <span class="inventory-price">
-                        ₹${formatAmount(item.selling_price)}
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <div class="inventory-expiry">
-
-                        <span class="inventory-expiry-date">
-                            ${expiry.text}
-                        </span>
-
-                        ${
-                            expiry.warning
-                                ? `
-                                    <span class="${expiry.className}">
-                                        ${expiry.warning}
-                                    </span>
-                                `
-                                : ""
-                        }
-
-                    </div>
-
-                </td>
-
-
-                <td>
-
                     ${
-                        availability
-                            ? `
-                                <span class="inventory-availability available">
-                                    <span class="inventory-availability-dot"></span>
-                                    Available
-                                </span>
-                            `
-                            : `
-                                <span class="inventory-availability unavailable">
-                                    <span class="inventory-availability-dot"></span>
-                                    Unavailable
-                                </span>
-                            `
+                        item.selling_price !== null &&
+                        item.selling_price !== undefined
+                            ? "₹" +
+                              formatPrice(
+                                  item.selling_price
+                              )
+                            : "—"
                     }
+                </td>
+
+
+                <td>
+                    ${
+                        item.expiry_date
+                            ? formatDate(
+                                  item.expiry_date
+                              )
+                            : "—"
+                    }
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="inventory-availability ${availabilityClass}"
+                    >
+                        ${availabilityText}
+                    </span>
 
                 </td>
 
 
                 <td>
 
-                    <button
-                        type="button"
-                        class="inventory-manage-button"
-                        data-inventory-id="${escapeHtml(item.id)}"
-                    >
-                        Manage
-                    </button>
+                    ${actionHtml}
 
                 </td>
 
             `;
 
 
-            tableBody.appendChild(row);
-
-        });
-
-
-        results.textContent =
-            `Showing ${filteredInventory.length} of ${inventory.length} inventory item${inventory.length === 1 ? "" : "s"}.`;
-
-    }
-
-
-    /* =========================================
-       FILTER
-    ========================================== */
-
-    function getFilteredInventory() {
-
-        const searchTerm =
-            searchInput.value
-                .trim()
-                .toLowerCase();
-
-
-        const filter =
-            filterSelect.value;
-
-
-        return inventory.filter(function (item) {
-
-            const medicineName =
-                String(
-                    item.medicine_name || ""
-                ).toLowerCase();
-
-
-            const genericName =
-                String(
-                    item.generic_name || ""
-                ).toLowerCase();
-
-
-            const batchNumber =
-                String(
-                    item.batch_number || ""
-                ).toLowerCase();
-
-
-            const matchesSearch =
-                !searchTerm ||
-                medicineName.includes(searchTerm) ||
-                genericName.includes(searchTerm) ||
-                batchNumber.includes(searchTerm);
-
-
-            if (!matchesSearch) {
-                return false;
-            }
-
-
-            const stock =
-                Number(item.stock) || 0;
-
-
-            if (filter === "IN_STOCK") {
-
-                return (
-                    stock > 0 &&
-                    item.is_available === true
-                );
-
-            }
-
-
-            if (filter === "LOW_STOCK") {
-
-                return (
-                    stock > 0 &&
-                    stock <= 10 &&
-                    item.is_available === true
-                );
-
-            }
-
-
-            if (filter === "OUT_OF_STOCK") {
-
-                return stock === 0;
-
-            }
-
-
-            if (filter === "UNAVAILABLE") {
-
-                return item.is_available === false;
-
-            }
-
-
-            return true;
-
-        });
-
-    }
-
-
-    /* =========================================
-       MANAGE BUTTON
-    ========================================== */
-
-    tableBody.addEventListener(
-        "click",
-        function (event) {
-
-            const button =
-                event.target.closest(
-                    ".inventory-manage-button"
-                );
-
-
-            if (!button) {
-                return;
-            }
-
-
-            openManageModal(
-                button.dataset.inventoryId
+            inventoryTableBody.appendChild(
+                row
             );
-
         }
     );
 
 
     /* =========================================
-       OPEN MANAGE MODAL
+       MANAGE BUTTONS
     ========================================== */
 
-    function openManageModal(
-        inventoryId
-    ) {
-
-        const item =
-            inventory.find(function (inventoryItem) {
-
-                return String(
-                    inventoryItem.id
-                ) === String(inventoryId);
-
-            });
-
-
-        if (!item) {
-            return;
-        }
-
-
-        selectedInventoryId =
-            inventoryId;
-
-
-        manageMedicineName.textContent =
-            `${item.medicine_name || "Medicine"}${item.strength ? " · " + item.strength : ""}`;
-
-
-        manageBatch.textContent =
-            item.batch_number || "—";
-
-
-        manageExpiry.textContent =
-            formatExpiry(
-                item.expiry_date
-            ).text;
-
-
-        manageStock.value =
-            Number(item.stock) || 0;
-
-
-        managePrice.value =
-            item.selling_price || "";
-
-
-        manageAvailable.checked =
-            item.is_available === true;
-
-
-        clearManageFormMessage();
-
-
-        manageInventoryModal.style.display =
-            "flex";
-
-        document.body.style.overflow =
-            "hidden";
-
-
-        setTimeout(function () {
-
-            manageStock.focus();
-
-        }, 50);
-
-    }
-
-
-    /* =========================================
-       CLOSE MANAGE MODAL
-    ========================================== */
-
-    function closeManageInventoryModal() {
-
-        if (isSubmittingInventory) {
-            return;
-        }
-
-
-        manageInventoryModal.style.display =
-            "none";
-
-        document.body.style.overflow =
-            "";
-
-        manageInventoryForm.reset();
-
-        selectedInventoryId =
-            null;
-
-        clearManageFormMessage();
-
-        setManageFormSubmitting(false);
-
-    }
-
-
-    closeManageModal.addEventListener(
-        "click",
-        closeManageInventoryModal
-    );
-
-
-    cancelManageButton.addEventListener(
-        "click",
-        closeManageInventoryModal
-    );
-
-
-    manageInventoryModal.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                event.target ===
-                manageInventoryModal
-            ) {
-
-                closeManageInventoryModal();
-
-            }
-
-        }
-    );
-
-
-    /* =========================================
-       SAVE INVENTORY
-    ========================================== */
-
-    manageInventoryForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            if (
-                isSubmittingInventory ||
-                !selectedInventoryId
-            ) {
-                return;
-            }
-
-
-            clearManageFormMessage();
-
-
-            const stock =
-                Number(manageStock.value);
-
-
-            const price =
-                Number(managePrice.value);
-
-
-            if (
-                Number.isNaN(stock) ||
-                stock < 0
-            ) {
-
-                showManageFormMessage(
-                    "Please enter a valid stock quantity.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                Number.isNaN(price) ||
-                price < 0
-            ) {
-
-                showManageFormMessage(
-                    "Please enter a valid selling price.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            isSubmittingInventory =
-                true;
-
-
-            setManageFormSubmitting(true);
-
-
-            try {
-
-                await apiRequest(
-                    `/medicine/pharmacist/inventory/${selectedInventoryId}/`,
-                    {
-                        method: "PATCH",
-                        body: JSON.stringify({
-                            stock: stock,
-                            selling_price: price,
-                            is_available:
-                                manageAvailable.checked
-                        })
+    document
+        .querySelectorAll(
+            ".inventory-manage-button"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const id =
+                            button.dataset.id;
+
+
+                        const item =
+                            inventoryData.find(
+                                function (
+                                    inventoryItem
+                                ) {
+
+                                    return (
+                                        String(
+                                            inventoryItem.id
+                                        ) ===
+                                        String(id)
+                                    );
+                                }
+                            );
+
+
+                        if (item) {
+
+                            openManageInventory(
+                                item
+                            );
+                        }
                     }
                 );
-
-
-                showManageFormMessage(
-                    "Inventory updated successfully.",
-                    "success"
-                );
-
-
-                setTimeout(
-                    async function () {
-
-                        /*
-                         * IMPORTANT:
-                         * Release the submitting lock BEFORE
-                         * calling the close function.
-                         */
-
-                        isSubmittingInventory =
-                            false;
-
-                        closeManageInventoryModal();
-
-                        await loadInventory();
-
-                    },
-                    600
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Inventory update error:",
-                    error
-                );
-
-
-                showManageFormMessage(
-                    error.message ||
-                    "Unable to update inventory.",
-                    "error"
-                );
-
-
-                isSubmittingInventory =
-                    false;
-
-
-                setManageFormSubmitting(false);
-
             }
+        );
 
-        }
+
+    inventoryResults.textContent =
+        `${filteredItems.length} item${
+            filteredItems.length === 1
+                ? ""
+                : "s"
+        } found`;
+}
+
+/* =========================================================
+   SEARCH / FILTER
+========================================================= */
+
+inventorySearch.addEventListener(
+    "input",
+    renderInventory
+);
+
+inventoryFilter.addEventListener(
+    "change",
+    renderInventory
+);
+
+
+/* =========================================================
+   ADD PRODUCT MODAL
+========================================================= */
+
+function openProductModalWindow() {
+
+    productModal.style.display =
+        "flex";
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+    productFormMessage.style.display =
+        "none";
+
+    productFormMessage.textContent =
+        "";
+
+    loadCategories();
+}
+
+
+function closeProductModalWindow() {
+
+    if (isSubmittingProduct) {
+
+        return;
+    }
+
+
+    productModal.style.display =
+        "none";
+
+    document.body.classList.remove(
+        "modal-open"
     );
 
 
-    /* =========================================
-       MANAGE FORM STATE
-    ========================================== */
+    productForm.reset();
 
-    function setManageFormSubmitting(
-        submitting
-    ) {
-
-        saveManageButton.disabled =
-            submitting;
-
-        cancelManageButton.disabled =
-            submitting;
-
-        closeManageModal.disabled =
-            submitting;
+    productImagePreview.innerHTML =
+        "";
 
 
-        saveManageButton.textContent =
-            submitting
-                ? "Saving..."
-                : "Save Changes";
+    productFormMessage.style.display =
+        "none";
 
-    }
-
-
-    function showManageFormMessage(
-        message,
-        type
-    ) {
-
-        manageFormMessage.textContent =
-            message;
-
-        manageFormMessage.style.display =
-            "block";
+    productFormMessage.textContent =
+        "";
+}
 
 
-        if (type === "success") {
-
-            manageFormMessage.style.color =
-                "#3f8170";
-
-            manageFormMessage.style.background =
-                "#edf8f4";
-
-            manageFormMessage.style.border =
-                "1px solid #d5ebe4";
-
-        } else {
-
-            manageFormMessage.style.color =
-                "#a94e4e";
-
-            manageFormMessage.style.background =
-                "#fff1f1";
-
-            manageFormMessage.style.border =
-                "1px solid #f2d8d8";
-
-        }
-
-    }
+addProductButton.addEventListener(
+    "click",
+    openProductModalWindow
+);
 
 
-    function clearManageFormMessage() {
+closeProductModal.addEventListener(
+    "click",
+    closeProductModalWindow
+);
 
-        manageFormMessage.textContent =
+
+cancelProductButton.addEventListener(
+    "click",
+    closeProductModalWindow
+);
+
+
+/* =========================================================
+   PRODUCT IMAGE PREVIEW
+========================================================= */
+
+productImage.addEventListener(
+    "change",
+    function () {
+
+        productImagePreview.innerHTML =
             "";
 
-        manageFormMessage.style.display =
-            "none";
 
-    }
-
-
-    /* =========================================
-       PRODUCT MODAL
-    ========================================== */
-
-    addProductButton.addEventListener(
-        "click",
-        async function () {
-
-            openProductModal();
-
-            await loadCategories();
-
-        }
-    );
+        const file =
+            productImage.files[0];
 
 
-    closeProductModal.addEventListener(
-        "click",
-        closeProductModalWindow
-    );
+        if (!file) {
 
-
-    cancelProductButton.addEventListener(
-        "click",
-        closeProductModalWindow
-    );
-
-
-    productModal.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                event.target ===
-                productModal
-            ) {
-
-                closeProductModalWindow();
-
-            }
-
-        }
-    );
-
-
-    function openProductModal() {
-
-        productModal.style.display =
-            "flex";
-
-        document.body.style.overflow =
-            "hidden";
-
-        clearProductFormMessage();
-
-
-        setTimeout(function () {
-
-            productBrandName.focus();
-
-        }, 50);
-
-    }
-
-
-    function closeProductModalWindow() {
-
-        if (isSubmittingProduct) {
             return;
         }
 
 
-        productModal.style.display =
-            "none";
+        if (
+            !file.type.startsWith("image/")
+        ) {
 
-        document.body.style.overflow =
-            "";
+            productImage.value =
+                "";
 
-
-        resetProductForm();
-
-    }
-
-
-    /* =========================================
-       LOAD CATEGORIES
-    ========================================== */
-
-    async function loadCategories() {
-
-        productCategory.innerHTML = `
-            <option value="">
-                Loading categories...
-            </option>
-        `;
-
-        productCategory.disabled =
-            true;
-
-
-        try {
-
-            const response =
-                await apiRequest(
-                    "/medicine/categories/",
-                    {
-                        method: "GET"
-                    }
-                );
-
-
-            if (Array.isArray(response)) {
-
-                categories = response;
-
-            } else {
-
-                categories =
-                    response.results ||
-                    response.data ||
-                    [];
-
-            }
-
-
-            if (!Array.isArray(categories)) {
-
-                throw new Error(
-                    "Invalid category data received."
-                );
-
-            }
-
-
-            renderCategories();
-
-        } catch (error) {
-
-            console.error(
-                "Category loading error:",
-                error
-            );
-
-
-            productCategory.innerHTML = `
-                <option value="">
-                    Unable to load categories
-                </option>
-            `;
-
-            productCategory.disabled =
-                true;
-
-
-            showProductFormMessage(
-                error.message ||
-                "Unable to load categories.",
+            showProductMessage(
+                "Please select a valid image file.",
                 "error"
             );
 
+            return;
         }
 
+
+        const imageURL =
+            URL.createObjectURL(file);
+
+
+        productImagePreview.innerHTML = `
+
+            <div class="product-image-preview-wrapper">
+
+                <img
+                    src="${imageURL}"
+                    alt="Product preview"
+                >
+
+                <button
+                    type="button"
+                    id="removeProductImage"
+                    class="remove-product-image"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+        `;
+
+
+        document
+            .getElementById(
+                "removeProductImage"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    productImage.value =
+                        "";
+
+                    productImagePreview.innerHTML =
+                        "";
+                }
+            );
     }
+);
 
 
-    /* =========================================
-       RENDER CATEGORIES
-    ========================================== */
+/* =========================================================
+   PRODUCT MESSAGE
+========================================================= */
 
-    function renderCategories(
-        selectedId = ""
-    ) {
+function showProductMessage(
+    message,
+    type
+) {
+
+    productFormMessage.textContent =
+        message;
+
+    productFormMessage.style.display =
+        "block";
+
+
+    if (type === "success") {
+
+        productFormMessage.style.color =
+            "#438f89";
+
+    } else {
+
+        productFormMessage.style.color =
+            "#d05b5b";
+    }
+}
+
+
+/* =========================================================
+   LOAD CATEGORIES
+========================================================= */
+
+async function loadCategories() {
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/medicine/categories/"
+            );
+
+
+        const categories =
+            extractData(response);
+
 
         productCategory.innerHTML = `
             <option value="">
@@ -1152,23 +1090,343 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
 
-        if (categories.length === 0) {
+        categories.forEach(
+            function (category) {
 
-            productCategory.innerHTML = `
-                <option value="">
-                    No categories available
-                </option>
-            `;
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-            productCategory.disabled =
-                true;
+
+                option.value =
+                    category.id;
+
+                option.textContent =
+                    category.name;
+
+
+                productCategory.appendChild(
+                    option
+                );
+            }
+        );
+
+
+    } catch (error) {
+
+        showProductMessage(
+            "Unable to load categories.",
+            "error"
+        );
+    }
+}
+
+
+/* =========================================================
+   ADD PRODUCT
+========================================================= */
+
+productForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        if (isSubmittingProduct) {
 
             return;
-
         }
 
 
-        categories.forEach(function (category) {
+        isSubmittingProduct = true;
+
+
+        saveProductButton.disabled =
+            true;
+
+        saveProductButton.textContent =
+            "Adding Product...";
+
+
+        productFormMessage.style.display =
+            "none";
+
+
+        try {
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "category",
+                productCategory.value
+            );
+
+
+            formData.append(
+                "brand_name",
+                productBrandName.value.trim()
+            );
+
+
+            formData.append(
+                "generic_name",
+                productGenericName.value.trim()
+            );
+
+
+            formData.append(
+                "strength",
+                productStrength.value.trim()
+            );
+
+
+            formData.append(
+                "manufacturer",
+                productManufacturer.value.trim()
+            );
+
+
+            formData.append(
+                "description",
+                productDescription.value.trim()
+            );
+
+
+            formData.append(
+                "requires_prescription",
+                productPrescription.checked
+            );
+
+
+            formData.append(
+                "stock",
+                productStock.value
+            );
+
+
+            formData.append(
+                "selling_price",
+                productPrice.value
+            );
+
+
+            formData.append(
+                "batch_number",
+                productBatch.value.trim()
+            );
+
+
+            formData.append(
+                "expiry_date",
+                productExpiry.value
+            );
+
+
+            formData.append(
+                "is_available",
+                productAvailable.checked
+            );
+
+
+            /* =========================================
+               IMAGE
+            ========================================== */
+
+            if (
+                productImage.files.length > 0
+            ) {
+
+                formData.append(
+                    "image",
+                    productImage.files[0]
+                );
+            }
+
+
+            await apiRequest(
+                "/medicine/pharmacist/products/",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+            showProductMessage(
+                "Product added successfully.",
+                "success"
+            );
+
+
+            isSubmittingProduct =
+                false;
+
+
+            setTimeout(
+                function () {
+
+                    closeProductModalWindow();
+
+                    loadInventory();
+
+                },
+                600
+            );
+
+
+        } catch (error) {
+
+            showProductMessage(
+                error.message ||
+                "Unable to add product.",
+                "error"
+            );
+
+
+            isSubmittingProduct =
+                false;
+
+
+        } finally {
+
+            saveProductButton.disabled =
+                false;
+
+            saveProductButton.textContent =
+                "Add Product";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CATEGORY MODAL
+========================================================= */
+
+function openCategoryModalWindow() {
+
+    categoryModal.style.display =
+        "flex";
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+
+    categoryFormMessage.style.display =
+        "none";
+
+    categoryFormMessage.textContent =
+        "";
+}
+
+
+function closeCategoryModalWindow() {
+
+    if (isSubmittingCategory) {
+
+        return;
+    }
+
+
+    categoryModal.style.display =
+        "none";
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+
+    categoryForm.reset();
+
+
+    categoryFormMessage.style.display =
+        "none";
+
+    categoryFormMessage.textContent =
+        "";
+}
+
+
+addCategoryButton.addEventListener(
+    "click",
+    openCategoryModalWindow
+);
+
+
+closeCategoryModal.addEventListener(
+    "click",
+    closeCategoryModalWindow
+);
+
+
+cancelCategoryButton.addEventListener(
+    "click",
+    closeCategoryModalWindow
+);
+
+
+/* =========================================================
+   CREATE CATEGORY
+========================================================= */
+
+categoryForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        if (isSubmittingCategory) {
+
+            return;
+        }
+
+
+        isSubmittingCategory =
+            true;
+
+
+        saveCategoryButton.disabled =
+            true;
+
+        saveCategoryButton.textContent =
+            "Creating...";
+
+
+        categoryFormMessage.style.display =
+            "none";
+
+
+        try {
+
+            const response =
+                await apiRequest(
+                    "/medicine/categories/create/",
+                    {
+                        method: "POST",
+
+                        body: JSON.stringify({
+
+                            name:
+                                categoryName.value.trim(),
+
+                            description:
+                                categoryDescription.value.trim()
+                        })
+                    }
+                );
+
+
+            const newCategory =
+                response.data ||
+                response;
+
 
             const option =
                 document.createElement(
@@ -1177,1088 +1435,816 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             option.value =
-                category.id;
-
+                newCategory.id;
 
             option.textContent =
-                category.name;
-
-
-            if (
-                String(category.id) ===
-                String(selectedId)
-            ) {
-
-                option.selected =
-                    true;
-
-            }
+                newCategory.name;
 
 
             productCategory.appendChild(
                 option
             );
 
-        });
+
+            productCategory.value =
+                newCategory.id;
 
 
-        productCategory.disabled =
-            false;
+            categoryFormMessage.textContent =
+                "Category created successfully.";
 
+            categoryFormMessage.style.color =
+                "#438f89";
+
+            categoryFormMessage.style.display =
+                "block";
+
+
+            isSubmittingCategory =
+                false;
+
+
+            setTimeout(
+                function () {
+
+                    closeCategoryModalWindow();
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            categoryFormMessage.textContent =
+                error.message ||
+                "Unable to create category.";
+
+            categoryFormMessage.style.color =
+                "#d05b5b";
+
+            categoryFormMessage.style.display =
+                "block";
+
+
+            isSubmittingCategory =
+                false;
+
+
+        } finally {
+
+            saveCategoryButton.disabled =
+                false;
+
+            saveCategoryButton.textContent =
+                "Create Category";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MANAGE INVENTORY
+========================================================= */
+
+function openManageInventory(item) {
+
+    selectedInventoryId =
+        item.id;
+
+
+    manageMedicineName.textContent =
+        `${item.medicine_name || ""} ${
+            item.strength || ""
+        }`;
+
+
+    manageBatch.textContent =
+        item.batch_number ||
+        "—";
+
+
+    manageExpiry.textContent =
+        formatDate(
+            item.expiry_date
+        );
+
+
+    manageStock.value =
+        item.stock;
+
+
+    managePrice.value =
+        item.selling_price;
+
+
+    manageAvailable.checked =
+        Boolean(
+            item.is_available
+        );
+
+
+    manageFormMessage.style.display =
+        "none";
+
+    manageFormMessage.textContent =
+        "";
+
+
+    manageInventoryModal.style.display =
+        "flex";
+
+    document.body.classList.add(
+        "modal-open"
+    );
+}
+
+
+function closeManageInventoryWindow() {
+
+    if (isSubmittingInventory) {
+
+        return;
     }
 
 
-    /* =========================================
-       CATEGORY MODAL
-    ========================================== */
+    manageInventoryModal.style.display =
+        "none";
 
-    addCategoryButton.addEventListener(
-        "click",
-        function () {
-
-            openCategoryModal();
-
-        }
+    document.body.classList.remove(
+        "modal-open"
     );
 
 
-    function openCategoryModal() {
+    manageInventoryForm.reset();
 
-        clearCategoryForm();
-
-        categoryModal.style.display =
-            "flex";
+    selectedInventoryId =
+        null;
 
 
-        setTimeout(function () {
+    manageFormMessage.style.display =
+        "none";
 
-            categoryName.focus();
-
-        }, 50);
-
-    }
+    manageFormMessage.textContent =
+        "";
+}
 
 
-    function closeCategoryModalWindow() {
+closeManageModal.addEventListener(
+    "click",
+    closeManageInventoryWindow
+);
 
-        if (isSubmittingCategory) {
+
+cancelManageButton.addEventListener(
+    "click",
+    closeManageInventoryWindow
+);
+
+
+/* =========================================================
+   UPDATE INVENTORY
+========================================================= */
+
+manageInventoryForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        if (isSubmittingInventory) {
+
             return;
         }
 
 
-        categoryModal.style.display =
-            "none";
+        if (!selectedInventoryId) {
 
-        clearCategoryForm();
-
-    }
-
-
-    closeCategoryModal.addEventListener(
-        "click",
-        closeCategoryModalWindow
-    );
-
-
-    cancelCategoryButton.addEventListener(
-        "click",
-        closeCategoryModalWindow
-    );
-
-
-    categoryModal.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                event.target ===
-                categoryModal
-            ) {
-
-                closeCategoryModalWindow();
-
-            }
-
-        }
-    );
-
-
-    /* =========================================
-       CREATE CATEGORY
-    ========================================== */
-
-    categoryForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            if (isSubmittingCategory) {
-                return;
-            }
-
-
-            const name =
-                categoryName.value.trim();
-
-
-            const description =
-                categoryDescription.value.trim();
-
-
-            if (!name) {
-
-                showCategoryFormMessage(
-                    "Please enter a category name.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            isSubmittingCategory =
-                true;
-
-
-            setCategoryFormSubmitting(true);
-
-
-            try {
-
-                const response =
-                    await apiRequest(
-                        "/medicine/categories/create/",
-                        {
-                            method: "POST",
-                            body: JSON.stringify({
-                                name: name,
-                                description:
-                                    description
-                            })
-                        }
-                    );
-
-
-                const newCategory =
-                    response.data ||
-                    response;
-
-
-                if (
-                    !newCategory ||
-                    !newCategory.id
-                ) {
-
-                    throw new Error(
-                        "Category was created, but the response was invalid."
-                    );
-
-                }
-
-
-                categories.push(
-                    newCategory
-                );
-
-
-                categories.sort(
-                    function (a, b) {
-
-                        return String(
-                            a.name
-                        ).localeCompare(
-                            String(b.name)
-                        );
-
-                    }
-                );
-
-
-                /*
-                 * Select the new category
-                 * in the product form.
-                 */
-
-                renderCategories(
-                    newCategory.id
-                );
-
-
-                showCategoryFormMessage(
-                    "Category created successfully.",
-                    "success"
-                );
-
-
-                setTimeout(
-                    function () {
-
-                        /*
-                         * IMPORTANT:
-                         * Release the lock BEFORE
-                         * closing the modal.
-                         */
-
-                        isSubmittingCategory =
-                            false;
-
-                        closeCategoryModalWindow();
-
-                    },
-                    500
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Category creation error:",
-                    error
-                );
-
-
-                showCategoryFormMessage(
-                    error.message ||
-                    "Unable to create category.",
-                    "error"
-                );
-
-
-                isSubmittingCategory =
-                    false;
-
-
-                setCategoryFormSubmitting(false);
-
-            }
-
-        }
-    );
-
-
-    /* =========================================
-       CATEGORY FORM STATE
-    ========================================== */
-
-    function setCategoryFormSubmitting(
-        submitting
-    ) {
-
-        saveCategoryButton.disabled =
-            submitting;
-
-        cancelCategoryButton.disabled =
-            submitting;
-
-        closeCategoryModal.disabled =
-            submitting;
-
-
-        saveCategoryButton.textContent =
-            submitting
-                ? "Creating..."
-                : "Create Category";
-
-    }
-
-
-    function showCategoryFormMessage(
-        message,
-        type
-    ) {
-
-        categoryFormMessage.textContent =
-            message;
-
-        categoryFormMessage.style.display =
-            "block";
-
-
-        if (type === "success") {
-
-            categoryFormMessage.style.color =
-                "#3f8170";
-
-            categoryFormMessage.style.background =
-                "#edf8f4";
-
-            categoryFormMessage.style.border =
-                "1px solid #d5ebe4";
-
-        } else {
-
-            categoryFormMessage.style.color =
-                "#a94e4e";
-
-            categoryFormMessage.style.background =
-                "#fff1f1";
-
-            categoryFormMessage.style.border =
-                "1px solid #f2d8d8";
-
-        }
-
-    }
-
-
-    function clearCategoryForm() {
-
-        categoryForm.reset();
-
-        clearCategoryFormMessage();
-
-        isSubmittingCategory =
-            false;
-
-        setCategoryFormSubmitting(false);
-
-    }
-
-
-    function clearCategoryFormMessage() {
-
-        categoryFormMessage.textContent =
-            "";
-
-        categoryFormMessage.style.display =
-            "none";
-
-    }
-
-
-    /* =========================================
-       CREATE PRODUCT
-    ========================================== */
-
-    productForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            if (isSubmittingProduct) {
-                return;
-            }
-
-
-            clearProductFormMessage();
-
-
-            const productData =
-                getProductFormData();
-
-
-            const validationError =
-                validateProductData(
-                    productData
-                );
-
-
-            if (validationError) {
-
-                showProductFormMessage(
-                    validationError,
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            isSubmittingProduct =
-                true;
-
-
-            setProductFormSubmitting(true);
-
-
-            try {
-
-                await apiRequest(
-                    "/medicine/pharmacist/products/",
-                    {
-                        method: "POST",
-                        body: JSON.stringify(
-                            productData
-                        )
-                    }
-                );
-
-
-                showProductFormMessage(
-                    "Product added successfully.",
-                    "success"
-                );
-
-
-                setTimeout(
-                    async function () {
-
-                        /*
-                         * IMPORTANT:
-                         * Release the lock BEFORE
-                         * closing the modal.
-                         */
-
-                        isSubmittingProduct =
-                            false;
-
-                        closeProductModalWindow();
-
-                        await loadInventory();
-
-                    },
-                    600
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Add product error:",
-                    error
-                );
-
-
-                showProductFormMessage(
-                    error.message ||
-                    "Unable to add product.",
-                    "error"
-                );
-
-
-                isSubmittingProduct =
-                    false;
-
-
-                setProductFormSubmitting(false);
-
-            }
-
-        }
-    );
-
-
-    /* =========================================
-       PRODUCT FORM DATA
-    ========================================== */
-
-    function getProductFormData() {
-
-        return {
-
-            category:
-                productCategory.value,
-
-            brand_name:
-                productBrandName.value.trim(),
-
-            generic_name:
-                productGenericName.value.trim(),
-
-            strength:
-                productStrength.value.trim(),
-
-            manufacturer:
-                productManufacturer.value.trim(),
-
-            description:
-                productDescription.value.trim(),
-
-            requires_prescription:
-                productPrescription.checked,
-
-            stock:
-                Number(productStock.value),
-
-            selling_price:
-                productPrice.value,
-
-            batch_number:
-                productBatch.value.trim(),
-
-            expiry_date:
-                productExpiry.value,
-
-            is_available:
-                productAvailable.checked
-
-        };
-
-    }
-
-
-    /* =========================================
-       VALIDATE PRODUCT
-    ========================================== */
-
-    function validateProductData(
-        data
-    ) {
-
-        if (!data.category) {
-
-            return "Please select a category.";
-
+            return;
         }
 
 
-        if (!data.brand_name) {
-
-            return "Please enter the brand name.";
-
-        }
-
-
-        if (!data.generic_name) {
-
-            return "Please enter the generic name.";
-
-        }
-
-
-        if (!data.strength) {
-
-            return "Please enter the medicine strength.";
-
-        }
-
-
-        if (!data.manufacturer) {
-
-            return "Please enter the manufacturer.";
-
-        }
-
-
-        if (
-            Number.isNaN(data.stock) ||
-            data.stock < 0
-        ) {
-
-            return "Please enter a valid stock quantity.";
-
-        }
-
-
-        if (
-            data.selling_price === "" ||
-            Number(data.selling_price) < 0
-        ) {
-
-            return "Please enter a valid selling price.";
-
-        }
-
-
-        if (!data.batch_number) {
-
-            return "Please enter the batch number.";
-
-        }
-
-
-        if (!data.expiry_date) {
-
-            return "Please select an expiry date.";
-
-        }
-
-
-        const expiryDate =
-            new Date(
-                data.expiry_date +
-                "T00:00:00"
-            );
-
-
-        const today =
-            new Date();
-
-        today.setHours(
-            0,
-            0,
-            0,
-            0
-        );
-
-
-        if (
-            Number.isNaN(
-                expiryDate.getTime()
-            )
-        ) {
-
-            return "Please enter a valid expiry date.";
-
-        }
-
-
-        if (expiryDate < today) {
-
-            return "Expiry date cannot be in the past.";
-
-        }
-
-
-        return null;
-
-    }
-
-
-    /* =========================================
-       PRODUCT FORM STATE
-    ========================================== */
-
-    function setProductFormSubmitting(
-        submitting
-    ) {
-
-        saveProductButton.disabled =
-            submitting;
-
-        cancelProductButton.disabled =
-            submitting;
-
-        closeProductModal.disabled =
-            submitting;
-
-        addCategoryButton.disabled =
-            submitting;
-
-
-        saveProductButton.textContent =
-            submitting
-                ? "Adding Product..."
-                : "Add Product";
-
-    }
-
-
-    /* =========================================
-       PRODUCT MESSAGE
-    ========================================== */
-
-    function showProductFormMessage(
-        message,
-        type
-    ) {
-
-        productFormMessage.textContent =
-            message;
-
-        productFormMessage.style.display =
-            "block";
-
-
-        if (type === "success") {
-
-            productFormMessage.style.color =
-                "#3f8170";
-
-            productFormMessage.style.background =
-                "#edf8f4";
-
-            productFormMessage.style.border =
-                "1px solid #d5ebe4";
-
-        } else {
-
-            productFormMessage.style.color =
-                "#a94e4e";
-
-            productFormMessage.style.background =
-                "#fff1f1";
-
-            productFormMessage.style.border =
-                "1px solid #f2d8d8";
-
-        }
-
-    }
-
-
-    function clearProductFormMessage() {
-
-        productFormMessage.textContent =
-            "";
-
-        productFormMessage.style.display =
-            "none";
-
-    }
-
-
-    /* =========================================
-       RESET PRODUCT FORM
-    ========================================== */
-
-    function resetProductForm() {
-
-        productForm.reset();
-
-
-        productAvailable.checked =
+        isSubmittingInventory =
             true;
 
 
-        productPrescription.checked =
-            false;
+        saveManageButton.disabled =
+            true;
+
+        saveManageButton.textContent =
+            "Saving...";
 
 
-        productCategory.innerHTML = `
+        manageFormMessage.style.display =
+            "none";
+
+
+        try {
+
+            await apiRequest(
+                `/medicine/pharmacist/inventory/${selectedInventoryId}/`,
+                {
+                    method: "PATCH",
+
+                    body: JSON.stringify({
+
+                        stock:
+                            Number(
+                                manageStock.value
+                            ),
+
+                        selling_price:
+                            Number(
+                                managePrice.value
+                            ),
+
+                        is_available:
+                            manageAvailable.checked
+                    })
+                }
+            );
+
+
+            manageFormMessage.textContent =
+                "Inventory updated successfully.";
+
+            manageFormMessage.style.color =
+                "#438f89";
+
+            manageFormMessage.style.display =
+                "block";
+
+
+            isSubmittingInventory =
+                false;
+
+
+            setTimeout(
+                function () {
+
+                    closeManageInventoryWindow();
+
+                    loadInventory();
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            manageFormMessage.textContent =
+                error.message ||
+                "Unable to update inventory.";
+
+            manageFormMessage.style.color =
+                "#d05b5b";
+
+            manageFormMessage.style.display =
+                "block";
+
+
+            isSubmittingInventory =
+                false;
+
+
+        } finally {
+
+            saveManageButton.disabled =
+                false;
+
+            saveManageButton.textContent =
+                "Save Changes";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ADD NEW BATCH
+========================================================= */
+
+function openBatchModalWindow() {
+
+    if (isSubmittingBatch) {
+
+        return;
+    }
+
+
+    batchModal.style.display =
+        "flex";
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+
+    batchForm.reset();
+
+    batchAvailable.checked =
+        true;
+
+
+    batchFormMessage.style.display =
+        "none";
+
+    batchFormMessage.textContent =
+        "";
+
+
+    loadBatchMedicines();
+}
+
+
+function closeBatchModalWindow() {
+
+    if (isSubmittingBatch) {
+
+        return;
+    }
+
+
+    batchModal.style.display =
+        "none";
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+
+    batchForm.reset();
+
+    batchAvailable.checked =
+        true;
+
+
+    batchFormMessage.style.display =
+        "none";
+
+    batchFormMessage.textContent =
+        "";
+}
+
+
+addBatchButton.addEventListener(
+    "click",
+    openBatchModalWindow
+);
+
+
+closeBatchModal.addEventListener(
+    "click",
+    closeBatchModalWindow
+);
+
+
+cancelBatchButton.addEventListener(
+    "click",
+    closeBatchModalWindow
+);
+
+
+/* =========================================================
+   LOAD MEDICINES FOR BATCH
+========================================================= */
+
+async function loadBatchMedicines() {
+
+    batchMedicine.innerHTML = `
+        <option value="">
+            Loading medicines...
+        </option>
+    `;
+
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/medicine/"
+            );
+
+
+        const medicines =
+            extractData(response);
+
+
+        batchMedicine.innerHTML = `
             <option value="">
-                Select category
+                Select medicine
             </option>
         `;
 
 
-        productCategory.disabled =
-            false;
+        medicines.forEach(
+            function (medicine) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
 
-        clearProductFormMessage();
+                option.value =
+                    medicine.id;
 
 
-        isSubmittingProduct =
-            false;
+                option.textContent =
+                    `${medicine.brand_name} — ${
+                        medicine.strength || ""
+                    }`;
 
 
-        setProductFormSubmitting(false);
+                batchMedicine.appendChild(
+                    option
+                );
+            }
+        );
 
+
+        if (medicines.length === 0) {
+
+            batchMedicine.innerHTML = `
+                <option value="">
+                    No medicines available
+                </option>
+            `;
+        }
+
+
+    } catch (error) {
+
+        batchMedicine.innerHTML = `
+            <option value="">
+                Unable to load medicines
+            </option>
+        `;
+
+
+        batchFormMessage.textContent =
+            error.message ||
+            "Unable to load medicines.";
+
+        batchFormMessage.style.color =
+            "#d05b5b";
+
+        batchFormMessage.style.display =
+            "block";
     }
+}
 
 
-    /* =========================================
-       STOCK CLASS
-    ========================================== */
+/* =========================================================
+   CREATE NEW BATCH
+========================================================= */
 
-    function getStockClass(
-        stock
-    ) {
+batchForm.addEventListener(
+    "submit",
+    async function (event) {
 
-        if (stock === 0) {
-            return "empty";
+        event.preventDefault();
+
+
+        if (isSubmittingBatch) {
+
+            return;
         }
 
 
-        if (stock <= 10) {
-            return "low";
+        if (!batchMedicine.value) {
+
+            batchFormMessage.textContent =
+                "Please select a medicine.";
+
+            batchFormMessage.style.color =
+                "#d05b5b";
+
+            batchFormMessage.style.display =
+                "block";
+
+            return;
         }
 
 
-        return "";
-
-    }
-
-
-    /* =========================================
-       EXPIRY
-    ========================================== */
-
-    function formatExpiry(
-        dateString
-    ) {
-
-        if (!dateString) {
-
-            return {
-                text: "—",
-                warning: "",
-                className: ""
-            };
-
-        }
+        isSubmittingBatch =
+            true;
 
 
-        const expiryDate =
-            new Date(
-                dateString +
-                "T00:00:00"
-            );
+        saveBatchButton.disabled =
+            true;
+
+        saveBatchButton.textContent =
+            "Adding Batch...";
 
 
-        if (
-            Number.isNaN(
-                expiryDate.getTime()
-            )
-        ) {
-
-            return {
-                text: "—",
-                warning: "",
-                className: ""
-            };
-
-        }
+        batchFormMessage.style.display =
+            "none";
 
 
-        const formatted =
-            expiryDate.toLocaleDateString(
-                "en-IN",
+        try {
+
+            await apiRequest(
+                "/medicine/pharmacist/batches/",
                 {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
+                    method: "POST",
+
+                    body: JSON.stringify({
+
+                        medicine:
+                            batchMedicine.value,
+
+                        stock:
+                            Number(
+                                batchStock.value
+                            ),
+
+                        selling_price:
+                            batchPrice.value,
+
+                        batch_number:
+                            batchNumber.value.trim(),
+
+                        expiry_date:
+                            batchExpiry.value,
+
+                        is_available:
+                            batchAvailable.checked
+                    })
                 }
             );
 
 
-        const today =
-            new Date();
+            batchFormMessage.textContent =
+                "New batch added successfully.";
 
-        today.setHours(
-            0,
-            0,
-            0,
-            0
-        );
+            batchFormMessage.style.color =
+                "#438f89";
 
-
-        const difference =
-            expiryDate.getTime() -
-            today.getTime();
+            batchFormMessage.style.display =
+                "block";
 
 
-        const days =
-            Math.ceil(
-                difference /
-                (1000 * 60 * 60 * 24)
+            isSubmittingBatch =
+                false;
+
+
+            setTimeout(
+                async function () {
+
+                    closeBatchModalWindow();
+
+                    await loadInventory();
+
+                },
+                600
             );
 
 
-        if (days < 0) {
+        } catch (error) {
 
-            return {
-                text: formatted,
-                warning: "Expired",
-                className:
-                    "inventory-expiry-danger"
-            };
+            batchFormMessage.textContent =
+                error.message ||
+                "Unable to add new batch.";
 
+            batchFormMessage.style.color =
+                "#d05b5b";
+
+            batchFormMessage.style.display =
+                "block";
+
+
+            isSubmittingBatch =
+                false;
+
+        } finally {
+
+            saveBatchButton.disabled =
+                false;
+
+            saveBatchButton.textContent =
+                "Add Batch";
         }
-
-
-        if (days <= 30) {
-
-            return {
-                text: formatted,
-                warning: "Expires soon",
-                className:
-                    "inventory-expiry-danger"
-            };
-
-        }
-
-
-        if (days <= 90) {
-
-            return {
-                text: formatted,
-                warning: "Within 3 months",
-                className:
-                    "inventory-expiry-warning"
-            };
-
-        }
-
-
-        return {
-            text: formatted,
-            warning: "",
-            className: ""
-        };
 
     }
+);
 
 
-    /* =========================================
-       FORMAT AMOUNT
-    ========================================== */
+/* =========================================================
+   MODAL OVERLAY CLICK
+========================================================= */
 
-    function formatAmount(
-        amount
-    ) {
+productModal.addEventListener(
+    "click",
+    function (event) {
 
-        const number =
-            Number(amount);
+        if (
+            event.target ===
+            productModal
+        ) {
+
+            closeProductModalWindow();
+        }
+    }
+);
+
+
+categoryModal.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target ===
+            categoryModal
+        ) {
+
+            closeCategoryModalWindow();
+        }
+    }
+);
+
+
+manageInventoryModal.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target ===
+            manageInventoryModal
+        ) {
+
+            closeManageInventoryWindow();
+        }
+    }
+);
+
+
+batchModal.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target ===
+            batchModal
+        ) {
+
+            closeBatchModalWindow();
+        }
+    }
+);
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key !== "Escape") {
+
+            return;
+        }
 
 
         if (
-            Number.isNaN(number)
+            productModal.style.display ===
+            "flex"
         ) {
 
-            return "0.00";
+            closeProductModalWindow();
 
+            return;
         }
 
 
-        return number.toLocaleString(
-            "en-IN",
-            {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }
-        );
+        if (
+            categoryModal.style.display ===
+            "flex"
+        ) {
 
+            closeCategoryModalWindow();
+
+            return;
+        }
+
+
+        if (
+            manageInventoryModal.style.display ===
+            "flex"
+        ) {
+
+            closeManageInventoryWindow();
+
+            return;
+        }
+
+
+        if (
+            batchModal.style.display ===
+            "flex"
+        ) {
+
+            closeBatchModalWindow();
+        }
     }
+);
 
 
-    /* =========================================
-       ESCAPE HTML
-    ========================================== */
+/* =========================================================
+   HELPERS
+========================================================= */
 
-    function escapeHtml(
-        value
+function formatPrice(price) {
+
+    if (
+        price === null ||
+        price === undefined ||
+        price === ""
     ) {
 
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
+        return "0.00";
     }
 
 
-    /* =========================================
-       ESCAPE KEY
-    ========================================== */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key !== "Escape"
-            ) {
-                return;
-            }
+    return Number(price).toFixed(2);
+}
 
 
-            if (
-                categoryModal.style.display !==
-                "none"
-            ) {
+function formatDate(dateString) {
 
-                closeCategoryModalWindow();
+    if (!dateString) {
 
-                return;
-
-            }
+        return "—";
+    }
 
 
-            if (
-                manageInventoryModal.style.display !==
-                "none"
-            ) {
-
-                closeManageInventoryModal();
-
-                return;
-
-            }
+    const date =
+        new Date(dateString);
 
 
-            if (
-                productModal.style.display !==
-                "none"
-            ) {
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
 
-                closeProductModalWindow();
+        return dateString;
+    }
 
-            }
 
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
         }
     );
+}
 
 
-    /* =========================================
-       LOADING
-    ========================================== */
+function escapeHtml(value) {
 
-    function showLoading() {
-
-        loading.style.display =
-            "flex";
-
-        tableWrapper.style.display =
-            "none";
-
-        empty.style.display =
-            "none";
-
-        results.style.display =
-            "none";
-
-        errorMessage.style.display =
-            "none";
-
-    }
-
-
-    function hideLoading() {
-
-        loading.style.display =
-            "none";
-
-    }
-
-
-    /* =========================================
-       ERROR
-    ========================================== */
-
-    function showError(
-        message
+    if (
+        value === null ||
+        value === undefined
     ) {
 
-        loading.style.display =
-            "none";
-
-        tableWrapper.style.display =
-            "none";
-
-        empty.style.display =
-            "none";
-
-        results.style.display =
-            "none";
-
-        errorMessage.textContent =
-            message;
-
-        errorMessage.style.display =
-            "block";
-
+        return "";
     }
 
 
-    /* =========================================
-       INITIAL LOAD
-    ========================================== */
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
 
-    loadInventory();
 
-});
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+loadInventory();

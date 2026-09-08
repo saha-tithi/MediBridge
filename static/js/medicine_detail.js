@@ -1,4 +1,3 @@
-
 const cartAction =
     document.getElementById("medicineCartAction");
 
@@ -14,7 +13,13 @@ if (cartAction) {
             10
         );
 
+
     loadMedicineCart();
+
+
+    // =========================================================
+    // LOAD CART
+    // =========================================================
 
     async function loadMedicineCart() {
 
@@ -35,7 +40,7 @@ if (cartAction) {
 
             if (
                 cart &&
-                cart.items
+                Array.isArray(cart.items)
             ) {
 
                 const existingItem =
@@ -43,8 +48,8 @@ if (cartAction) {
                         function (item) {
 
                             return (
-                                item.medicine_id ===
-                                medicineId
+                                String(item.medicine_id) ===
+                                String(medicineId)
                             );
 
                         }
@@ -63,6 +68,7 @@ if (cartAction) {
                     showAddButton();
 
                 }
+
 
                 updateNavbarCartCount(cart);
 
@@ -86,6 +92,11 @@ if (cartAction) {
 
     }
 
+
+    // =========================================================
+    // ADD TO CART BUTTON
+    // =========================================================
+
     function showAddButton() {
 
         cartAction.innerHTML = `
@@ -107,12 +118,17 @@ if (cartAction) {
             );
 
 
-        button.addEventListener(
-            "click",
-            addToCart
-        );
+        if (button) {
+
+            button.addEventListener(
+                "click",
+                addToCart
+            );
+
+        }
 
     }
+
 
     async function addToCart() {
 
@@ -120,6 +136,11 @@ if (cartAction) {
             document.getElementById(
                 "addToCartButton"
             );
+
+
+        if (!button) {
+            return;
+        }
 
 
         button.disabled = true;
@@ -148,30 +169,36 @@ if (cartAction) {
                 response.data;
 
 
-            const cartItem =
-                cart.items.find(
-                    function (item) {
+            if (
+                cart &&
+                Array.isArray(cart.items)
+            ) {
 
-                        return (
-                            item.medicine_id ===
-                            medicineId
-                        );
+                const cartItem =
+                    cart.items.find(
+                        function (item) {
 
-                    }
-                );
+                            return (
+                                String(item.medicine_id) ===
+                                String(medicineId)
+                            );
+
+                        }
+                    );
 
 
-            if (cartItem) {
+                if (cartItem) {
 
-                showQuantityControl(
-                    cartItem.id,
-                    cartItem.quantity
-                );
+                    showQuantityControl(
+                        cartItem.id,
+                        cartItem.quantity
+                    );
+
+                }
+
+                updateNavbarCartCount(cart);
 
             }
-
-
-            updateNavbarCartCount(cart);
 
 
         } catch (error) {
@@ -196,6 +223,11 @@ if (cartAction) {
         }
 
     }
+
+
+    // =========================================================
+    // QUANTITY CONTROL
+    // =========================================================
 
     function showQuantityControl(
         cartItemId,
@@ -260,63 +292,132 @@ if (cartAction) {
         `;
 
 
-        const decreaseButton =
-            document.getElementById(
-                "decreaseQuantity"
-            );
+        // Store the current cart item information
+        // directly on the container.
 
+        cartAction.dataset.cartItemId =
+            cartItemId;
 
-        const increaseButton =
-            document.getElementById(
-                "increaseQuantity"
-            );
-
-
-
-
-        decreaseButton.addEventListener(
-            "click",
-            function () {
-
-                if (quantity > 1) {
-
-                    updateQuantity(
-                        cartItemId,
-                        quantity - 1
-                    );
-
-                }
-
-            }
-        );
-
-
-
-
-        increaseButton.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    quantity <
-                    availableStock
-                ) {
-
-                    updateQuantity(
-                        cartItemId,
-                        quantity + 1
-                    );
-
-                }
-
-            }
-        );
+        cartAction.dataset.quantity =
+            quantity;
 
     }
 
 
+    // =========================================================
+    // QUANTITY BUTTONS
+    // =========================================================
+
+    cartAction.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    ".medicine-quantity-button"
+                );
 
 
+            if (!button) {
+                return;
+            }
+
+
+            const cartItemId =
+                cartAction.dataset.cartItemId;
+
+
+            const currentQuantity =
+                parseInt(
+                    cartAction.dataset.quantity,
+                    10
+                );
+
+
+            if (!cartItemId) {
+                console.error(
+                    "Cart item ID is missing."
+                );
+                return;
+            }
+
+
+            if (
+                Number.isNaN(
+                    currentQuantity
+                )
+            ) {
+
+                console.error(
+                    "Current quantity is invalid."
+                );
+
+                return;
+
+            }
+
+
+            // -----------------------------------------
+            // DECREASE
+            // -----------------------------------------
+
+            if (
+                button.id ===
+                "decreaseQuantity"
+            ) {
+
+                if (
+                    currentQuantity <= 1
+                ) {
+
+                    return;
+
+                }
+
+
+                updateQuantity(
+                    cartItemId,
+                    currentQuantity - 1
+                );
+
+                return;
+
+            }
+
+
+            // -----------------------------------------
+            // INCREASE
+            // -----------------------------------------
+
+            if (
+                button.id ===
+                "increaseQuantity"
+            ) {
+
+                if (
+                    currentQuantity >=
+                    availableStock
+                ) {
+
+                    return;
+
+                }
+
+
+                updateQuantity(
+                    cartItemId,
+                    currentQuantity + 1
+                );
+
+            }
+
+        }
+    );
+
+
+    // =========================================================
+    // UPDATE QUANTITY
+    // =========================================================
 
     async function updateQuantity(
         cartItemId,
@@ -342,30 +443,37 @@ if (cartAction) {
                 response.data;
 
 
-            const cartItem =
-                cart.items.find(
-                    function (item) {
+            if (
+                cart &&
+                Array.isArray(cart.items)
+            ) {
 
-                        return (
-                            item.medicine_id ===
-                            medicineId
-                        );
+                const cartItem =
+                    cart.items.find(
+                        function (item) {
 
-                    }
-                );
+                            return (
+                                String(item.medicine_id) ===
+                                String(medicineId)
+                            );
+
+                        }
+                    );
 
 
-            if (cartItem) {
+                if (cartItem) {
 
-                showQuantityControl(
-                    cartItem.id,
-                    cartItem.quantity
-                );
+                    showQuantityControl(
+                        cartItem.id,
+                        cartItem.quantity
+                    );
+
+                }
+
+
+                updateNavbarCartCount(cart);
 
             }
-
-
-            updateNavbarCartCount(cart);
 
 
         } catch (error) {
@@ -376,20 +484,22 @@ if (cartAction) {
             );
 
 
-            
-
             showCartMessage(
                 error.message ||
                 "Unable to update quantity."
             );
 
 
-           
             await loadMedicineCart();
 
         }
 
     }
+
+
+    // =========================================================
+    // NAVBAR CART COUNT
+    // =========================================================
 
     function updateNavbarCartCount(cart) {
 
@@ -406,7 +516,7 @@ if (cartAction) {
 
         if (
             !cart ||
-            !cart.items
+            !Array.isArray(cart.items)
         ) {
 
             cartCount.textContent =
@@ -426,7 +536,7 @@ if (cartAction) {
 
                     return (
                         total +
-                        item.quantity
+                        Number(item.quantity || 0)
                     );
 
                 },
@@ -439,6 +549,10 @@ if (cartAction) {
 
     }
 
+
+    // =========================================================
+    // CART MESSAGE
+    // =========================================================
 
     function showCartMessage(message) {
 
@@ -455,8 +569,10 @@ if (cartAction) {
                     "p"
                 );
 
+
             messageElement.id =
                 "cartActionMessage";
+
 
             messageElement.className =
                 "cart-action-message";

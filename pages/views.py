@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
+from medicine.models import Medicine
 
 
 
@@ -81,4 +82,32 @@ def pharmacist_inventory_page(request):
     return render(
         request,
         "pharmacist/inventory.html",
+    )
+
+def medicine_detail_page(request, pk):
+
+    medicine = get_object_or_404(
+        Medicine.objects
+        .select_related("category")
+        .prefetch_related("inventories"),
+        pk=pk,
+    )
+
+    active_inventory = (
+        medicine.inventories
+        .filter(
+            is_available=True,
+            stock__gt=0,
+        )
+        .order_by("expiry_date")
+        .first()
+    )
+
+    return render(
+        request,
+        "medicines/medicine_detail.html",
+        {
+            "medicine": medicine,
+            "active_inventory": active_inventory,
+        },
     )
