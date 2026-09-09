@@ -85,6 +85,7 @@ class MedicineDetailSerializer(serializers.ModelSerializer):
             "manufacturer",
             "description",
             "requires_prescription",
+            "is_active",
             "image",
             "inventories",
             "available_stock",
@@ -124,7 +125,28 @@ class MedicineCreateUpdateSerializer(
             "image",
         )
 
+# =========================================================
+# PHARMACIST — UPDATE MEDICINE
+# =========================================================
 
+class PharmacistMedicineUpdateSerializer(
+    serializers.ModelSerializer
+):
+
+    class Meta:
+        model = Medicine
+
+        fields = (
+            "category",
+            "brand_name",
+            "generic_name",
+            "strength",
+            "manufacturer",
+            "description",
+            "requires_prescription",
+            "image",
+            "is_active",
+        )
 # =========================================================
 # PHARMACIST — INVENTORY
 # =========================================================

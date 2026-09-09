@@ -13,6 +13,7 @@ from .serializers import (
     PharmacistCreateProductSerializer,
     PharmacistInventoryUpdateSerializer,
     PharmacistCreateBatchSerializer,
+    PharmacistMedicineUpdateSerializer,
 )
 
 from django.shortcuts import render
@@ -27,11 +28,11 @@ from orders.permissions import IsPharmacistOrAdmin
 class MedicineListAPIView(generics.ListAPIView):
 
     queryset = (
-        Medicine.objects
-        .select_related("category")
-        .prefetch_related("inventories")
-        .all()
-    )
+    Medicine.objects
+    .select_related("category")
+    .prefetch_related("inventories")
+    .filter(is_active=True)
+)
 
     serializer_class = MedicineListSerializer
 
@@ -75,11 +76,11 @@ class MedicineDetailAPIView(
 ):
 
     queryset = (
-        Medicine.objects
-        .select_related("category")
-        .prefetch_related("inventories")
-        .all()
-    )
+    Medicine.objects
+    .select_related("category")
+    .prefetch_related("inventories")
+    .filter(is_active=True)
+)
 
     serializer_class = MedicineDetailSerializer
 
@@ -119,7 +120,10 @@ def medicine_detail_page(request, pk):
         Medicine.objects
         .select_related("category")
         .prefetch_related("inventories")
-        .get(pk=pk)
+        .get(
+            pk=pk,
+            is_active=True
+        )
     )
 
     return render(
@@ -307,4 +311,68 @@ class PharmacistCategoryCreateAPIView(
 
     permission_classes = [
         IsPharmacistOrAdmin
+    ]
+
+# =========================================================
+# PHARMACIST — MEDICINE LIST
+# =========================================================
+
+class PharmacistMedicineListAPIView(
+    generics.ListAPIView
+):
+
+    queryset = (
+        Medicine.objects
+        .select_related("category")
+        .prefetch_related("inventories")
+        .all()
+    )
+
+    serializer_class = MedicineDetailSerializer
+
+    permission_classes = [
+        IsPharmacistOrAdmin
+    ]
+
+# =========================================================
+# PHARMACIST — MEDICINE DETAIL
+# =========================================================
+
+class PharmacistMedicineDetailAPIView(
+    generics.RetrieveAPIView
+):
+
+    queryset = (
+        Medicine.objects
+        .select_related("category")
+        .prefetch_related("inventories")
+        .all()
+    )
+
+    serializer_class = MedicineDetailSerializer
+
+    permission_classes = [
+        IsPharmacistOrAdmin
+    ]
+# =========================================================
+# PHARMACIST — UPDATE MEDICINE
+# =========================================================
+
+class PharmacistMedicineUpdateAPIView(
+    generics.UpdateAPIView
+):
+
+    queryset = Medicine.objects.all()
+
+    serializer_class = (
+        PharmacistMedicineUpdateSerializer
+    )
+
+    permission_classes = [
+        IsPharmacistOrAdmin
+    ]
+
+    http_method_names = [
+        "patch",
+        "put",
     ]

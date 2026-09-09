@@ -25,6 +25,7 @@ class Medicine(models.Model):
     manufacturer=models.CharField(max_length=150)
     description=models.TextField(blank=True)
     requires_prescription = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     image = models.ImageField(upload_to="medicines/",blank=True,null=True,)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,0 +1,309 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}
+Medicines | MediBridge Pharmacy
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/pharmacist_medicines.css' %}"
+>
+{% endblock %}
+
+{% block content %}
+
+<section class="medicines-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="medicines-page-header">
+
+        <div class="medicines-page-heading">
+
+            <span class="medicines-page-eyebrow">
+                PRODUCT CATALOG
+            </span>
+
+            <h1>
+                Medicines
+            </h1>
+
+            <p>
+                View and manage the medicines available in your pharmacy.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="medicines-stat-grid">
+
+        <div class="medicine-stat-card">
+
+            <span class="medicine-stat-label">
+                Total Medicines
+            </span>
+
+            <strong id="totalMedicines">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="medicine-stat-card">
+
+            <span class="medicine-stat-label">
+                Enabled
+            </span>
+
+            <strong id="enabledMedicines">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="medicine-stat-card">
+
+            <span class="medicine-stat-label">
+                Disabled
+            </span>
+
+            <strong id="disabledMedicines">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="medicine-stat-card">
+
+            <span class="medicine-stat-label">
+                Prescription Required
+            </span>
+
+            <strong id="prescriptionMedicines">
+                —
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+    ====================================================== -->
+
+    <div class="medicines-toolbar">
+
+        <div class="medicines-search">
+
+            <span class="medicines-search-icon">
+                ⌕
+            </span>
+
+            <input
+                type="text"
+                id="medicineSearch"
+                placeholder="Search medicine, generic name or manufacturer..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div class="medicines-filter">
+
+            <select id="medicineCategoryFilter">
+
+                <option value="ALL">
+                    All Categories
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="medicines-filter">
+
+            <select id="medicinePrescriptionFilter">
+
+                <option value="ALL">
+                    All Medicines
+                </option>
+
+                <option value="PRESCRIPTION">
+                    Prescription Required
+                </option>
+
+                <option value="OTC">
+                    OTC
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="medicines-filter">
+
+            <select id="medicineStatusFilter">
+
+                <option value="ALL">
+                    All Status
+                </option>
+
+                <option value="ENABLED">
+                    Enabled
+                </option>
+
+                <option value="DISABLED">
+                    Disabled
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RESULTS
+    ====================================================== -->
+
+    <div
+        id="medicineResults"
+        class="medicine-results"
+    ></div>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        id="medicineLoading"
+        class="medicine-state medicine-loading"
+    >
+
+        <div class="medicine-loading-spinner"></div>
+
+        <p>
+            Loading medicines...
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <div
+        id="medicineError"
+        class="medicine-state medicine-error"
+        style="display: none;"
+    ></div>
+
+
+    <!-- =====================================================
+         EMPTY
+    ====================================================== -->
+
+    <div
+        id="medicineEmpty"
+        class="medicine-state medicine-empty"
+        style="display: none;"
+    >
+
+        <div class="medicine-empty-icon">
+            💊
+        </div>
+
+        <h3>
+            No medicines found
+        </h3>
+
+        <p>
+            Try changing your search or filters.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MEDICINE TABLE
+    ====================================================== -->
+
+    <div
+        id="medicineTableWrapper"
+        class="medicines-table-wrapper"
+        style="display: none;"
+    >
+
+        <table class="medicines-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Medicine
+                    </th>
+
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Prescription
+                    </th>
+
+                    <th>
+                        Stock
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="medicineTableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/pharmacist_medicines.js' %}"></script>
+
+{% endblock %}

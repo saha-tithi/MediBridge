@@ -1,0 +1,357 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}
+Medicine Details | MediBridge Pharmacy
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/pharmacist_medicine_detail.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="pharmacist-medicine-detail-page">
+
+   
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="medicine-detail-header">
+
+        <div>
+
+            <span class="medicine-detail-eyebrow">
+                MEDICINE DETAILS
+            </span>
+
+            <h1 id="medicineDetailName">
+                —
+            </h1>
+
+            <p id="medicineDetailSubtitle">
+                —
+            </p>
+
+        </div>
+
+
+        <div
+            id="medicineDetailStatus"
+            class="medicine-detail-status"
+        >
+            —
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        id="medicineDetailLoading"
+        class="medicine-detail-state medicine-detail-loading"
+    >
+
+        <div class="medicine-detail-spinner"></div>
+
+        <p>
+            Loading medicine details...
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <div
+        id="medicineDetailError"
+        class="medicine-detail-state medicine-detail-error"
+        style="display: none;"
+    ></div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <div
+        id="medicineDetailContent"
+        class="medicine-detail-content"
+        style="display: none;"
+    >
+
+
+        <!-- =================================================
+             MEDICINE INFORMATION
+        ================================================== -->
+
+        <div class="medicine-detail-card">
+
+            <div class="medicine-detail-card-header">
+
+                <div>
+
+                    <span class="medicine-detail-card-label">
+                        PRODUCT INFORMATION
+                    </span>
+
+                    <h2>
+                        Medicine Information
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="medicine-detail-main">
+
+
+                <!-- IMAGE -->
+
+                <div class="medicine-detail-image-wrapper">
+
+                    <div
+                        id="medicineDetailImage"
+                        class="medicine-detail-image"
+                    ></div>
+
+                </div>
+
+
+                <!-- INFORMATION -->
+
+                <div class="medicine-detail-info-grid">
+
+
+                    <div class="medicine-detail-info-item">
+
+                        <span>
+                            Brand Name
+                        </span>
+
+                        <strong id="detailBrandName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="medicine-detail-info-item">
+
+                        <span>
+                            Generic Name
+                        </span>
+
+                        <strong id="detailGenericName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="medicine-detail-info-item">
+
+                        <span>
+                            Strength
+                        </span>
+
+                        <strong id="detailStrength">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="medicine-detail-info-item">
+
+                        <span>
+                            Manufacturer
+                        </span>
+
+                        <strong id="detailManufacturer">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="medicine-detail-info-item">
+
+                        <span>
+                            Category
+                        </span>
+
+                        <strong id="detailCategory">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="medicine-detail-info-item">
+
+                        <span>
+                            Prescription
+                        </span>
+
+                        <strong id="detailPrescription">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div
+                id="medicineDetailDescriptionWrapper"
+                class="medicine-detail-description"
+                style="display: none;"
+            >
+
+                <span>
+                    Description
+                </span>
+
+                <p id="medicineDetailDescription"></p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             INVENTORY SUMMARY
+        ================================================== -->
+
+        <div class="medicine-detail-card">
+
+            <div class="medicine-detail-card-header">
+
+                <div>
+
+                    <span class="medicine-detail-card-label">
+                        INVENTORY
+                    </span>
+
+                    <h2>
+                        Inventory Summary
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="/pharmacist/inventory/"
+                    class="medicine-detail-secondary-button"
+                >
+                    View Inventory
+                </a>
+
+            </div>
+
+
+            <div class="medicine-detail-summary-grid">
+
+
+                <div class="medicine-summary-item">
+
+                    <span>
+                        Total Stock
+                    </span>
+
+                    <strong id="detailTotalStock">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="medicine-summary-item">
+
+                    <span>
+                        Active Batches
+                    </span>
+
+                    <strong id="detailActiveBatches">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="medicine-summary-item">
+
+                    <span>
+                        Expiring Soon
+                    </span>
+
+                    <strong id="detailExpiringSoon">
+                        —
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="medicine-detail-actions">
+
+            <button
+                type="button"
+                id="editMedicineButton"
+                class="medicine-detail-primary-button"
+            >
+                Edit Medicine
+            </button>
+
+
+            <button
+                type="button"
+                id="toggleMedicineButton"
+                class="medicine-detail-danger-button"
+            >
+                Disable Medicine
+            </button>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/pharmacist_medicine_detail.js' %}"></script>
+
+{% endblock %}

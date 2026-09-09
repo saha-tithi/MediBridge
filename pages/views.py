@@ -111,3 +111,13 @@ def medicine_detail_page(request, pk):
             "active_inventory": active_inventory,
         },
     )
+def pharmacist_medicines_page(request):
+    return render(
+        request,
+        "pharmacist/medicines.html"
+    )
+def pharmacist_medicine_detail_page(request, pk):
+    return render(
+        request,
+        "pharmacist/medicine_detail.html"
+    )
