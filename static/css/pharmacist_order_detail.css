@@ -807,3 +807,277 @@
         align-self: flex-start;
     }
 }
+/* =========================================================
+   ORDER DETAIL CUSTOM DIALOGS
+========================================================= */
+
+.medicine-confirm-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.medicine-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(24, 59, 54, 0.38);
+    backdrop-filter: blur(2px);
+}
+
+.medicine-confirm-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 410px;
+    padding: 26px;
+    border: 1px solid #e2ebe8;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 18px 50px rgba(35, 76, 69, 0.16);
+    animation: orderConfirmIn 0.2s ease;
+}
+
+@keyframes orderConfirmIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.medicine-confirm-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1f8f5;
+    color: #3b9b7a;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.medicine-confirm-content h3 {
+    margin: 0;
+    color: #294640;
+    font-size: 18px;
+    font-weight: 650;
+}
+
+.medicine-confirm-content p {
+    margin: 8px 0 0;
+    color: #718884;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   INPUT DIALOG
+========================================================= */
+
+.medicine-input-card {
+    max-width: 470px;
+}
+
+.medicine-dialog-input {
+    width: 100%;
+    min-height: 100px;
+    margin-top: 20px;
+    padding: 11px 12px;
+    border: 1px solid #dce8e5;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #294640;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.medicine-dialog-input::placeholder {
+    color: #a0afac;
+}
+
+.medicine-dialog-input:focus {
+    border-color: #74b59f;
+    box-shadow: 0 0 0 3px rgba(59, 155, 122, 0.09);
+}
+
+.medicine-dialog-input-error {
+    min-height: 18px;
+    margin-top: 6px;
+    color: #b56d6d;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   DIALOG ACTIONS
+========================================================= */
+
+.medicine-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.medicine-confirm-cancel,
+.medicine-confirm-primary {
+    height: 39px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.medicine-confirm-cancel {
+    border: 1px solid #d7e4e1;
+    background: #ffffff;
+    color: #5f7973;
+}
+
+.medicine-confirm-cancel:hover {
+    background: #f5faf8;
+}
+
+.medicine-confirm-primary {
+    border: 1px solid #3b9b7a;
+    background: #3b9b7a;
+    color: #ffffff;
+}
+
+.medicine-confirm-primary:hover {
+    background: #32896b;
+    border-color: #32896b;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.medicine-toast {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 4000;
+    min-width: 300px;
+    max-width: 420px;
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border: 1px solid #dce9e5;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(35, 76, 69, 0.13);
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+.medicine-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.medicine-toast-icon {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef8f3;
+    color: #3b9b7a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.medicine-toast.error {
+    border-color: #eadede;
+}
+
+.medicine-toast.error .medicine-toast-icon {
+    background: #fcf3f3;
+    color: #b56d6d;
+}
+
+.medicine-toast-message {
+    flex: 1;
+    color: #435f59;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.medicine-toast-close {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: #91a29e;
+    font-family: inherit;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.medicine-toast-close:hover {
+    color: #526d67;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .medicine-confirm-dialog {
+        padding: 16px;
+    }
+
+    .medicine-confirm-card {
+        padding: 22px;
+    }
+
+    .medicine-confirm-actions {
+        flex-direction: column-reverse;
+    }
+
+    .medicine-confirm-cancel,
+    .medicine-confirm-primary {
+        width: 100%;
+    }
+
+    .medicine-toast {
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+        min-width: 0;
+        max-width: none;
+    }
+}

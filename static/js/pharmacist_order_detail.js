@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =====================================================
        GET ORDER ID FROM URL
-       ===================================================== */
+    ===================================================== */
 
     const pathParts = window.location.pathname
         .split("/")
@@ -153,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderPrescriptions(order);
 
         renderActions(order);
-
     }
 
 
@@ -370,7 +369,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 prescriptionActions.style.display =
                     "none";
-
             }
 
             return;
@@ -412,10 +410,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const fileUrl =
             prescription.file_url;
 
-
         const status =
             prescription.status || "PENDING";
-
 
         const statusClass =
             status === "VERIFIED"
@@ -423,7 +419,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 : status === "REJECTED"
                     ? "rejected"
                     : "";
-
 
         const statusText =
             status === "VERIFIED"
@@ -528,8 +523,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
-        }
-        else {
+        } else {
 
             prescriptionActions.style.display =
                 "none";
@@ -565,18 +559,15 @@ document.addEventListener("DOMContentLoaded", function () {
             prescriptionStatus.textContent =
                 "Rejected";
 
-        }
-        else if (allVerified) {
+        } else if (allVerified) {
 
             prescriptionStatus.textContent =
                 "Verified";
 
-        }
-        else {
+        } else {
 
             prescriptionStatus.textContent =
                 "Attached";
-
         }
     }
 
@@ -648,61 +639,67 @@ document.addEventListener("DOMContentLoaded", function () {
         let pharmacistNote = "";
 
 
+        /*
+         * REJECT
+         */
+
         if (newStatus === "REJECTED") {
 
-            pharmacistNote =
-                window.prompt(
-                    "Enter a reason for rejecting the prescription:"
+            const result =
+                await showMedicineInputDialog(
+                    "Reject Prescription",
+                    "Please provide a reason for rejecting this prescription.",
+                    "Enter rejection reason...",
+                    true
                 );
 
 
-            if (pharmacistNote === null) {
+            if (!result.confirmed) {
 
                 return;
             }
 
 
             pharmacistNote =
-                pharmacistNote.trim();
+                result.value.trim();
 
 
             if (!pharmacistNote) {
 
-                showActionError(
-                    "Please provide a reason for rejecting the prescription."
+                showMedicineToast(
+                    "Please provide a reason for rejecting the prescription.",
+                    "error"
                 );
 
                 return;
             }
 
         }
+
+
+        /*
+         * VERIFY
+         */
+
         else {
 
-            const confirmed =
-                window.confirm(
-                    "Verify this prescription?"
+            const result =
+                await showMedicineInputDialog(
+                    "Verify Prescription",
+                    "Confirm that you have reviewed and approved the attached prescription.",
+                    "Add an optional note...",
+                    false
                 );
 
 
-            if (!confirmed) {
+            if (!result.confirmed) {
 
                 return;
             }
 
 
             pharmacistNote =
-                window.prompt(
-                    "Add an optional note:",
-                    ""
-                );
-
-
-            if (pharmacistNote === null) {
-
-                pharmacistNote = "";
-
-            }
-
+                result.value.trim();
         }
 
 
@@ -710,7 +707,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             verifyPrescriptionButton.disabled =
                 true;
-
         }
 
 
@@ -718,19 +714,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             rejectPrescriptionButton.disabled =
                 true;
-
         }
 
 
         try {
 
             /*
-             * At the moment all attached order items
-             * should point to the same uploaded
-             * prescription.
-             *
-             * We therefore update each pending
-             * prescription returned by the order.
+             * Update every pending prescription
+             * attached to this order.
              */
 
             for (
@@ -758,11 +749,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             /*
-             * Reload the order so the UI gets the
-             * latest prescription status.
+             * Reload order.
              */
 
             await loadOrder();
+
+
+            showMedicineToast(
+                newStatus === "VERIFIED"
+                    ? "Prescription verified successfully."
+                    : "Prescription rejected successfully.",
+                "success"
+            );
 
 
         } catch (error) {
@@ -773,9 +771,10 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            showActionError(
+            showMedicineToast(
                 error.message ||
-                "Unable to update the prescription."
+                "Unable to update the prescription.",
+                "error"
             );
 
 
@@ -783,7 +782,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 verifyPrescriptionButton.disabled =
                     false;
-
             }
 
 
@@ -791,9 +789,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 rejectPrescriptionButton.disabled =
                     false;
-
             }
-
         }
 
     }
@@ -812,8 +808,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         /*
          * PLACED
-         *
-         * Pharmacist can process the order.
          */
 
         if (status === "PLACED") {
@@ -945,9 +939,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     No further action is available.
                 </div>
             `;
-
         }
-
     }
 
 
@@ -969,8 +961,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const confirmed =
-            window.confirm(
-                "Process this order?"
+            await showMedicineConfirm(
+                "Process Order?",
+                "The order will be moved to processing after stock and prescription checks."
             );
 
 
@@ -1003,6 +996,12 @@ document.addEventListener("DOMContentLoaded", function () {
             renderOrder(currentOrder);
 
 
+            showMedicineToast(
+                "Order is now being processed.",
+                "success"
+            );
+
+
         } catch (error) {
 
             console.error(
@@ -1017,13 +1016,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Process order";
 
 
-            showActionError(
+            showMedicineToast(
                 error.message ||
-                "Unable to process this order."
+                "Unable to process this order.",
+                "error"
             );
-
         }
-
     }
 
 
@@ -1045,8 +1043,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!newStatus) {
 
-            showActionError(
-                "Please select a status."
+            showMedicineToast(
+                "Please select a status.",
+                "error"
             );
 
             return;
@@ -1054,10 +1053,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const confirmed =
-            window.confirm(
-                `Mark this order as ${formatStatus(
-                    newStatus
-                )}?`
+            await showMedicineConfirm(
+                `Mark Order as ${formatStatus(newStatus)}?`,
+                `The order status will be changed to ${formatStatus(newStatus)}.`
             );
 
 
@@ -1097,6 +1095,12 @@ document.addEventListener("DOMContentLoaded", function () {
             renderOrder(currentOrder);
 
 
+            showMedicineToast(
+                `Order marked as ${formatStatus(newStatus)}.`,
+                "success"
+            );
+
+
         } catch (error) {
 
             console.error(
@@ -1105,9 +1109,10 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            showActionError(
+            showMedicineToast(
                 error.message ||
-                "Unable to update order status."
+                "Unable to update order status.",
+                "error"
             );
 
         } finally {
@@ -1118,7 +1123,595 @@ document.addEventListener("DOMContentLoaded", function () {
             updateStatusButton.textContent =
                 "Update status";
         }
+    }
 
+
+    /* =====================================================
+       CUSTOM CONFIRMATION DIALOG
+       ===================================================== */
+
+    function showMedicineConfirm(
+        title,
+        message
+    ) {
+
+        return new Promise(
+            function (resolve) {
+
+                const existingDialog =
+                    document.getElementById(
+                        "medicineConfirmDialog"
+                    );
+
+
+                if (existingDialog) {
+                    existingDialog.remove();
+                }
+
+
+                const dialog =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                dialog.id =
+                    "medicineConfirmDialog";
+
+                dialog.className =
+                    "medicine-confirm-dialog";
+
+
+                dialog.innerHTML = `
+
+                    <div class="medicine-confirm-overlay"></div>
+
+                    <div
+                        class="medicine-confirm-card"
+                        role="dialog"
+                        aria-modal="true"
+                    >
+
+                        <div class="medicine-confirm-icon">
+                            <span>!</span>
+                        </div>
+
+
+                        <div class="medicine-confirm-content">
+
+                            <h3>
+                                ${escapeHtml(title)}
+                            </h3>
+
+                            <p>
+                                ${escapeHtml(message)}
+                            </p>
+
+                        </div>
+
+
+                        <div class="medicine-confirm-actions">
+
+                            <button
+                                type="button"
+                                class="medicine-confirm-cancel"
+                                id="medicineConfirmCancel"
+                            >
+                                Cancel
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="medicine-confirm-primary"
+                                id="medicineConfirmProceed"
+                            >
+                                Confirm
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+
+                document.body.appendChild(
+                    dialog
+                );
+
+
+                document.body.style.overflow =
+                    "hidden";
+
+
+                const cancelButton =
+                    document.getElementById(
+                        "medicineConfirmCancel"
+                    );
+
+
+                const proceedButton =
+                    document.getElementById(
+                        "medicineConfirmProceed"
+                    );
+
+
+                const overlay =
+                    dialog.querySelector(
+                        ".medicine-confirm-overlay"
+                    );
+
+
+                function finish(
+                    result
+                ) {
+
+                    dialog.remove();
+
+                    document.body.style.overflow =
+                        "";
+
+                    resolve(result);
+                }
+
+
+                cancelButton.addEventListener(
+                    "click",
+                    function () {
+
+                        finish(false);
+
+                    }
+                );
+
+
+                proceedButton.addEventListener(
+                    "click",
+                    function () {
+
+                        finish(true);
+
+                    }
+                );
+
+
+                overlay.addEventListener(
+                    "click",
+                    function () {
+
+                        finish(false);
+
+                    }
+                );
+
+
+                function handleEscape(
+                    event
+                ) {
+
+                    if (
+                        event.key === "Escape"
+                    ) {
+
+                        document.removeEventListener(
+                            "keydown",
+                            handleEscape
+                        );
+
+                        finish(false);
+                    }
+                }
+
+
+                document.addEventListener(
+                    "keydown",
+                    handleEscape
+                );
+
+
+                proceedButton.focus();
+            }
+        );
+    }
+
+
+    /* =====================================================
+       CUSTOM INPUT DIALOG
+       ===================================================== */
+
+    function showMedicineInputDialog(
+        title,
+        message,
+        placeholder,
+        required
+    ) {
+
+        return new Promise(
+            function (resolve) {
+
+                const existingDialog =
+                    document.getElementById(
+                        "medicineInputDialog"
+                    );
+
+
+                if (existingDialog) {
+                    existingDialog.remove();
+                }
+
+
+                const dialog =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                dialog.id =
+                    "medicineInputDialog";
+
+                dialog.className =
+                    "medicine-confirm-dialog";
+
+
+                dialog.innerHTML = `
+
+                    <div class="medicine-confirm-overlay"></div>
+
+
+                    <div
+                        class="medicine-confirm-card medicine-input-card"
+                        role="dialog"
+                        aria-modal="true"
+                    >
+
+                        <div class="medicine-confirm-icon">
+                            <span>✎</span>
+                        </div>
+
+
+                        <div class="medicine-confirm-content">
+
+                            <h3>
+                                ${escapeHtml(title)}
+                            </h3>
+
+                            <p>
+                                ${escapeHtml(message)}
+                            </p>
+
+                        </div>
+
+
+                        <textarea
+                            id="medicineDialogInput"
+                            class="medicine-dialog-input"
+                            placeholder="${escapeHtml(placeholder)}"
+                            rows="4"
+                        ></textarea>
+
+
+                        <div
+                            id="medicineDialogInputError"
+                            class="medicine-dialog-input-error"
+                        ></div>
+
+
+                        <div class="medicine-confirm-actions">
+
+                            <button
+                                type="button"
+                                class="medicine-confirm-cancel"
+                                id="medicineInputCancel"
+                            >
+                                Cancel
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="medicine-confirm-primary"
+                                id="medicineInputConfirm"
+                            >
+                                ${
+                                    required
+                                        ? "Reject Prescription"
+                                        : "Verify Prescription"
+                                }
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+
+                document.body.appendChild(
+                    dialog
+                );
+
+
+                document.body.style.overflow =
+                    "hidden";
+
+
+                const input =
+                    document.getElementById(
+                        "medicineDialogInput"
+                    );
+
+
+                const inputError =
+                    document.getElementById(
+                        "medicineDialogInputError"
+                    );
+
+
+                const cancelButton =
+                    document.getElementById(
+                        "medicineInputCancel"
+                    );
+
+
+                const confirmButton =
+                    document.getElementById(
+                        "medicineInputConfirm"
+                    );
+
+
+                const overlay =
+                    dialog.querySelector(
+                        ".medicine-confirm-overlay"
+                    );
+
+
+                function finish(
+                    confirmed
+                ) {
+
+                    const value =
+                        input.value.trim();
+
+
+                    dialog.remove();
+
+                    document.body.style.overflow =
+                        "";
+
+
+                    document.removeEventListener(
+                        "keydown",
+                        handleEscape
+                    );
+
+
+                    resolve({
+                        confirmed: confirmed,
+                        value: value
+                    });
+                }
+
+
+                confirmButton.addEventListener(
+                    "click",
+                    function () {
+
+                        const value =
+                            input.value.trim();
+
+
+                        if (
+                            required &&
+                            !value
+                        ) {
+
+                            inputError.textContent =
+                                "A rejection reason is required.";
+
+                            input.focus();
+
+                            return;
+                        }
+
+
+                        finish(true);
+
+                    }
+                );
+
+
+                cancelButton.addEventListener(
+                    "click",
+                    function () {
+
+                        finish(false);
+
+                    }
+                );
+
+
+                overlay.addEventListener(
+                    "click",
+                    function () {
+
+                        finish(false);
+
+                    }
+                );
+
+
+                function handleEscape(
+                    event
+                ) {
+
+                    if (
+                        event.key === "Escape"
+                    ) {
+
+                        finish(false);
+                    }
+                }
+
+
+                document.addEventListener(
+                    "keydown",
+                    handleEscape
+                );
+
+
+                input.addEventListener(
+                    "input",
+                    function () {
+
+                        inputError.textContent =
+                            "";
+
+                    }
+                );
+
+
+                input.focus();
+            }
+        );
+    }
+
+
+    /* =====================================================
+       CUSTOM TOAST
+       ===================================================== */
+
+    function showMedicineToast(
+        message,
+        type = "success"
+    ) {
+
+        const existingToast =
+            document.getElementById(
+                "medicineToast"
+            );
+
+
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+
+        const toast =
+            document.createElement(
+                "div"
+            );
+
+
+        toast.id =
+            "medicineToast";
+
+        toast.className =
+            `medicine-toast ${type}`;
+
+
+        const icon =
+            type === "success"
+                ? "✓"
+                : "×";
+
+
+        toast.innerHTML = `
+
+            <span class="medicine-toast-icon">
+                ${icon}
+            </span>
+
+
+            <span class="medicine-toast-message">
+                ${escapeHtml(message)}
+            </span>
+
+
+            <button
+                type="button"
+                class="medicine-toast-close"
+                aria-label="Close notification"
+            >
+                ×
+            </button>
+
+        `;
+
+
+        document.body.appendChild(
+            toast
+        );
+
+
+        requestAnimationFrame(
+            function () {
+
+                toast.classList.add(
+                    "show"
+                );
+
+            }
+        );
+
+
+        const closeButton =
+            toast.querySelector(
+                ".medicine-toast-close"
+            );
+
+
+        closeButton.addEventListener(
+            "click",
+            function () {
+
+                removeMedicineToast(
+                    toast
+                );
+
+            }
+        );
+
+
+        setTimeout(
+            function () {
+
+                removeMedicineToast(
+                    toast
+                );
+
+            },
+            3500
+        );
+    }
+
+
+    /* =====================================================
+       REMOVE TOAST
+       ===================================================== */
+
+    function removeMedicineToast(
+        toast
+    ) {
+
+        if (!toast) {
+            return;
+        }
+
+
+        toast.classList.remove(
+            "show"
+        );
+
+
+        setTimeout(
+            function () {
+
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+
+            },
+            250
+        );
     }
 
 
@@ -1343,12 +1936,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function showActionError(message) {
-
-        window.alert(message);
-    }
-
-
     /* =====================================================
        BASIC HTML ESCAPING
        ===================================================== */
@@ -1356,11 +1943,26 @@ document.addEventListener("DOMContentLoaded", function () {
     function escapeHtml(value) {
 
         return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
     }
 
 

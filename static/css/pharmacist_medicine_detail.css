@@ -486,3 +486,529 @@
     }
 
 }
+/* =========================================================
+   EDIT MEDICINE MODAL
+========================================================= */
+
+.medicine-edit-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.medicine-edit-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(24, 59, 54, 0.38);
+    backdrop-filter: blur(2px);
+}
+
+.medicine-edit-modal-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 720px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #e1ebe8;
+    border-radius: 16px;
+    box-shadow: 0 18px 50px rgba(35, 76, 69, 0.16);
+    animation: medicineEditModalIn 0.2s ease;
+}
+
+@keyframes medicineEditModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.medicine-edit-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 24px;
+    border-bottom: 1px solid #edf2f1;
+}
+
+.medicine-edit-modal-header h2 {
+    margin: 0;
+    color: #294640;
+    font-size: 21px;
+    font-weight: 650;
+}
+
+.medicine-edit-modal-header p {
+    margin: 6px 0 0;
+    color: #81938f;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.medicine-edit-modal-close {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dfe9e6;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #718884;
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.medicine-edit-modal-close:hover {
+    background: #f5faf8;
+    border-color: #cbded8;
+    color: #3b806d;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+#editMedicineForm {
+    padding: 24px;
+}
+
+.medicine-edit-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+}
+
+.medicine-edit-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.medicine-edit-field label {
+    margin-bottom: 7px;
+    color: #526d67;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.medicine-edit-field input,
+.medicine-edit-field select,
+.medicine-edit-field textarea {
+    width: 100%;
+    border: 1px solid #dce8e5;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #294640;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.medicine-edit-field input,
+.medicine-edit-field select {
+    height: 42px;
+    padding: 0 12px;
+}
+
+.medicine-edit-field textarea {
+    min-height: 115px;
+    padding: 11px 12px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.medicine-edit-field input::placeholder,
+.medicine-edit-field textarea::placeholder {
+    color: #a0afac;
+}
+
+.medicine-edit-field input:focus,
+.medicine-edit-field select:focus,
+.medicine-edit-field textarea:focus {
+    border-color: #74b59f;
+    box-shadow: 0 0 0 3px rgba(59, 155, 122, 0.09);
+}
+
+.medicine-edit-description-field {
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.medicine-edit-message {
+    margin-top: 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #f6faf8;
+    color: #438f72;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.medicine-edit-message.error {
+    background: #fcf6f6;
+    color: #b56d6d;
+}
+
+
+/* =========================================================
+   MODAL ACTIONS
+========================================================= */
+
+.medicine-edit-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #edf2f1;
+}
+
+.medicine-edit-cancel-button,
+.medicine-edit-save-button {
+    height: 40px;
+    padding: 0 17px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.medicine-edit-cancel-button {
+    border: 1px solid #d7e4e1;
+    background: #ffffff;
+    color: #5f7973;
+}
+
+.medicine-edit-cancel-button:hover {
+    background: #f5faf8;
+    border-color: #c5d9d3;
+}
+
+.medicine-edit-save-button {
+    min-width: 125px;
+    border: 1px solid #3b9b7a;
+    background: #3b9b7a;
+    color: #ffffff;
+}
+
+.medicine-edit-save-button:hover {
+    background: #32896b;
+    border-color: #32896b;
+}
+
+.medicine-edit-cancel-button:active,
+.medicine-edit-save-button:active {
+    transform: translateY(1px);
+}
+
+.medicine-edit-save-button:disabled,
+.medicine-edit-cancel-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   MODAL RESPONSIVE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .medicine-edit-modal {
+        padding: 14px;
+    }
+
+    .medicine-edit-modal-card {
+        max-height: calc(100vh - 28px);
+        border-radius: 13px;
+    }
+
+    .medicine-edit-modal-header {
+        padding: 18px;
+    }
+
+    #editMedicineForm {
+        padding: 18px;
+    }
+
+    .medicine-edit-form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .medicine-edit-description-field {
+        margin-top: 16px;
+    }
+
+    .medicine-edit-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .medicine-edit-cancel-button,
+    .medicine-edit-save-button {
+        width: 100%;
+    }
+}
+/* =========================================================
+   MEDICINE CONFIRMATION DIALOG
+========================================================= */
+
+.medicine-confirm-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.medicine-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(24, 59, 54, 0.38);
+    backdrop-filter: blur(2px);
+}
+
+.medicine-confirm-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 410px;
+    padding: 26px;
+    border: 1px solid #e2ebe8;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 18px 50px rgba(35, 76, 69, 0.16);
+    animation: medicineConfirmIn 0.2s ease;
+}
+
+@keyframes medicineConfirmIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.medicine-confirm-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1f8f5;
+    color: #3b9b7a;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.medicine-confirm-content h3 {
+    margin: 0;
+    color: #294640;
+    font-size: 18px;
+    font-weight: 650;
+}
+
+.medicine-confirm-content p {
+    margin: 8px 0 0;
+    color: #718884;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.medicine-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 24px;
+}
+
+.medicine-confirm-cancel,
+.medicine-confirm-primary {
+    height: 39px;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.medicine-confirm-cancel {
+    border: 1px solid #d7e4e1;
+    background: #ffffff;
+    color: #5f7973;
+}
+
+.medicine-confirm-cancel:hover {
+    background: #f5faf8;
+}
+
+.medicine-confirm-primary {
+    border: 1px solid #3b9b7a;
+    background: #3b9b7a;
+    color: #ffffff;
+}
+
+.medicine-confirm-primary:hover {
+    background: #32896b;
+    border-color: #32896b;
+}
+
+
+/* =========================================================
+   MEDICINE TOAST
+========================================================= */
+
+.medicine-toast {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 4000;
+    min-width: 300px;
+    max-width: 420px;
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border: 1px solid #dce9e5;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(35, 76, 69, 0.13);
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+.medicine-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.medicine-toast-icon {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef8f3;
+    color: #3b9b7a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.medicine-toast.error {
+    border-color: #eadede;
+}
+
+.medicine-toast.error .medicine-toast-icon {
+    background: #fcf3f3;
+    color: #b56d6d;
+}
+
+.medicine-toast-message {
+    flex: 1;
+    color: #435f59;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.medicine-toast-close {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: #91a29e;
+    font-family: inherit;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.medicine-toast-close:hover {
+    color: #526d67;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .medicine-confirm-dialog {
+        padding: 16px;
+    }
+
+    .medicine-confirm-card {
+        padding: 22px;
+    }
+
+    .medicine-confirm-actions {
+        flex-direction: column-reverse;
+    }
+
+    .medicine-confirm-cancel,
+    .medicine-confirm-primary {
+        width: 100%;
+    }
+
+    .medicine-toast {
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+        min-width: 0;
+        max-width: none;
+    }
+}

@@ -19,7 +19,6 @@ Medicine Details | MediBridge Pharmacy
 
 <section class="pharmacist-medicine-detail-page">
 
-   
 
     <!-- =====================================================
          PAGE HEADER
@@ -347,7 +346,282 @@ Medicine Details | MediBridge Pharmacy
 
 </section>
 
+
+
+<!-- =========================================================
+     EDIT MEDICINE MODAL
+========================================================= -->
+
+<div
+    id="editMedicineModal"
+    class="medicine-edit-modal"
+    style="display: none;"
+>
+
+
+    <!-- MODAL OVERLAY -->
+
+    <div
+        class="medicine-edit-modal-overlay"
+        id="editMedicineModalOverlay"
+    ></div>
+
+
+    <!-- MODAL CARD -->
+
+    <div
+        class="medicine-edit-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="editMedicineModalTitle"
+    >
+
+
+        <!-- =================================================
+             MODAL HEADER
+        ================================================== -->
+
+        <div class="medicine-edit-modal-header">
+
+            <div>
+
+                <span class="medicine-detail-card-label">
+                    MEDICINE MANAGEMENT
+                </span>
+
+                <h2 id="editMedicineModalTitle">
+                    Edit Medicine
+                </h2>
+
+                <p>
+                    Update the medicine information below.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeEditMedicineButton"
+                class="medicine-edit-modal-close"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <!-- =================================================
+             EDIT FORM
+        ================================================== -->
+
+        <form id="editMedicineForm">
+
+
+            <!-- FORM GRID -->
+
+            <div class="medicine-edit-form-grid">
+
+
+                <!-- BRAND NAME -->
+
+                <div class="medicine-edit-field">
+
+                    <label for="editBrandName">
+                        Brand Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editBrandName"
+                        name="brand_name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- GENERIC NAME -->
+
+                <div class="medicine-edit-field">
+
+                    <label for="editGenericName">
+                        Generic Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editGenericName"
+                        name="generic_name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- STRENGTH -->
+
+                <div class="medicine-edit-field">
+
+                    <label for="editStrength">
+                        Strength
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editStrength"
+                        name="strength"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MANUFACTURER -->
+
+                <div class="medicine-edit-field">
+
+                    <label for="editManufacturer">
+                        Manufacturer
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editManufacturer"
+                        name="manufacturer"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="medicine-edit-field">
+
+                    <label for="editCategory">
+                        Category
+                    </label>
+
+                    <select
+                        id="editCategory"
+                        name="category"
+                        required
+                    >
+
+                        <option value="">
+                            Select category
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- PRESCRIPTION -->
+
+                <div class="medicine-edit-field">
+
+                    <label for="editPrescription">
+                        Prescription
+                    </label>
+
+                    <select
+                        id="editPrescription"
+                        name="requires_prescription"
+                    >
+
+                        <option value="false">
+                            OTC
+                        </option>
+
+                        <option value="true">
+                            Prescription Required
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
+
+            <div
+                class="medicine-edit-field medicine-edit-description-field"
+            >
+
+                <label for="editDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="editDescription"
+                    name="description"
+                    rows="5"
+                    placeholder="Enter medicine description..."
+                ></textarea>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORM MESSAGE
+            ================================================== -->
+
+            <div
+                id="editMedicineMessage"
+                class="medicine-edit-message"
+                style="display: none;"
+            ></div>
+
+
+
+            <!-- =================================================
+                 MODAL ACTIONS
+            ================================================== -->
+
+            <div class="medicine-edit-modal-actions">
+
+
+                <button
+                    type="button"
+                    id="cancelEditMedicineButton"
+                    class="medicine-edit-cancel-button"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    id="saveMedicineButton"
+                    class="medicine-edit-save-button"
+                >
+                    Save Changes
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
 {% endblock %}
+
 
 
 {% block extra_js %}
