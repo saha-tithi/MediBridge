@@ -6,11 +6,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const ordersError = document.getElementById("ordersError");
 
     const ordersTotal = document.getElementById("ordersTotal");
-    const ordersResultCount = document.getElementById("ordersResultCount");
+    const ordersResultCount =
+        document.getElementById("ordersResultCount");
 
-    const orderSearch = document.getElementById("orderSearch");
-    const statusFilter = document.getElementById("statusFilter");
-    const paymentFilter = document.getElementById("paymentFilter");
+    const orderSearch =
+        document.getElementById("orderSearch");
+
+    const statusFilter =
+        document.getElementById("statusFilter");
+
+    const paymentFilter =
+        document.getElementById("paymentFilter");
+
+
+    /* =====================================================
+       ACTIVE ORDERS ELEMENTS
+       ===================================================== */
+
+    const activeOrdersList =
+        document.getElementById("activeOrdersList");
+
+    const activeOrdersLoading =
+        document.getElementById("activeOrdersLoading");
+
+    const activeOrdersEmpty =
+        document.getElementById("activeOrdersEmpty");
+
+    const activeOrdersError =
+        document.getElementById("activeOrdersError");
+
+    const activeOrdersCount =
+        document.getElementById("activeOrdersCount");
+
 
     let allOrders = [];
 
@@ -34,13 +61,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             allOrders = response.data || [];
 
-            ordersTotal.textContent = allOrders.length;
+            ordersTotal.textContent =
+                allOrders.length;
 
             renderOrders();
 
+            renderActiveOrders();
+
         } catch (error) {
 
-            console.error("Failed to load pharmacist orders:", error);
+            console.error(
+                "Failed to load pharmacist orders:",
+                error
+            );
 
             hideLoading();
 
@@ -52,12 +85,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             ordersError.style.display = "block";
 
+            showActiveOrdersError(
+                error.message ||
+                "Unable to load active orders."
+            );
         }
     }
 
 
     /* =====================================================
-       RENDER ORDERS
+       RENDER ALL ORDERS
        ===================================================== */
 
     function renderOrders() {
@@ -78,34 +115,35 @@ document.addEventListener("DOMContentLoaded", function () {
             paymentFilter.value;
 
 
-        const filteredOrders = allOrders.filter(function (order) {
+        const filteredOrders =
+            allOrders.filter(function (order) {
 
-            const orderId =
-                String(order.id || "")
-                    .toLowerCase();
+                const orderId =
+                    String(order.id || "")
+                        .toLowerCase();
 
-            const matchesSearch =
-                !searchValue ||
-                orderId.includes(searchValue);
-
-
-            const matchesStatus =
-                selectedStatus === "ALL" ||
-                order.status === selectedStatus;
+                const matchesSearch =
+                    !searchValue ||
+                    orderId.includes(searchValue);
 
 
-            const matchesPayment =
-                selectedPayment === "ALL" ||
-                order.payment_status === selectedPayment;
+                const matchesStatus =
+                    selectedStatus === "ALL" ||
+                    order.status === selectedStatus;
 
 
-            return (
-                matchesSearch &&
-                matchesStatus &&
-                matchesPayment
-            );
+                const matchesPayment =
+                    selectedPayment === "ALL" ||
+                    order.payment_status === selectedPayment;
 
-        });
+
+                return (
+                    matchesSearch &&
+                    matchesStatus &&
+                    matchesPayment
+                );
+
+            });
 
 
         ordersResultCount.textContent =
@@ -140,6 +178,225 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =====================================================
+       RENDER ACTIVE ORDERS
+       ===================================================== */
+
+    function renderActiveOrders() {
+
+        if (!activeOrdersList) {
+            return;
+        }
+
+
+        hideActiveOrdersLoading();
+
+        hideActiveOrdersError();
+
+
+        const activeOrders =
+            allOrders
+                .filter(function (order) {
+
+                    return (
+                        order.status === "PACKED" ||
+                        order.status === "SHIPPED"
+                    );
+
+                })
+                .sort(function (a, b) {
+
+                    const dateA =
+                        new Date(
+                            a.updated_at ||
+                            a.created_at ||
+                            0
+                        );
+
+                    const dateB =
+                        new Date(
+                            b.updated_at ||
+                            b.created_at ||
+                            0
+                        );
+
+                    return dateA - dateB;
+                });
+
+
+        activeOrdersCount.textContent =
+            activeOrders.length;
+
+
+        if (activeOrders.length === 0) {
+
+            activeOrdersList.innerHTML = "";
+
+            activeOrdersList.style.display =
+                "none";
+
+            activeOrdersEmpty.style.display =
+                "flex";
+
+            return;
+        }
+
+
+        activeOrdersEmpty.style.display =
+            "none";
+
+        activeOrdersList.style.display =
+            "block";
+
+
+        activeOrdersList.innerHTML =
+            activeOrders
+                .map(function (order) {
+                    return createActiveOrderItem(order);
+                })
+                .join("");
+    }
+
+
+    /* =====================================================
+       CREATE ACTIVE ORDER ITEM
+       ===================================================== */
+
+    function createActiveOrderItem(order) {
+
+        const orderId =
+            String(order.id || "")
+                .toUpperCase();
+
+
+        const shortOrderId =
+            orderId.length > 8
+                ? orderId.substring(0, 8)
+                : orderId;
+
+
+        const statusClass =
+            order.status === "PACKED"
+                ? "status-packed"
+                : "status-shipped";
+
+
+        const statusText =
+            order.status === "PACKED"
+                ? "Packed"
+                : "Shipped";
+
+
+        const amount =
+            order.total_amount !== undefined &&
+            order.total_amount !== null
+                ? `₹${order.total_amount}`
+                : "—";
+
+
+        const activityDate =
+            order.updated_at ||
+            order.created_at;
+
+
+        const activityTime =
+            formatRelativeTime(activityDate);
+
+
+        return `
+            <a
+                href="/pharmacist/orders/${order.id}/"
+                class="active-order-item"
+            >
+
+                <div class="active-order-top">
+
+                    <span class="active-order-id">
+                        #${shortOrderId}
+                    </span>
+
+                    <span
+                        class="active-order-status ${statusClass}"
+                    >
+                        ${statusText}
+                    </span>
+
+                </div>
+
+
+                <div class="active-order-customer">
+                    ${getCustomerName(order)}
+                </div>
+
+
+                <div class="active-order-meta">
+
+                    <span class="active-order-time">
+                        ${activityTime}
+                    </span>
+
+                    <span class="active-order-amount">
+                        ${amount}
+                        <span class="active-order-arrow">
+                            →
+                        </span>
+                    </span>
+
+                </div>
+
+            </a>
+        `;
+    }
+
+
+    /* =====================================================
+       CUSTOMER NAME
+       ===================================================== */
+
+    function getCustomerName(order) {
+
+        if (order.customer_name) {
+            return escapeHtml(
+                order.customer_name
+            );
+        }
+
+
+        if (
+            order.customer &&
+            typeof order.customer === "object"
+        ) {
+
+            const customer =
+                order.customer;
+
+
+            const fullName = [
+                customer.first_name,
+                customer.last_name
+            ]
+                .filter(Boolean)
+                .join(" ");
+
+
+            if (fullName) {
+                return escapeHtml(fullName);
+            }
+
+
+            if (customer.username) {
+                return escapeHtml(
+                    customer.username
+                );
+            }
+
+        }
+
+
+        return "Customer order";
+    }
+
+
+    /* =====================================================
        CREATE ORDER ROW
        ===================================================== */
 
@@ -169,10 +426,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const hasPrescription =
             Array.isArray(order.items) &&
             order.items.some(function (item) {
+
                 return (
                     item.is_prescription_item === true ||
                     item.prescription !== null
                 );
+
             });
 
 
@@ -181,7 +440,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const paymentClass =
-            getPaymentClass(order.payment_status);
+            getPaymentClass(
+                order.payment_status
+            );
 
 
         const statusText =
@@ -189,7 +450,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const paymentText =
-            formatPaymentStatus(order.payment_status);
+            formatPaymentStatus(
+                order.payment_status
+            );
 
 
         return `
@@ -219,7 +482,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     <span class="order-meta-value">
                         ${itemCount}
-                        ${itemCount === 1 ? "item" : "items"}
+                        ${itemCount === 1
+                            ? "item"
+                            : "items"}
                     </span>
 
                 </div>
@@ -234,14 +499,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     ${
                         hasPrescription
                             ? `
-                                <span class="prescription-indicator">
-                                    <span class="prescription-dot"></span>
+                                <span
+                                    class="prescription-indicator"
+                                >
+                                    <span
+                                        class="prescription-dot"
+                                    ></span>
                                     Required
                                 </span>
                             `
                             : `
-                                <span class="prescription-indicator none">
-                                    <span class="prescription-dot"></span>
+                                <span
+                                    class="prescription-indicator none"
+                                >
+                                    <span
+                                        class="prescription-dot"
+                                    ></span>
                                     Not required
                                 </span>
                             `
@@ -256,11 +529,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         Status
                     </span>
 
-                    <span class="order-status ${statusClass}">
+                    <span
+                        class="order-status ${statusClass}"
+                    >
                         ${statusText}
                     </span>
 
-                    <span class="payment-status ${paymentClass}">
+                    <span
+                        class="payment-status ${paymentClass}"
+                    >
                         ${paymentText}
                     </span>
 
@@ -277,6 +554,115 @@ document.addEventListener("DOMContentLoaded", function () {
 
             </a>
         `;
+    }
+
+
+    /* =====================================================
+       RELATIVE TIME
+       ===================================================== */
+
+    function formatRelativeTime(dateValue) {
+
+        if (!dateValue) {
+            return "Time unavailable";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (Number.isNaN(date.getTime())) {
+            return "Time unavailable";
+        }
+
+
+        const now =
+            new Date();
+
+
+        const difference =
+            Math.max(
+                0,
+                now.getTime() -
+                date.getTime()
+            );
+
+
+        const minutes =
+            Math.floor(
+                difference /
+                (1000 * 60)
+            );
+
+
+        if (minutes < 1) {
+            return "Just now";
+        }
+
+
+        if (minutes < 60) {
+
+            return (
+                minutes +
+                (
+                    minutes === 1
+                        ? " min ago"
+                        : " mins ago"
+                )
+            );
+
+        }
+
+
+        const hours =
+            Math.floor(
+                minutes / 60
+            );
+
+
+        if (hours < 24) {
+
+            return (
+                hours +
+                (
+                    hours === 1
+                        ? " hour ago"
+                        : " hours ago"
+                )
+            );
+
+        }
+
+
+        const days =
+            Math.floor(
+                hours / 24
+            );
+
+
+        if (days === 1) {
+            return "Yesterday";
+        }
+
+
+        if (days < 7) {
+
+            return (
+                days +
+                " days ago"
+            );
+
+        }
+
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short"
+            }
+        );
     }
 
 
@@ -408,22 +794,74 @@ document.addEventListener("DOMContentLoaded", function () {
                 return "Payment failed";
 
             default:
-                return paymentStatus || "Payment unknown";
+                return (
+                    paymentStatus ||
+                    "Payment unknown"
+                );
         }
     }
 
 
     /* =====================================================
-       LOADING STATE
+       ACTIVE ORDERS LOADING
+       ===================================================== */
+
+    function hideActiveOrdersLoading() {
+
+        if (activeOrdersLoading) {
+            activeOrdersLoading.style.display =
+                "none";
+        }
+    }
+
+
+    function showActiveOrdersError(message) {
+
+        hideActiveOrdersLoading();
+
+        if (activeOrdersList) {
+            activeOrdersList.style.display =
+                "none";
+        }
+
+        if (activeOrdersEmpty) {
+            activeOrdersEmpty.style.display =
+                "none";
+        }
+
+        if (activeOrdersError) {
+            activeOrdersError.textContent =
+                message;
+
+            activeOrdersError.style.display =
+                "block";
+        }
+    }
+
+
+    function hideActiveOrdersError() {
+
+        if (activeOrdersError) {
+            activeOrdersError.style.display =
+                "none";
+        }
+    }
+
+
+    /* =====================================================
+       MAIN LOADING STATE
        ===================================================== */
 
     function showLoading() {
 
-        ordersLoading.style.display = "block";
+        ordersLoading.style.display =
+            "block";
 
-        ordersEmpty.style.display = "none";
+        ordersEmpty.style.display =
+            "none";
 
-        ordersError.style.display = "none";
+        ordersError.style.display =
+            "none";
 
         ordersList.innerHTML = "";
     }
@@ -431,7 +869,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function hideLoading() {
 
-        ordersLoading.style.display = "none";
+        ordersLoading.style.display =
+            "none";
     }
 
 
@@ -465,6 +904,22 @@ document.addEventListener("DOMContentLoaded", function () {
             renderOrders();
         }
     );
+
+
+    /* =====================================================
+       HTML ESCAPE
+       ===================================================== */
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+    }
 
 
     /* =====================================================

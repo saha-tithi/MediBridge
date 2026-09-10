@@ -942,3 +942,485 @@
     }
 
 }
+/* =========================================================
+   ORDERS CONTENT LAYOUT
+   ========================================================= */
+
+.orders-content-layout {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr) 310px;
+
+    align-items: start;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   ALL ORDERS
+   ========================================================= */
+
+.all-orders-panel {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   ACTIVE ORDERS PANEL
+   ========================================================= */
+
+.active-orders-panel {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e2ebeb;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   ACTIVE ORDERS HEADER
+   ========================================================= */
+
+.active-orders-header {
+    min-height: 105px;
+
+    padding: 23px 20px;
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    border-bottom: 1px solid #e7eeee;
+}
+
+
+.active-orders-eyebrow {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #438f89;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+.active-orders-header h2 {
+    margin: 0;
+
+    color: #173f4a;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    letter-spacing: -0.2px;
+}
+
+
+.active-orders-header p {
+    margin: 6px 0 0;
+
+    color: #7b8c90;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.active-orders-count {
+    min-width: 28px;
+    height: 28px;
+
+    padding: 0 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #eef7f5;
+
+    border-radius: 8px;
+
+    color: #438f89;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIVE ORDERS LIST
+   ========================================================= */
+
+.active-orders-list {
+    width: 100%;
+}
+
+
+/* =========================================================
+   ACTIVE ORDER ITEM
+   ========================================================= */
+
+.active-order-item {
+    display: block;
+
+    width: 100%;
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #edf2f1;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        padding-left 0.18s ease;
+}
+
+
+.active-order-item:last-child {
+    border-bottom: 0;
+}
+
+
+.active-order-item:hover {
+    background: #fbfdfd;
+
+    padding-left: 21px;
+}
+
+
+/* =========================================================
+   ACTIVE ORDER TOP
+   ========================================================= */
+
+.active-order-top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+
+.active-order-id {
+    min-width: 0;
+
+    color: #173f4a;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ACTIVE ORDER STATUS
+   ========================================================= */
+
+.active-order-status {
+    flex-shrink: 0;
+
+    padding: 5px 7px;
+
+    border-radius: 6px;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    text-transform: uppercase;
+}
+
+
+.active-order-status.status-packed {
+    background: #f1edfb;
+
+    color: #765ca6;
+}
+
+
+.active-order-status.status-shipped {
+    background: #eaf5f3;
+
+    color: #438f89;
+}
+
+
+/* =========================================================
+   ACTIVE ORDER CUSTOMER
+   ========================================================= */
+
+.active-order-customer {
+    margin-bottom: 5px;
+
+    color: #536a6d;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ACTIVE ORDER META
+   ========================================================= */
+
+.active-order-meta {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.active-order-time {
+    color: #9aa8aa;
+
+    font-size: 9px;
+}
+
+
+.active-order-amount {
+    color: #173f4a;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTIVE ORDER ARROW
+   ========================================================= */
+
+.active-order-arrow {
+    margin-left: 4px;
+
+    color: #438f89;
+
+    font-size: 12px;
+
+    transition:
+        transform 0.18s ease;
+}
+
+
+.active-order-item:hover .active-order-arrow {
+    transform: translateX(3px);
+}
+
+
+/* =========================================================
+   ACTIVE ORDERS LOADING
+   ========================================================= */
+
+.active-orders-loading {
+    padding: 8px 18px 14px;
+}
+
+
+.active-order-skeleton {
+    width: 100%;
+
+    height: 76px;
+
+    margin-top: 7px;
+
+    border-radius: 9px;
+
+    background: #f2f5f5;
+}
+
+
+.active-order-skeleton:first-child {
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   ACTIVE ORDERS EMPTY
+   ========================================================= */
+
+.active-orders-empty {
+    min-height: 180px;
+
+    padding: 30px 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    text-align: center;
+}
+
+
+.active-orders-empty-icon {
+    width: 38px;
+    height: 38px;
+
+    margin-bottom: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef6f4;
+
+    color: #438f89;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+.active-orders-empty strong {
+    color: #30494d;
+
+    font-size: 12px;
+}
+
+
+.active-orders-empty span {
+    max-width: 220px;
+
+    margin-top: 6px;
+
+    color: #8a999b;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACTIVE ORDERS ERROR
+   ========================================================= */
+
+.active-orders-error {
+    margin: 14px;
+
+    padding: 11px 12px;
+
+    background: #fff4f4;
+
+    border: 1px solid #f0dada;
+
+    border-radius: 8px;
+
+    color: #bd5c5c;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .orders-content-layout {
+        grid-template-columns: minmax(0, 1fr) 280px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — STACK PANELS
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .orders-content-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .active-orders-panel {
+        order: -1;
+    }
+
+    .active-orders-list {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .active-order-item {
+        border-right: 1px solid #edf2f1;
+    }
+
+    .active-order-item:nth-last-child(-n + 2) {
+        border-bottom: 0;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+    .active-orders-list {
+        grid-template-columns: 1fr;
+    }
+
+    .active-order-item {
+        border-right: 0;
+    }
+
+    .active-order-item:nth-last-child(-n + 2) {
+        border-bottom: 1px solid #edf2f1;
+    }
+
+    .active-order-item:last-child {
+        border-bottom: 0;
+    }
+
+}

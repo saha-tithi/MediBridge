@@ -81,119 +81,227 @@
 
 
     <!-- =====================================================
-         ORDERS PANEL
+         ORDERS CONTENT
          ===================================================== -->
 
-    <section class="orders-panel">
-
-        <div class="orders-panel-header">
-
-            <div>
-                <span class="panel-eyebrow">ORDER MANAGEMENT</span>
-
-                <h2>All orders</h2>
-
-                <p>
-                    View order details and take action when required.
-                </p>
-            </div>
-
-            <div id="ordersResultCount" class="orders-result-count">
-                —
-            </div>
-
-        </div>
+    <div class="orders-content-layout">
 
 
         <!-- =================================================
-             LOADING
+             ALL ORDERS
              ================================================= -->
 
-        <div id="ordersLoading" class="orders-loading">
+        <section class="orders-panel all-orders-panel">
 
-            <div class="order-loading-row">
-                <span></span>
+            <div class="orders-panel-header">
+
                 <div>
-                    <b></b>
-                    <small></small>
+                    <span class="panel-eyebrow">
+                        ORDER MANAGEMENT
+                    </span>
+
+                    <h2>All orders</h2>
+
+                    <p>
+                        View order details and take action when required.
+                    </p>
                 </div>
-                <i></i>
+
+                <div
+                    id="ordersResultCount"
+                    class="orders-result-count"
+                >
+                    —
+                </div>
+
             </div>
 
-            <div class="order-loading-row">
-                <span></span>
-                <div>
-                    <b></b>
-                    <small></small>
+
+            <!-- =============================================
+                 LOADING
+                 ============================================= -->
+
+            <div
+                id="ordersLoading"
+                class="orders-loading"
+            >
+
+                <div class="order-loading-row">
+                    <span></span>
+                    <div>
+                        <b></b>
+                        <small></small>
+                    </div>
+                    <i></i>
                 </div>
-                <i></i>
+
+                <div class="order-loading-row">
+                    <span></span>
+                    <div>
+                        <b></b>
+                        <small></small>
+                    </div>
+                    <i></i>
+                </div>
+
+                <div class="order-loading-row">
+                    <span></span>
+                    <div>
+                        <b></b>
+                        <small></small>
+                    </div>
+                    <i></i>
+                </div>
+
+                <div class="order-loading-row">
+                    <span></span>
+                    <div>
+                        <b></b>
+                        <small></small>
+                    </div>
+                    <i></i>
+                </div>
+
             </div>
 
-            <div class="order-loading-row">
-                <span></span>
-                <div>
-                    <b></b>
-                    <small></small>
+
+            <!-- =============================================
+                 ORDERS LIST
+                 ============================================= -->
+
+            <div
+                id="ordersList"
+                class="orders-list"
+            ></div>
+
+
+            <!-- =============================================
+                 EMPTY STATE
+                 ============================================= -->
+
+            <div
+                id="ordersEmpty"
+                class="orders-empty"
+                style="display: none;"
+            >
+
+                <div class="empty-icon">
+                    —
                 </div>
-                <i></i>
+
+                <strong>No orders found</strong>
+
+                <span>
+                    There are no orders matching your current filters.
+                </span>
+
             </div>
 
-            <div class="order-loading-row">
-                <span></span>
-                <div>
-                    <b></b>
-                    <small></small>
-                </div>
-                <i></i>
-            </div>
 
-        </div>
+            <!-- =============================================
+                 ERROR
+                 ============================================= -->
+
+            <div
+                id="ordersError"
+                class="orders-error"
+                style="display: none;"
+            ></div>
+
+        </section>
 
 
         <!-- =================================================
-             ORDERS LIST
+             ACTIVE ORDERS
              ================================================= -->
 
-        <div
-            id="ordersList"
-            class="orders-list"
-        ></div>
+        <aside class="active-orders-panel">
 
+            <div class="active-orders-header">
 
-        <!-- =================================================
-             EMPTY STATE
-             ================================================= -->
+                <div>
+                    <span class="active-orders-eyebrow">
+                        FOLLOW UP
+                    </span>
 
-        <div
-            id="ordersEmpty"
-            class="orders-empty"
-            style="display: none;"
-        >
+                    <h2>Active orders</h2>
 
-            <div class="empty-icon">
-                —
+                    <p>
+                        Packed and shipped orders waiting for the next update.
+                    </p>
+                </div>
+
+                <span
+                    id="activeOrdersCount"
+                    class="active-orders-count"
+                >
+                    0
+                </span>
+
             </div>
 
-            <strong>No orders found</strong>
 
-            <span>
-                There are no orders matching your current filters.
-            </span>
+            <!-- =============================================
+                 ACTIVE ORDERS LOADING
+                 ============================================= -->
 
-        </div>
+            <div
+                id="activeOrdersLoading"
+                class="active-orders-loading"
+            >
+                <div class="active-order-skeleton"></div>
+                <div class="active-order-skeleton"></div>
+            </div>
 
 
-        <!-- =================================================
-             ERROR
-             ================================================= -->
+            <!-- =============================================
+                 ACTIVE ORDERS LIST
+                 ============================================= -->
 
-        <div
-            id="ordersError"
-            class="orders-error"
-            style="display: none;"
-        ></div>
+            <div
+                id="activeOrdersList"
+                class="active-orders-list"
+                style="display: none;"
+            ></div>
 
-    </section>
+
+            <!-- =============================================
+                 NO ACTIVE ORDERS
+                 ============================================= -->
+
+            <div
+                id="activeOrdersEmpty"
+                class="active-orders-empty"
+                style="display: none;"
+            >
+
+                <div class="active-orders-empty-icon">
+                    ✓
+                </div>
+
+                <strong>No active orders</strong>
+
+                <span>
+                    Packed and shipped orders will appear here.
+                </span>
+
+            </div>
+
+
+            <!-- =============================================
+                 ACTIVE ORDERS ERROR
+                 ============================================= -->
+
+            <div
+                id="activeOrdersError"
+                class="active-orders-error"
+                style="display: none;"
+            ></div>
+
+        </aside>
+
+
+    </div>
 
 </div>
 
