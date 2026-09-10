@@ -19,6 +19,7 @@ from .serializers import (
 from django.shortcuts import render
 
 from orders.permissions import IsPharmacistOrAdmin
+from notifications.services import update_low_stock_notification
 
 
 # =========================================================
@@ -242,6 +243,7 @@ class PharmacistCategoryListAPIView(
 # PHARMACIST — UPDATE INVENTORY
 # =========================================================
 
+
 class PharmacistInventoryUpdateAPIView(
     generics.UpdateAPIView
 ):
@@ -264,11 +266,9 @@ class PharmacistInventoryUpdateAPIView(
         "patch",
     ]
 
-
 # =========================================================
 # PHARMACIST — ADD NEW PRODUCT
 # =========================================================
-
 class PharmacistCreateProductAPIView(
     generics.CreateAPIView
 ):
@@ -281,11 +281,17 @@ class PharmacistCreateProductAPIView(
         IsPharmacistOrAdmin
     ]
 
+    def perform_create(self, serializer):
+
+        medicine = serializer.save()
+
+        update_low_stock_notification(
+            medicine
+        )
 
 # =========================================================
 # PHARMACIST — ADD NEW BATCH
 # =========================================================
-
 class PharmacistCreateBatchAPIView(
     generics.CreateAPIView
 ):
@@ -298,6 +304,13 @@ class PharmacistCreateBatchAPIView(
         IsPharmacistOrAdmin
     ]
 
+    def perform_create(self, serializer):
+
+        inventory = serializer.save()
+
+        update_low_stock_notification(
+            inventory.medicine
+        )
 
 # =========================================================
 # PHARMACIST — CREATE CATEGORY

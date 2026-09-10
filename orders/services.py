@@ -5,6 +5,8 @@ from django.db import transaction
 from cart.models import Cart
 from orders.models import Order, OrderItem
 from prescriptions.models import Prescription
+from notifications.models import Notification
+from notifications.services import update_low_stock_notification
 
 
 @transaction.atomic
@@ -66,6 +68,15 @@ def create_order(
             unit_price=cart_item.unit_price,
             subtotal=cart_item.subtotal,
         )
+    Notification.objects.create(
+        notification_type=Notification.NotificationType.NEW_ORDER,
+        title="New Order",
+        message=(
+            f"Order #{str(order.id)[:8].upper()} has been placed "
+            f"for ₹{order.total_amount}."
+        ),
+        order=order,
+    )
 
 
     if payment_method == Order.PaymentMethod.COD:
@@ -201,7 +212,9 @@ def process_order(order):
 
 
             remaining_quantity -= quantity_to_take
-
+        update_low_stock_notification(
+            item.medicine
+        )
 
     # =====================================================
     # ORDER PROCESSED

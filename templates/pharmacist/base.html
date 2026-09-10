@@ -189,18 +189,24 @@
                      NOTIFICATIONS
                      ================================================= -->
 
-                <a
-                    href="/pharmacist/notifications/"
-                    class="notification-button"
-                    aria-label="Notifications"
-                    title="Notifications"
-                >
+               <a
+    href="/pharmacist/notifications/"
+    class="notification-button"
+    aria-label="Notifications"
+    title="Notifications"
+>
 
-                    <span class="notification-icon"></span>
+    <span class="notification-icon"></span>
 
-                    <span class="notification-indicator"></span>
+    <span
+        id="notificationUnreadBadge"
+        class="notification-unread-badge"
+        style="display: none;"
+    >
+        0
+    </span>
 
-                </a>
+</a>
 
 
 
@@ -265,6 +271,8 @@
      ========================================================= -->
 
 <script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/pharmacist_notification_badge.js' %}"></script>
+
 
 
 {% block extra_js %}

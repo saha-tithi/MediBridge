@@ -35,6 +35,7 @@ urlpatterns = [
     path("medicines/", medicine_list_page, name="medicine-list-page"),
     path("medicines/<uuid:pk>/",medicine_detail_page,name="medicine-detail-page",),
     path("api/v1/addresses/",include("addresses.urls"),),
+    path("api/v1/notifications/",include("notifications.urls"),),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT,)

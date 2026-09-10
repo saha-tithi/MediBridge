@@ -1037,3 +1037,34 @@ body.pharmacist-app {
     }
 
 }
+/* =========================================================
+   NOTIFICATION UNREAD BADGE
+   ========================================================= */
+
+.notification-button {
+    position: relative;
+}
+
+.notification-unread-badge {
+    position: absolute;
+    top: -5px;
+    right: -6px;
+
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+
+    background: #3b9b7a;
+    color: #ffffff;
+
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1;
+}

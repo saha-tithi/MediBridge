@@ -121,3 +121,8 @@ def pharmacist_medicine_detail_page(request, pk):
         request,
         "pharmacist/medicine_detail.html"
     )
+def pharmacist_notifications_page(request):
+    return render(
+        request,
+        "pharmacist/notifications.html",
+    )

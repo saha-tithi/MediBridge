@@ -1,0 +1,97 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}Notifications | MediBridge Pharmacy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pharmacist_notifications.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="pharmacist-notifications-page">
+
+    <!-- Page Header -->
+    <div class="notifications-header">
+
+        <div>
+            <span class="notifications-eyebrow">
+                PHARMACY UPDATES
+            </span>
+
+            <h1>Notifications</h1>
+
+            <p>
+                Stay updated with new orders and inventory alerts.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="markAllReadButton"
+            class="notifications-mark-all"
+        >
+            Mark all as read
+        </button>
+
+    </div>
+
+
+    <!-- Loading -->
+    <div
+        id="notificationsLoading"
+        class="notifications-state notifications-loading"
+    >
+        <div class="notifications-spinner"></div>
+
+        <p>
+            Loading notifications...
+        </p>
+    </div>
+
+
+    <!-- Error -->
+    <div
+        id="notificationsError"
+        class="notifications-state notifications-error"
+        style="display: none;"
+    >
+    </div>
+
+
+    <!-- Empty State -->
+    <div
+        id="notificationsEmpty"
+        class="notifications-empty"
+        style="display: none;"
+    >
+
+        <div class="notifications-empty-icon">
+            ✓
+        </div>
+
+        <h2>You're all caught up</h2>
+
+        <p>
+            There are no new pharmacy notifications right now.
+        </p>
+
+    </div>
+
+
+    <!-- Notifications -->
+    <div
+        id="notificationsContainer"
+        class="notifications-container"
+        style="display: none;"
+    >
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/pharmacist_notifications.js' %}"></script>
+{% endblock %}
