@@ -126,3 +126,8 @@ def pharmacist_notifications_page(request):
         request,
         "pharmacist/notifications.html",
     )
+def pharmacist_profile_page(request):
+    return render(
+        request,
+        "pharmacist/profile.html",
+    )

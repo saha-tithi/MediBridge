@@ -1,0 +1,140 @@
+{% extends "pharmacist/base.html" %}
+{% load static %}
+
+{% block title %}Profile | MediBridge Pharmacy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pharmacist_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="pharmacist-profile-page">
+
+    <div class="profile-header">
+        <div>
+            <span class="profile-eyebrow">ACCOUNT</span>
+            <h1>Profile</h1>
+            <p>Manage your pharmacy account information.</p>
+        </div>
+    </div>
+
+    <div class="profile-layout">
+
+        <!-- PROFILE CARD -->
+        <div class="profile-card profile-main-card">
+
+            <div class="profile-card-header">
+                <div>
+                    <span class="profile-card-label">
+                        PERSONAL INFORMATION
+                    </span>
+
+                    <h2>Account Details</h2>
+                </div>
+            </div>
+
+            <div class="profile-main">
+
+                <div class="profile-avatar" id="profileAvatar">
+                    —
+                </div>
+
+                <div class="profile-identity">
+                    <h2 id="profileName">—</h2>
+                    <p id="profileRole">—</p>
+                </div>
+
+            </div>
+
+            <div class="profile-info-grid">
+
+                <div class="profile-info-item">
+                    <span>Username</span>
+                    <strong id="profileUsername">—</strong>
+                </div>
+
+                <div class="profile-info-item">
+                    <span>Email</span>
+                    <strong id="profileEmail">—</strong>
+                </div>
+
+                <div class="profile-info-item">
+                    <span>Phone Number</span>
+                    <strong id="profilePhone">—</strong>
+                </div>
+
+                <div class="profile-info-item">
+                    <span>Account Role</span>
+                    <strong id="profileRoleDetail">—</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT STATUS -->
+        <div class="profile-card profile-status-card">
+
+            <div class="profile-card-header">
+                <div>
+                    <span class="profile-card-label">
+                        ACCOUNT STATUS
+                    </span>
+
+                    <h2>Access</h2>
+                </div>
+            </div>
+
+            <div class="profile-status-content">
+
+                <div class="profile-status-row">
+
+                    <div>
+                        <span>Account</span>
+                        <strong>Active</strong>
+                    </div>
+
+                    <span class="profile-status-badge">
+                        Active
+                    </span>
+
+                </div>
+
+                <div class="profile-status-row">
+
+                    <div>
+                        <span>Access Level</span>
+                        <strong id="profileAccessLevel">—</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOGOUT -->
+    <div class="profile-actions">
+
+        <button
+            type="button"
+            id="logoutButton"
+            class="profile-logout-button"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pharmacist_profile.js' %}"></script>
+{% endblock %}

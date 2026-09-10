@@ -1,0 +1,328 @@
+.pharmacist-profile-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.profile-eyebrow {
+    display: block;
+    margin-bottom: 7px;
+    color: #3b9b7a;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.profile-header h1 {
+    margin: 0;
+    color: #183b36;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.6px;
+}
+
+.profile-header p {
+    margin: 8px 0 0;
+    color: #718884;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+    gap: 18px;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.profile-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e4ecea;
+    border-radius: 15px;
+    box-shadow: 0 3px 16px rgba(35, 76, 69, 0.035);
+}
+
+.profile-card-header {
+    min-height: 72px;
+    padding: 17px 22px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #edf2f1;
+}
+
+.profile-card-label {
+    display: block;
+    margin-bottom: 4px;
+    color: #3b9b7a;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.profile-card-header h2 {
+    margin: 0;
+    color: #294640;
+    font-size: 17px;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   PROFILE IDENTITY
+   ========================================================= */
+
+.profile-main {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 22px;
+    border-bottom: 1px solid #edf2f1;
+}
+
+.profile-avatar {
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eaf6f1;
+    color: #3b9b7a;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.profile-identity h2 {
+    margin: 0;
+    color: #183b36;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.profile-identity p {
+    margin: 6px 0 0;
+    color: #718884;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   INFORMATION GRID
+   ========================================================= */
+
+.profile-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.profile-info-item {
+    min-height: 82px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #edf2f1;
+}
+
+.profile-info-item:nth-child(odd) {
+    border-right: 1px solid #edf2f1;
+}
+
+.profile-info-item:nth-last-child(-n + 2) {
+    border-bottom: none;
+}
+
+.profile-info-item span {
+    display: block;
+    margin-bottom: 7px;
+    color: #81938f;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.profile-info-item strong {
+    display: block;
+    overflow: hidden;
+    color: #294640;
+    font-size: 13px;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ACCOUNT STATUS
+   ========================================================= */
+
+.profile-status-content {
+    padding: 8px 22px 18px;
+}
+
+.profile-status-row {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid #edf2f1;
+}
+
+.profile-status-row:last-child {
+    border-bottom: none;
+}
+
+.profile-status-row div span {
+    display: block;
+    margin-bottom: 6px;
+    color: #81938f;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.profile-status-row div strong {
+    color: #294640;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.profile-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid #dcebe5;
+    border-radius: 20px;
+    background: #f4faf7;
+    color: #438f72;
+    font-size: 11px;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.profile-status-badge::before {
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #5eb18e;
+    content: "";
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-info-item:nth-child(odd) {
+        border-right: none;
+    }
+
+    .profile-info-item:nth-last-child(-n + 2) {
+        border-bottom: 1px solid #edf2f1;
+    }
+
+    .profile-info-item:last-child {
+        border-bottom: none;
+    }
+
+    .profile-main {
+        padding: 22px 18px;
+    }
+
+    .profile-card-header {
+        padding: 17px 18px;
+    }
+
+    .profile-info-item {
+        padding: 17px 18px;
+    }
+
+    .profile-status-content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+}
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+}
+
+.profile-logout-button {
+    width: 180px;
+    height: 48px;
+    padding: 0 24px;
+
+    border: 1px solid #e2cfcf;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #a56d6d;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+.profile-logout-button:hover {
+    background: #fcf6f6;
+    border-color: #d9baba;
+    color: #985f5f;
+
+    box-shadow: 0 4px 12px rgba(165, 109, 109, 0.08);
+}
+
+.profile-logout-button:active {
+    transform: translateY(1px);
+}
+
+@media (max-width: 550px) {
+
+    .profile-actions {
+        justify-content: center;
+    }
+
+    .profile-logout-button {
+        width: 180px;
+    }
+
+}
