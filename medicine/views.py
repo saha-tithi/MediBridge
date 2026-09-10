@@ -265,6 +265,13 @@ class PharmacistInventoryUpdateAPIView(
     http_method_names = [
         "patch",
     ]
+    def perform_update(self, serializer):
+
+        inventory = serializer.save()
+
+        update_low_stock_notification(
+            inventory.medicine
+        )
 
 # =========================================================
 # PHARMACIST — ADD NEW PRODUCT
