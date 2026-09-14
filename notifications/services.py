@@ -39,9 +39,6 @@ def update_low_stock_notification(medicine):
     )
 
 
-    # =========================================================
-    # MEDICINE IS LOW IN STOCK
-    # =========================================================
 
     if low_stock:
 
@@ -63,11 +60,6 @@ def update_low_stock_notification(medicine):
         )
 
         return notification
-
-
-    # =========================================================
-    # MEDICINE IS NOT LOW IN STOCK
-    # =========================================================
 
     if active_notification:
 

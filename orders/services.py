@@ -87,10 +87,6 @@ def create_order(
     return order
 
 
-# =========================================================
-# PROCESS ORDER
-# =========================================================
-
 @transaction.atomic
 def process_order(order):
 
@@ -171,11 +167,6 @@ def process_order(order):
                 f"Only {total_available} unit(s) available."
             )
 
-
-        # =================================================
-        # CONSUME STOCK — EARLIEST EXPIRY FIRST
-        # =================================================
-
         remaining_quantity = item.quantity
 
 
@@ -192,11 +183,6 @@ def process_order(order):
 
 
             inventory.stock -= quantity_to_take
-
-
-            # ---------------------------------------------
-            # DEACTIVATE EMPTY BATCH
-            # ---------------------------------------------
 
             if inventory.stock == 0:
 
@@ -215,11 +201,6 @@ def process_order(order):
         update_low_stock_notification(
             item.medicine
         )
-
-    # =====================================================
-    # ORDER PROCESSED
-    # =====================================================
-
     order.status = Order.Status.PACKED
 
 
@@ -234,9 +215,7 @@ def process_order(order):
     return order
 
 
-# =========================================================
-# UPDATE ORDER STATUS
-# =========================================================
+
 
 @transaction.atomic
 def update_order_status(

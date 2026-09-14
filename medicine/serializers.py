@@ -3,20 +3,11 @@ from rest_framework import serializers
 from .models import Category, Medicine, Inventory
 
 
-# =========================================================
-# CATEGORY
-# =========================================================
-
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
         fields = "__all__"
-
-
-# =========================================================
-# CUSTOMER — INVENTORY
-# =========================================================
 
 class InventorySerializer(serializers.ModelSerializer):
 
@@ -32,10 +23,6 @@ class InventorySerializer(serializers.ModelSerializer):
             "is_available",
         )
 
-
-# =========================================================
-# CUSTOMER — MEDICINE LIST
-# =========================================================
 
 class MedicineListSerializer(serializers.ModelSerializer):
 
@@ -55,10 +42,6 @@ class MedicineListSerializer(serializers.ModelSerializer):
             "category",
         )
 
-
-# =========================================================
-# CUSTOMER — MEDICINE DETAIL
-# =========================================================
 
 class MedicineDetailSerializer(serializers.ModelSerializer):
 
@@ -103,10 +86,6 @@ class MedicineDetailSerializer(serializers.ModelSerializer):
         )
 
 
-# =========================================================
-# MEDICINE — CREATE / UPDATE
-# =========================================================
-
 class MedicineCreateUpdateSerializer(
     serializers.ModelSerializer
 ):
@@ -124,11 +103,6 @@ class MedicineCreateUpdateSerializer(
             "requires_prescription",
             "image",
         )
-
-# =========================================================
-# PHARMACIST — UPDATE MEDICINE
-# =========================================================
-
 class PharmacistMedicineUpdateSerializer(
     serializers.ModelSerializer
 ):
@@ -147,9 +121,6 @@ class PharmacistMedicineUpdateSerializer(
             "image",
             "is_active",
         )
-# =========================================================
-# PHARMACIST — INVENTORY
-# =========================================================
 
 class PharmacistInventorySerializer(
     serializers.ModelSerializer
@@ -190,11 +161,6 @@ class PharmacistInventorySerializer(
             "expiry_date",
             "is_available",
         )
-
-
-# =========================================================
-# PHARMACIST — MEDICINE WITHOUT INVENTORY
-# =========================================================
 
 class PharmacistMedicineWithoutInventorySerializer(
     serializers.ModelSerializer
@@ -265,10 +231,6 @@ class PharmacistMedicineWithoutInventorySerializer(
         return False
 
 
-# =========================================================
-# PHARMACIST — UPDATE INVENTORY
-# =========================================================
-
 class PharmacistInventoryUpdateSerializer(
     serializers.ModelSerializer
 ):
@@ -301,11 +263,6 @@ class PharmacistInventoryUpdateSerializer(
             )
 
         return value
-
-
-# =========================================================
-# PHARMACIST — ADD NEW PRODUCT
-# =========================================================
 
 class PharmacistCreateProductSerializer(
     serializers.ModelSerializer
@@ -394,9 +351,6 @@ class PharmacistCreateProductSerializer(
         return medicine
 
 
-# =========================================================
-# PHARMACIST — ADD NEW BATCH
-# =========================================================
 
 class PharmacistCreateBatchSerializer(
     serializers.ModelSerializer

@@ -21,11 +21,6 @@ from django.shortcuts import render
 from orders.permissions import IsPharmacistOrAdmin
 from notifications.services import update_low_stock_notification
 
-
-# =========================================================
-# CUSTOMER — MEDICINE LIST
-# =========================================================
-
 class MedicineListAPIView(generics.ListAPIView):
 
     queryset = (
@@ -67,11 +62,6 @@ class MedicineListAPIView(generics.ListAPIView):
         "brand_name",
     ]
 
-
-# =========================================================
-# CUSTOMER — MEDICINE DETAIL
-# =========================================================
-
 class MedicineDetailAPIView(
     generics.RetrieveAPIView
 ):
@@ -90,10 +80,6 @@ class MedicineDetailAPIView(
     ]
 
 
-# =========================================================
-# CUSTOMER — MEDICINE LIST PAGE
-# =========================================================
-
 def medicine_list_page(request):
 
     medicines = (
@@ -109,11 +95,6 @@ def medicine_list_page(request):
             "medicines": medicines,
         },
     )
-
-
-# =========================================================
-# CUSTOMER — MEDICINE DETAIL PAGE
-# =========================================================
 
 def medicine_detail_page(request, pk):
 
@@ -136,10 +117,6 @@ def medicine_detail_page(request, pk):
     )
 
 
-# =========================================================
-# PHARMACIST — INVENTORY
-# =========================================================
-
 class PharmacistInventoryListAPIView(
     generics.ListAPIView
 ):
@@ -158,9 +135,6 @@ class PharmacistInventoryListAPIView(
 
     def list(self, request, *args, **kwargs):
 
-        # -------------------------------------------------
-        # Existing inventory batches
-        # -------------------------------------------------
 
         inventory_queryset = (
             self.get_queryset()
@@ -177,10 +151,6 @@ class PharmacistInventoryListAPIView(
             inventory_serializer.data
         )
 
-
-        # -------------------------------------------------
-        # Medicines with NO inventory
-        # -------------------------------------------------
 
         medicines_without_inventory = (
             Medicine.objects
@@ -202,10 +172,6 @@ class PharmacistInventoryListAPIView(
         )
 
 
-        # -------------------------------------------------
-        # Combine both
-        # -------------------------------------------------
-
         combined_data = (
             list(inventory_data)
             +
@@ -221,11 +187,6 @@ class PharmacistInventoryListAPIView(
             }
         )
 
-
-# =========================================================
-# PHARMACIST — CATEGORY LIST
-# =========================================================
-
 class PharmacistCategoryListAPIView(
     generics.ListAPIView
 ):
@@ -237,12 +198,6 @@ class PharmacistCategoryListAPIView(
     permission_classes = [
         IsPharmacistOrAdmin
     ]
-
-
-# =========================================================
-# PHARMACIST — UPDATE INVENTORY
-# =========================================================
-
 
 class PharmacistInventoryUpdateAPIView(
     generics.UpdateAPIView
@@ -273,9 +228,7 @@ class PharmacistInventoryUpdateAPIView(
             inventory.medicine
         )
 
-# =========================================================
-# PHARMACIST — ADD NEW PRODUCT
-# =========================================================
+
 class PharmacistCreateProductAPIView(
     generics.CreateAPIView
 ):
@@ -296,9 +249,6 @@ class PharmacistCreateProductAPIView(
             medicine
         )
 
-# =========================================================
-# PHARMACIST — ADD NEW BATCH
-# =========================================================
 class PharmacistCreateBatchAPIView(
     generics.CreateAPIView
 ):
@@ -319,10 +269,6 @@ class PharmacistCreateBatchAPIView(
             inventory.medicine
         )
 
-# =========================================================
-# PHARMACIST — CREATE CATEGORY
-# =========================================================
-
 class PharmacistCategoryCreateAPIView(
     generics.CreateAPIView
 ):
@@ -333,9 +279,6 @@ class PharmacistCategoryCreateAPIView(
         IsPharmacistOrAdmin
     ]
 
-# =========================================================
-# PHARMACIST — MEDICINE LIST
-# =========================================================
 
 class PharmacistMedicineListAPIView(
     generics.ListAPIView
@@ -354,10 +297,6 @@ class PharmacistMedicineListAPIView(
         IsPharmacistOrAdmin
     ]
 
-# =========================================================
-# PHARMACIST — MEDICINE DETAIL
-# =========================================================
-
 class PharmacistMedicineDetailAPIView(
     generics.RetrieveAPIView
 ):
@@ -374,9 +313,6 @@ class PharmacistMedicineDetailAPIView(
     permission_classes = [
         IsPharmacistOrAdmin
     ]
-# =========================================================
-# PHARMACIST — UPDATE MEDICINE
-# =========================================================
 
 class PharmacistMedicineUpdateAPIView(
     generics.UpdateAPIView
