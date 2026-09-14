@@ -5,163 +5,123 @@
 </p>
 
 <p align="center">
-  A digital pharmacy platform that connects customers and pharmacists through medicine ordering, prescription management, payments, inventory, and order processing.
+  A digital pharmacy platform connecting customers and pharmacists through
+  medicine ordering, prescription management, payments, inventory, and order processing.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Django-5.x-092E20?style=for-the-badge&logo=django&logoColor=white">
+  <img src="https://img.shields.io/badge/DRF-API-red?style=for-the-badge">
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
+  <img src="https://img.shields.io/badge/HTML5-Frontend-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/CSS3-Frontend-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/JavaScript-Frontend-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 </p>
 
 ---
 
 ## 🌿 About the Project
 
-**MediBridge** is a full-stack online pharmacy management platform built with **Django, Django REST Framework, PostgreSQL, HTML, CSS, and JavaScript**.
+**MediBridge** is a full-stack online pharmacy management platform built using **Django, Django REST Framework, PostgreSQL, HTML, CSS, and JavaScript**.
 
-The platform provides a complete medicine ordering experience for customers while giving pharmacists a dedicated dashboard to manage pharmacy operations.
+The platform provides customers with a complete medicine ordering experience while giving pharmacists a dedicated dashboard to manage orders, prescriptions, medicines, and inventory.
 
 Customers can browse medicines, search for products, view medicine details, add medicines to their cart, upload prescriptions, place orders, make payments, and track their orders.
 
-Pharmacists can manage medicines and inventory, review prescriptions, process customer orders, update order statuses, and receive notifications about important pharmacy activities.
+Pharmacists can manage medicines and inventory, review prescriptions, process customer orders, update order statuses, and receive important notifications.
 
 ---
 
-# ✨ Features
+# ✨ Key Features
 
 ## 👤 Customer
 
-### 🔐 Authentication
-- User registration
-- Login and logout
-- JWT authentication
-- Role-based access control
-- Protected pages
+- 🔐 Registration and Login
+- 🔑 JWT Authentication
+- 💊 Browse and Search Medicines
+- 📋 Medicine Details and Categories
+- 🛒 Shopping Cart
+- 📄 Prescription Upload
+- 🤖 AI-Assisted Prescription Processing
+- 💳 Razorpay Online Payment
+- 💵 Cash on Delivery
+- 🔄 Payment Verification & Retry
+- 📦 Order History
+- 🚚 Active Order Tracking
+- 🔔 Notifications
+- 📧 Order Email Notifications
 
-### 💊 Medicine
-- Browse medicines
-- Search medicines
-- View medicine details
-- View medicine images
-- Medicine categories
-- Medicine availability
+## 👨‍⚕️ Pharmacist
 
-### 🛒 Shopping Cart
-- Add medicines to cart
-- Update medicine quantity
-- Remove medicines
-- View cart
-- Calculate cart total
+- 📊 Dedicated Pharmacist Dashboard
+- 📦 Customer Order Management
+- 📋 Prescription Verification
+- ❌ Prescription Rejection
+- 📝 Pharmacist Notes
+- 💊 Medicine Management
+- 📦 Inventory Management
+- ⚠️ Low-Stock Detection
+- 🔔 New Order Notifications
+- 🔔 Low-Stock Notifications
+- 🚚 Order Status Management
+- 👤 Pharmacist Profile
 
-### 📋 Prescription
-- Upload prescriptions
-- Prescription-based medicine ordering
-- AI-assisted prescription processing
-- Extract medicine information from prescriptions
-- Select extracted medicines for ordering
+## 👑 Admin
 
-### 💳 Checkout & Payment
-- Checkout system
-- Razorpay online payment
-- Cash on Delivery
-- Payment verification
-- Payment status tracking
-- Retry failed payments
-
-### 📦 Orders
-- Place orders
-- View order history
-- View order details
-- View active orders
-- Track order status
-- View payment status
-
-### 🔔 Notifications
-- Order-related notifications
-- Important account and order updates
-
-### 📧 Email
-- Order placed email
-- Order delivered email
+- Django Admin Panel
+- User Management
+- Pharmacist Management
+- Medicine Management
+- Database Management
 
 ---
 
-# 👨‍⚕️ Pharmacist
-
-MediBridge provides a dedicated pharmacist dashboard for managing pharmacy operations.
-
-### 📊 Dashboard
-- Pharmacy overview
-- Active orders
-- Order management
-- Inventory access
-- Medicine management
-- Notifications
-
-### 📦 Order Management
-Pharmacists can:
-
-- View customer orders
-- View order details
-- Review ordered medicines
-- Process orders
-- Update order status
-
-### 📋 Prescription Verification
-
-Pharmacists can:
-
-- View prescriptions attached to orders
-- Review uploaded prescriptions
-- Verify prescriptions
-- Reject prescriptions
-- Add pharmacist notes
-
-A prescription-based order **cannot be processed until the pharmacist verifies the prescription**.
-
-### 💊 Medicine Management
-- View medicines
-- Manage medicine information
-- Monitor medicine availability
-
-### 📦 Inventory
-- View inventory
-- Monitor stock levels
-- Manage stock
-- Identify low-stock medicines
-
-Medicines with **10 or fewer available units** are treated as low stock.
-
-### 🔔 Notifications
-Pharmacists receive notifications for:
-
-- New orders
-- Low-stock medicines
-
-### 👤 Profile
-- View pharmacist profile
-- Logout
-
----
-
-# 🔄 How MediBridge Works
-
-## Customer Workflow
+# 🔄 Platform Workflow
 
 ```text
-Register / Login
-      ↓
-Browse Medicines
-      ↓
-View Medicine Details
-      ↓
-Add Medicines to Cart
-      ↓
-Upload Prescription (if required)
-      ↓
-AI Prescription Processing
-      ↓
-Select Medicines
-      ↓
-Checkout
-      ↓
-Choose Payment Method
-      ↓
-Place Order
-      ↓
-Track Order
+                    👤 CUSTOMER
+                        │
+                        ▼
+                 Browse Medicines
+                        │
+                        ▼
+                   Add to Cart
+                        │
+                        ▼
+             Upload Prescription
+                  (if required)
+                        │
+                        ▼
+                 🤖 AI Processing
+                        │
+                        ▼
+                    Checkout
+                        │
+                        ▼
+                  💳 Payment
+                        │
+                        ▼
+                  Place Order
+                        │
+                        ▼
+                👨‍⚕️ PHARMACIST
+                        │
+                        ▼
+                  Review Order
+                        │
+                        ▼
+            Verify Prescription
+              (if required)
+                        │
+                        ▼
+                Check Inventory
+                        │
+                        ▼
+                 Process Order
+                        │
+                        ▼
+              Pack → Ship → Deliver
+                        │
+                        ▼
+                    📦 ORDER
