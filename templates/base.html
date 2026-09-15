@@ -18,18 +18,9 @@
     </title>
 
 
-    <!-- =====================================================
-         CUSTOMER PAGE ACCESS PROTECTION
-         ===================================================== -->
-
     <script>
 
         (function () {
-
-            /*
-             * Login and register pages must remain accessible
-             * without authentication.
-             */
 
             const currentPath =
                 window.location.pathname;
@@ -55,10 +46,7 @@
                 localStorage.getItem("access_token");
 
 
-            /*
-             * No logged-in user or token
-             * → go to login.
-             */
+            
 
             if (!storedUser || !accessToken) {
 
@@ -87,11 +75,6 @@
             }
 
 
-            /*
-             * Pharmacist and Admin belong to the
-             * pharmacist application.
-             */
-
             if (
                 user.role === "PHARMACIST" ||
                 user.role === "ADMIN"
@@ -102,11 +85,6 @@
                 return;
             }
 
-
-            /*
-             * Only CUSTOMER can continue
-             * on customer pages.
-             */
 
             if (user.role !== "CUSTOMER") {
 
@@ -188,9 +166,6 @@
 
         </a>
 
-
-        <!-- ORDERS -->
-
         <a
             href="/orders/"
             class="nav-link {% if request.resolver_match.url_name == 'orders-page' %}active{% endif %}"
@@ -207,7 +182,6 @@
         </a>
 
 
-        <!-- UPLOAD PRESCRIPTION -->
 
         <a
             href="/upload-prescription/"
@@ -231,8 +205,6 @@
     <div class="navbar-right">
 
 
-        <!-- CART -->
-
         <a
             href="/cart/"
             class="cart-link {% if request.resolver_match.url_name == 'cart-page' %}active{% endif %}"
@@ -252,8 +224,6 @@
 
         </a>
 
-
-        <!-- PROFILE -->
 
         <a
             href="/profile/"

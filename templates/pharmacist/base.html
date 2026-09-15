@@ -19,10 +19,7 @@
     </title>
 
 
-    <!-- =====================================================
-         PHARMACIST PAGE ACCESS PROTECTION
-         ===================================================== -->
-
+  
     <script>
 
         (function () {
@@ -34,11 +31,7 @@
                 localStorage.getItem("access_token");
 
 
-            /*
-             * No logged-in user or token
-             * → go to login
-             */
-
+            
             if (!storedUser || !accessToken) {
 
                 window.location.replace("/login/");
@@ -66,11 +59,7 @@
             }
 
 
-            /*
-             * Only PHARMACIST and ADMIN
-             * can access pharmacist pages.
-             */
-
+            
             if (
                 user.role !== "PHARMACIST" &&
                 user.role !== "ADMIN"
@@ -85,21 +74,13 @@
 
     </script>
 
-
-    <!-- =====================================================
-         BASE CSS
-         ===================================================== -->
-
     <link
         rel="stylesheet"
         href="{% static 'css/base.css' %}"
     >
 
 
-    <!-- =====================================================
-         PHARMACIST CSS
-         ===================================================== -->
-
+  
     <link
         rel="stylesheet"
         href="{% static 'css/pharmacist_base.css' %}"
@@ -118,19 +99,13 @@
 <div class="pharmacist-shell">
 
 
-    <!-- =====================================================
-         NAVBAR
-         ===================================================== -->
-
+    
     <header class="pharmacist-header">
 
         <div class="pharmacist-header-inner">
 
 
-            <!-- =================================================
-                 MEDIBRIDGE LOGO
-                 ================================================= -->
-
+            
             <a
                 href="/pharmacist/"
                 class="pharmacist-brand"
@@ -155,17 +130,14 @@
             </a>
 
 
-            <!-- =================================================
-                 PHARMACIST NAVIGATION
-                 ================================================= -->
-
+            
             <nav
                 class="pharmacist-navigation"
                 aria-label="Pharmacist navigation"
             >
 
 
-                <!-- DASHBOARD -->
+                
 
                 <a
                     href="/pharmacist/"
@@ -184,7 +156,7 @@
                 </a>
 
 
-                <!-- ORDERS -->
+                
 
                 <a
                     href="/pharmacist/orders/"
@@ -203,7 +175,7 @@
                 </a>
 
 
-                <!-- INVENTORY -->
+                
 
                 <a
                     href="/pharmacist/inventory/"
@@ -222,7 +194,7 @@
                 </a>
 
 
-                <!-- MEDICINES -->
+                
 
                 <a
                     href="/pharmacist/medicines/"
@@ -244,16 +216,8 @@
             </nav>
 
 
-            <!-- =================================================
-                 RIGHT SIDE
-                 ================================================= -->
-
             <div class="pharmacist-header-actions">
 
-
-                <!-- =================================================
-                     NOTIFICATIONS
-                     ================================================= -->
 
                 <a
                     href="/pharmacist/notifications/"
@@ -274,10 +238,6 @@
 
                 </a>
 
-
-                <!-- =================================================
-                     PROFILE
-                     ================================================= -->
 
                 <a
                     href="/pharmacist/profile/"
@@ -314,10 +274,6 @@
     </header>
 
 
-    <!-- =====================================================
-         PAGE CONTENT
-         ===================================================== -->
-
     <main class="pharmacist-content">
 
         {% block content %}
@@ -328,10 +284,6 @@
 
 </div>
 
-
-<!-- =========================================================
-     JAVASCRIPT
-     ========================================================= -->
 
 <script src="{% static 'js/api.js' %}"></script>
 
