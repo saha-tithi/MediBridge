@@ -1,11 +1,3 @@
-/* =========================================
-   PROFILE PAGE
-========================================= */
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
 
 const profileForm =
     document.getElementById("profileForm");
@@ -44,16 +36,8 @@ const logoutButton =
     document.getElementById("logoutButton");
 
 
-/* =========================================
-   STATE
-========================================= */
-
 let currentProfile = null;
 
-
-/* =========================================
-   LOAD PROFILE
-========================================= */
 
 async function loadProfile() {
 
@@ -105,10 +89,6 @@ async function loadProfile() {
 }
 
 
-/* =========================================
-   RENDER PROFILE
-========================================= */
-
 function renderProfile(profile) {
 
     usernameInput.value =
@@ -130,11 +110,6 @@ function renderProfile(profile) {
 
 }
 
-
-/* =========================================
-   EDIT PROFILE
-========================================= */
-
 editProfileButton.addEventListener(
     "click",
     function () {
@@ -144,10 +119,6 @@ editProfileButton.addEventListener(
     }
 );
 
-
-/* =========================================
-   ENABLE EDITING
-========================================= */
 
 function enableEditing() {
 
@@ -169,10 +140,6 @@ function enableEditing() {
 }
 
 
-/* =========================================
-   CANCEL EDIT
-========================================= */
-
 cancelEditButton.addEventListener(
     "click",
     function () {
@@ -192,10 +159,6 @@ cancelEditButton.addEventListener(
 );
 
 
-/* =========================================
-   DISABLE EDITING
-========================================= */
-
 function disableEditing() {
 
     usernameInput.disabled = true;
@@ -212,10 +175,6 @@ function disableEditing() {
 
 }
 
-
-/* =========================================
-   SAVE PROFILE
-========================================= */
 
 profileForm.addEventListener(
     "submit",
@@ -343,14 +302,6 @@ profileForm.addEventListener(
 );
 
 
-/* =========================================
-   LOGOUT
-========================================= */
-
-/* =========================================
-   LOGOUT
-========================================= */
-
 logoutButton.addEventListener(
     "click",
     function () {
@@ -369,10 +320,6 @@ logoutButton.addEventListener(
     }
 );
 
-
-/* =========================================
-   FORMAT ROLE
-========================================= */
 
 function formatRole(role) {
 
@@ -403,10 +350,6 @@ function formatRole(role) {
 }
 
 
-/* =========================================
-   FORMAT DATE
-========================================= */
-
 function formatDate(dateString) {
 
     if (!dateString) {
@@ -434,10 +377,6 @@ function formatDate(dateString) {
 }
 
 
-/* =========================================
-   ERROR
-========================================= */
-
 function showProfileError(message) {
 
     profileError.textContent =
@@ -459,9 +398,5 @@ function clearProfileError() {
 
 }
 
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadProfile();

@@ -1,6 +1,3 @@
-/* =========================================================
-   PHARMACIST INVENTORY
-========================================================= */
 
 let inventoryData = [];
 
@@ -8,11 +5,6 @@ let isSubmittingProduct = false;
 let isSubmittingCategory = false;
 let isSubmittingInventory = false;
 let isSubmittingBatch = false;
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
 
 const inventorySearch =
     document.getElementById("inventorySearch");
@@ -50,10 +42,6 @@ const lowStockInventory =
 const outOfStockInventory =
     document.getElementById("outOfStockInventory");
 
-
-/* =========================================================
-   ADD PRODUCT MODAL
-========================================================= */
 
 const addProductButton =
     document.getElementById("addProductButton");
@@ -113,20 +101,12 @@ const productAvailable =
     document.getElementById("productAvailable");
 
 
-/* =========================================================
-   PRODUCT IMAGE
-========================================================= */
-
 const productImage =
     document.getElementById("productImage");
 
 const productImagePreview =
     document.getElementById("productImagePreview");
 
-
-/* =========================================================
-   CATEGORY MODAL
-========================================================= */
 
 const addCategoryButton =
     document.getElementById("addCategoryButton");
@@ -155,10 +135,6 @@ const categoryFormMessage =
 const saveCategoryButton =
     document.getElementById("saveCategoryButton");
 
-
-/* =========================================================
-   MANAGE INVENTORY MODAL
-========================================================= */
 
 const manageInventoryModal =
     document.getElementById("manageInventoryModal");
@@ -198,10 +174,6 @@ const saveManageButton =
 
 let selectedInventoryId = null;
 
-
-/* =========================================================
-   ADD NEW BATCH MODAL
-========================================================= */
 
 const addBatchButton =
     document.getElementById("addBatchButton");
@@ -243,9 +215,6 @@ const saveBatchButton =
     document.getElementById("saveBatchButton");
 
 
-/* =========================================================
-   LOAD INVENTORY
-========================================================= */
 
 async function loadInventory() {
 
@@ -279,9 +248,6 @@ async function loadInventory() {
 }
 
 
-/* =========================================================
-   EXTRACT API DATA
-========================================================= */
 
 function extractData(response) {
 
@@ -322,10 +288,6 @@ function extractData(response) {
     return [];
 }
 
-
-/* =========================================================
-   INVENTORY LOADING STATE
-========================================================= */
 
 function showInventoryLoading() {
 
@@ -510,19 +472,12 @@ function renderInventory() {
                 let matchesFilter = true;
 
 
-                /* =========================================
-                   INVENTORY FILTERS
-                ========================================== */
-
+              
                 if (
                     filter === "ACTIVE"
                 ) {
 
-                    /*
-                     * Active inventory:
-                     * - Stock must be greater than 0
-                     * - Batch must be available
-                     */
+                    
 
                     matchesFilter =
                         stock > 0 &&
@@ -554,15 +509,6 @@ function renderInventory() {
                     filter === "UNAVAILABLE"
                 ) {
 
-                    /*
-                     * This includes:
-                     *
-                     * 1. Existing batches marked unavailable
-                     * 2. Medicines with NO inventory
-                     *
-                     * The backend sends is_available=false
-                     * for medicines without inventory.
-                     */
 
                     matchesFilter =
                         item.is_available === false;
@@ -633,10 +579,6 @@ function renderInventory() {
             }
 
 
-            /* =========================================
-               AVAILABILITY
-            ========================================== */
-
             let availabilityClass;
 
             let availabilityText;
@@ -668,20 +610,13 @@ function renderInventory() {
             }
 
 
-            /* =========================================
-               ACTION
-            ========================================== */
-
+           
             let actionHtml;
 
 
             if (item.id) {
 
-                /*
-                 * Normal inventory batch.
-                 * It has an Inventory record, so it can
-                 * be managed.
-                 */
+               
 
                 actionHtml = `
                     <button
@@ -812,10 +747,7 @@ function renderInventory() {
     );
 
 
-    /* =========================================
-       MANAGE BUTTONS
-    ========================================== */
-
+    
     document
         .querySelectorAll(
             ".inventory-manage-button"
@@ -867,10 +799,6 @@ function renderInventory() {
         } found`;
 }
 
-/* =========================================================
-   SEARCH / FILTER
-========================================================= */
-
 inventorySearch.addEventListener(
     "input",
     renderInventory
@@ -882,9 +810,6 @@ inventoryFilter.addEventListener(
 );
 
 
-/* =========================================================
-   ADD PRODUCT MODAL
-========================================================= */
 
 function openProductModalWindow() {
 
@@ -953,9 +878,6 @@ cancelProductButton.addEventListener(
 );
 
 
-/* =========================================================
-   PRODUCT IMAGE PREVIEW
-========================================================= */
 
 productImage.addEventListener(
     "change",
@@ -1036,10 +958,6 @@ productImage.addEventListener(
 );
 
 
-/* =========================================================
-   PRODUCT MESSAGE
-========================================================= */
-
 function showProductMessage(
     message,
     type
@@ -1065,9 +983,6 @@ function showProductMessage(
 }
 
 
-/* =========================================================
-   LOAD CATEGORIES
-========================================================= */
 
 async function loadCategories() {
 
@@ -1122,10 +1037,6 @@ async function loadCategories() {
     }
 }
 
-
-/* =========================================================
-   ADD PRODUCT
-========================================================= */
 
 productForm.addEventListener(
     "submit",
@@ -1232,10 +1143,7 @@ productForm.addEventListener(
             );
 
 
-            /* =========================================
-               IMAGE
-            ========================================== */
-
+           
             if (
                 productImage.files.length > 0
             ) {
@@ -1303,11 +1211,6 @@ productForm.addEventListener(
     }
 );
 
-
-/* =========================================================
-   CATEGORY MODAL
-========================================================= */
-
 function openCategoryModalWindow() {
 
     categoryModal.style.display =
@@ -1371,9 +1274,6 @@ cancelCategoryButton.addEventListener(
 );
 
 
-/* =========================================================
-   CREATE CATEGORY
-========================================================= */
 
 categoryForm.addEventListener(
     "submit",
@@ -1503,11 +1403,6 @@ categoryForm.addEventListener(
     }
 );
 
-
-/* =========================================================
-   MANAGE INVENTORY
-========================================================= */
-
 function openManageInventory(item) {
 
     selectedInventoryId =
@@ -1602,10 +1497,6 @@ cancelManageButton.addEventListener(
     closeManageInventoryWindow
 );
 
-
-/* =========================================================
-   UPDATE INVENTORY
-========================================================= */
 
 manageInventoryForm.addEventListener(
     "submit",
@@ -1723,9 +1614,6 @@ manageInventoryForm.addEventListener(
 );
 
 
-/* =========================================================
-   ADD NEW BATCH
-========================================================= */
 
 function openBatchModalWindow() {
 
@@ -1807,10 +1695,6 @@ cancelBatchButton.addEventListener(
     closeBatchModalWindow
 );
 
-
-/* =========================================================
-   LOAD MEDICINES FOR BATCH
-========================================================= */
 
 async function loadBatchMedicines() {
 
@@ -1898,9 +1782,6 @@ async function loadBatchMedicines() {
 }
 
 
-/* =========================================================
-   CREATE NEW BATCH
-========================================================= */
 
 batchForm.addEventListener(
     "submit",
@@ -2032,11 +1913,6 @@ batchForm.addEventListener(
     }
 );
 
-
-/* =========================================================
-   MODAL OVERLAY CLICK
-========================================================= */
-
 productModal.addEventListener(
     "click",
     function (event) {
@@ -2097,9 +1973,6 @@ batchModal.addEventListener(
 );
 
 
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
 
 document.addEventListener(
     "keydown",
@@ -2155,9 +2028,6 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
 
 function formatPrice(price) {
 
@@ -2242,9 +2112,5 @@ function escapeHtml(value) {
         );
 }
 
-
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
 
 loadInventory();

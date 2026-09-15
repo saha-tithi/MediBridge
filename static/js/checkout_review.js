@@ -1,6 +1,3 @@
-/* =========================================
-   REVIEW PAGE ELEMENTS
-========================================= */
 
 const selectedAddressElement =
     document.getElementById("selectedAddress");
@@ -21,21 +18,10 @@ const reviewError =
     document.getElementById("reviewError");
 
 
-
-/* =========================================
-   STATE
-========================================= */
-
 let selectedAddressId =sessionStorage.getItem("selectedAddressId");
 let currentCart = null;
 let selectedAddressForPayment = null;
 let pendingOnlineOrder = null;
-
-
-/* =========================================
-   LOAD REVIEW DATA
-========================================= */
-
 async function loadReviewPage() {
 
     try {
@@ -253,12 +239,6 @@ function renderSelectedAddress(address) {
 
 }
 
-
-
-/* =========================================
-   RENDER ORDER ITEMS
-========================================= */
-
 function renderReviewItems(cart) {
 
     reviewItems.innerHTML =
@@ -324,10 +304,7 @@ function renderReviewItems(cart) {
             .join("");
 
 
-    /*
-     * Cart total comes from backend.
-     */
-
+    
     itemsTotal.textContent =
         `₹${cart.total}`;
 
@@ -338,10 +315,6 @@ function renderReviewItems(cart) {
 }
 
 
-
-/* =========================================
-   PAYMENT METHOD
-========================================= */
 
 const paymentOptions =
     document.querySelectorAll(
@@ -386,18 +359,11 @@ paymentOptions.forEach(
 );
 
 
-/* =========================================
-   PLACE ORDER
-========================================= */
-
 placeOrderButton.addEventListener(
     "click",
     async function () {
 
-        /* =================================
-           RETRY EXISTING ONLINE PAYMENT
-        ================================= */
-
+      
         if (pendingOnlineOrder) {
 
             await startRazorpayPayment(
@@ -450,10 +416,7 @@ placeOrderButton.addEventListener(
 
         try {
 
-            /* =================================
-               GET SELECTED ADDRESS
-            ================================= */
-
+            
             const addresses =
                 await apiRequest(
                     "/addresses/",
@@ -484,10 +447,7 @@ placeOrderButton.addEventListener(
             selectedAddressForPayment = selectedAddress;
 
  
-            /* =================================
-               BUILD SHIPPING ADDRESS
-            ================================= */
-
+            
             const shippingAddress =
                 [
                     selectedAddress.full_name,
@@ -498,12 +458,6 @@ placeOrderButton.addEventListener(
                 ]
                 .filter(Boolean)
                 .join(", ");
-
-
-
-            /* =================================
-               CREATE MEDIBRIDGE ORDER
-            ================================= */
 
             const orderResponse =
                 await apiRequest(
@@ -553,10 +507,7 @@ placeOrderButton.addEventListener(
 
 
 
-            /* =================================
-               COD
-            ================================= */
-
+          
             if (
                 paymentMethod === "COD"
             ) {
@@ -577,10 +528,7 @@ placeOrderButton.addEventListener(
 
 
 
-            /* =================================
-               ONLINE PAYMENT
-            ================================= */
-
+        
             if (
                 paymentMethod === "ONLINE"
             ) {
@@ -616,9 +564,6 @@ placeOrderButton.addEventListener(
 
     }
 );
-/* =========================================
-   ENABLE PAYMENT RETRY
-========================================= */
 
 function enablePaymentRetry() {
 
@@ -628,9 +573,6 @@ function enablePaymentRetry() {
         "Retry Payment";
 
 }
-/* =========================================
-   START RAZORPAY PAYMENT
-========================================= */
 
 async function startRazorpayPayment(order) {
 
@@ -640,10 +582,7 @@ async function startRazorpayPayment(order) {
             "Opening Payment...";
 
 
-        /* =================================
-           CREATE / GET RAZORPAY ORDER
-        ================================= */
-
+        
         const response =
             await apiRequest(
                 `/orders/${order.id}/razorpay/create/`,
@@ -669,10 +608,7 @@ async function startRazorpayPayment(order) {
         }
 
 
-        /* =================================
-           RAZORPAY CHECKOUT OPTIONS
-        ================================= */
-
+       
         const options = {
 
             key:
@@ -693,10 +629,6 @@ async function startRazorpayPayment(order) {
             order_id:
                 razorpayData.razorpay_order_id,
 
-
-            /* ==============================
-               PAYMENT SUCCESS
-            ============================== */
 
             handler:
                 async function (
@@ -769,10 +701,6 @@ async function startRazorpayPayment(order) {
                 },
 
 
-            /* ==============================
-               PREFILL CUSTOMER
-            ============================== */
-
             prefill: {
 
                 name:
@@ -784,20 +712,13 @@ async function startRazorpayPayment(order) {
             },
 
 
-            /* ==============================
-               THEME
-            ============================== */
-
             theme: {
 
                 color:
                     "#438f89"
 
             },
-            /* ==============================
-   MODAL CLOSE
-============================== */
-
+            
 modal: {
 
     ondismiss: function () {
@@ -819,20 +740,13 @@ modal: {
         };
 
 
-        /* =================================
-           CREATE RAZORPAY INSTANCE
-        ================================= */
-
         const razorpay =
             new Razorpay(
                 options
             );
 
 
-        /* =================================
-           PAYMENT FAILED
-        ================================= */
-
+       
         razorpay.on(
             "payment.failed",
             function (
@@ -857,10 +771,6 @@ modal: {
 
 
 
-        /* =================================
-           OPEN RAZORPAY
-        ================================= */
-
         razorpay.open();
 
 
@@ -884,9 +794,6 @@ modal: {
 
 }
 
-/* =========================================
-   HTML ESCAPE
-========================================= */
 
 function escapeHTML(value) {
 
@@ -928,9 +835,6 @@ function escapeHTML(value) {
         );
 
 }
-/* =========================================
-   ADDRESS LABEL
-========================================= */
 
 function getAddressLabel(label) {
 
@@ -949,10 +853,6 @@ function getAddressLabel(label) {
 }
 
 
-/* =========================================
-   ERROR
-========================================= */
-
 function showReviewError(message) {
 
     reviewError.textContent =
@@ -963,9 +863,5 @@ function showReviewError(message) {
 
 }
 
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadReviewPage();

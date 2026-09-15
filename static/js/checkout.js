@@ -1,6 +1,3 @@
-/* =========================================
-   CHECKOUT ELEMENTS
-========================================= */
 
 const addressList =
     document.getElementById("addressList");
@@ -36,10 +33,6 @@ const addressFormError =
 
 
 
-/* =========================================
-   STATE
-========================================= */
-
 let addresses = [];
 
 let selectedAddressId = null;
@@ -48,10 +41,6 @@ let editingAddressId = null;
 let expandedAddressId = null;
 
 
-
-/* =========================================
-   LOAD ADDRESSES
-========================================= */
 
 async function loadAddresses() {
 
@@ -147,10 +136,6 @@ async function loadAddresses() {
 
 
 
-/* =========================================
-   RENDER ADDRESSES
-========================================= */
-
 function renderAddresses() {
 
     if (
@@ -201,10 +186,6 @@ function renderAddresses() {
 }
 
 
-
-/* =========================================
-   CREATE ADDRESS HTML
-========================================= */
 
 function createAddressHTML(address) {
 
@@ -417,10 +398,6 @@ function createAddressHTML(address) {
     `;
 
 }
-/* =========================================
-   ADDRESS LABEL
-========================================= */
-
 function getAddressLabel(label) {
 
     const labels = {
@@ -440,9 +417,6 @@ function getAddressLabel(label) {
 
 
 
-/* =========================================
-   SELECT ADDRESS
-========================================= */
 
 addressList.addEventListener(
     "change",
@@ -477,19 +451,13 @@ addressList.addEventListener(
 );
 
 
-/* =========================================
-   ADDRESS ACTIONS
-========================================= */
 
 addressList.addEventListener(
     "click",
     function (event) {
 
 
-        /* =================================
-           EDIT
-        ================================== */
-
+        
         const editButton =
             event.target.closest(
                 ".edit-address"
@@ -509,10 +477,6 @@ addressList.addEventListener(
         }
 
 
-
-        /* =================================
-           DELETE
-        ================================== */
 
         const deleteButton =
             event.target.closest(
@@ -534,10 +498,7 @@ addressList.addEventListener(
 
 
 
-        /* =================================
-           RADIO
-        ================================== */
-
+   
         if (
             event.target.closest(
                 ".address-radio"
@@ -549,11 +510,6 @@ addressList.addEventListener(
         }
 
 
-
-        /* =================================
-           ADDRESS HEADER
-           → EXPAND / COLLAPSE
-        ================================== */
 
         const header =
             event.target.closest(
@@ -603,9 +559,6 @@ addressList.addEventListener(
 
     }
 );
-/* =========================================
-   SHOW ADD ADDRESS FORM
-========================================= */
 
 function showAddressForm() {
 
@@ -624,20 +577,11 @@ function showAddressForm() {
         "none";
 
 
-    /*
-     * Make sure this is a fresh
-     * Add Address form.
-     */
+    
 
     clearAddressForm();
 
 }
-
-
-
-/* =========================================
-   HIDE ADDRESS FORM
-========================================= */
 
 function hideAddressForm() {
 
@@ -654,10 +598,6 @@ function hideAddressForm() {
 }
 
 
-
-/* =========================================
-   CLEAR FORM
-========================================= */
 
 function clearAddressForm() {
 
@@ -711,10 +651,6 @@ function clearAddressForm() {
 
 
 
-/* =========================================
-   SAVE ADDRESS
-========================================= */
-
 async function saveAddress() {
 
     const fullName =
@@ -760,10 +696,6 @@ async function saveAddress() {
 
 
 
-    /* =====================================
-       VALIDATION
-    ===================================== */
-
     if (
         !fullName ||
         !phoneNumber ||
@@ -793,11 +725,6 @@ async function saveAddress() {
 
     }
 
-
-
-    /* =====================================
-       PREPARE DATA
-    ===================================== */
 
     const addressData = {
 
@@ -830,10 +757,6 @@ async function saveAddress() {
 
 
 
-    /* =====================================
-       BUTTON STATE
-    ===================================== */
-
     saveAddressButton.disabled =
         true;
 
@@ -850,10 +773,6 @@ async function saveAddress() {
         let response;
 
 
-
-        /* =================================
-           EDIT EXISTING ADDRESS
-        ================================= */
 
         if (editingAddressId) {
 
@@ -902,11 +821,6 @@ async function saveAddress() {
         }
 
 
-
-        /* =================================
-           CREATE NEW ADDRESS
-        ================================= */
-
         else {
 
             response =
@@ -940,10 +854,6 @@ async function saveAddress() {
         }
 
 
-
-        /* =================================
-           RESET EDIT MODE
-        ================================= */
 
         editingAddressId =
             null;
@@ -982,10 +892,6 @@ async function saveAddress() {
 }
 
 
-
-/* =========================================
-   DELETE ADDRESS
-========================================= */
 
 async function deleteAddress(addressId) {
 
@@ -1042,10 +948,6 @@ async function deleteAddress(addressId) {
 
 
 
-/* =========================================
-   EDIT ADDRESS
-========================================= */
-
 function editAddress(addressId) {
 
     const address =
@@ -1085,12 +987,6 @@ function editAddress(addressId) {
 
     editingAddressId =
         address.id;
-
-
-
-    /* =====================================
-       FILL EXISTING DATA
-    ===================================== */
 
     document.getElementById(
         "fullName"
@@ -1151,9 +1047,6 @@ function editAddress(addressId) {
 
 
 
-/* =========================================
-   PROCEED
-========================================= */
 
 proceedButton.addEventListener(
     "click",
@@ -1176,11 +1069,6 @@ proceedButton.addEventListener(
     }
 );
 
-
-
-/* =========================================
-   FORM BUTTONS
-========================================= */
 
 addAddressButton.addEventListener(
     "click",
@@ -1222,11 +1110,6 @@ saveAddressButton.addEventListener(
 );
 
 
-
-/* =========================================
-   PROCEED STATE
-========================================= */
-
 function updateProceedButton() {
 
     proceedButton.disabled =
@@ -1235,10 +1118,6 @@ function updateProceedButton() {
 }
 
 
-
-/* =========================================
-   ERROR
-========================================= */
 
 function showAddressError(message) {
 
@@ -1251,11 +1130,6 @@ function showAddressError(message) {
 
 }
 
-
-
-/* =========================================
-   HTML ESCAPE
-========================================= */
 
 function escapeHTML(value) {
 
@@ -1297,11 +1171,5 @@ function escapeHTML(value) {
         );
 
 }
-
-
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadAddresses();

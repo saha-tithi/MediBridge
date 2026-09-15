@@ -1,13 +1,5 @@
-/* =========================================================
-   PHARMACIST MEDICINES
-========================================================= */
 
 let medicinesData = [];
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
 
 const medicineSearch =
     document.getElementById("medicineSearch");
@@ -52,10 +44,6 @@ const prescriptionMedicines =
     document.getElementById("prescriptionMedicines");
 
 
-/* =========================================================
-   LOAD MEDICINES
-========================================================= */
-
 async function loadMedicines() {
 
     showMedicineLoading();
@@ -88,11 +76,6 @@ async function loadMedicines() {
         );
     }
 }
-
-
-/* =========================================================
-   EXTRACT API DATA
-========================================================= */
 
 function extractMedicineData(response) {
 
@@ -134,10 +117,6 @@ function extractMedicineData(response) {
 }
 
 
-/* =========================================================
-   LOADING STATE
-========================================================= */
-
 function showMedicineLoading() {
 
     medicineLoading.style.display =
@@ -164,10 +143,6 @@ function hideMedicineLoading() {
 }
 
 
-/* =========================================================
-   ERROR STATE
-========================================================= */
-
 function showMedicineError(message) {
 
     medicineError.textContent =
@@ -186,10 +161,6 @@ function showMedicineError(message) {
         "none";
 }
 
-
-/* =========================================================
-   STATISTICS
-========================================================= */
 
 function updateMedicineStatistics() {
 
@@ -240,9 +211,6 @@ function updateMedicineStatistics() {
 }
 
 
-/* =========================================================
-   CATEGORY FILTER
-========================================================= */
 
 function populateCategoryFilter() {
 
@@ -359,9 +327,6 @@ function populateCategoryFilter() {
 }
 
 
-/* =========================================================
-   RENDER MEDICINES
-========================================================= */
 
 function renderMedicines() {
 
@@ -683,10 +648,7 @@ function renderMedicines() {
     );
 
 
-    /* =====================================================
-       VIEW MEDICINE
-    ====================================================== */
-
+   
     document
         .querySelectorAll(
             ".medicine-view-button"
@@ -725,9 +687,6 @@ function renderMedicines() {
 }
 
 
-/* =========================================================
-   SEARCH / FILTER EVENTS
-========================================================= */
 
 medicineSearch.addEventListener(
     "input",
@@ -752,10 +711,6 @@ medicineStatusFilter.addEventListener(
     renderMedicines
 );
 
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
 
 function escapeMedicineHtml(value) {
 
@@ -792,8 +747,5 @@ function escapeMedicineHtml(value) {
 }
 
 
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
 
 loadMedicines();

@@ -1,6 +1,3 @@
-/* =========================================
-   ORDER SUCCESS
-========================================= */
 
 const orderDetails =
     document.getElementById(
@@ -8,9 +5,6 @@ const orderDetails =
     );
 
 
-/* =========================================
-   ORDER ID
-========================================= */
 
 const pathParts =
     window.location.pathname
@@ -22,10 +16,6 @@ const orderId =
     pathParts[pathParts.length - 1];
 
 
-
-/* =========================================
-   LOAD ORDER
-========================================= */
 
 async function loadOrder() {
 
@@ -81,10 +71,6 @@ async function loadOrder() {
 }
 
 
-
-/* =========================================
-   RENDER ORDER
-========================================= */
 
 function renderOrder(order) {
 
@@ -178,10 +164,6 @@ function renderOrder(order) {
 
 
 
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
 function escapeHTML(value) {
 
     if (
@@ -223,10 +205,5 @@ function escapeHTML(value) {
 
 }
 
-
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadOrder();

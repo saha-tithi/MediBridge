@@ -31,10 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let availableMedicines = [];
 
 
-    /* -----------------------------
-       ERROR
-    ----------------------------- */
-
+    
     function showError(message) {
 
         if (resultsError) {
@@ -47,10 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
-    /* -----------------------------
-       LOAD RESULTS
-    ----------------------------- */
 
     async function loadResults() {
 
@@ -118,10 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    /* -----------------------------
-       RENDER MEDICINES
-    ----------------------------- */
-
+  
     function renderMedicines(medicines) {
 
         medicinesContainer.innerHTML = "";
@@ -183,9 +173,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    /* -----------------------------
-       MATCHED MEDICINE CARD
-    ----------------------------- */
 
     function createMatchedCard(
         item,
@@ -286,7 +273,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
 
 
-        /* Checkbox */
+        
 
         checkbox.addEventListener(
             "change",
@@ -302,7 +289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
 
-        /* Card click */
+        
 
         card.addEventListener(
             "click",
@@ -333,10 +320,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return card;
     }
 
-
-    /* -----------------------------
-       UNAVAILABLE CARD
-    ----------------------------- */
 
     function createUnavailableCard(item) {
 
@@ -416,10 +399,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    /* -----------------------------
-       UPDATE CART BUTTON
-    ----------------------------- */
-
+  
     function updateCartButton() {
 
         const selected =
@@ -452,10 +432,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    /* -----------------------------
-       ADD TO CART
-    ----------------------------- */
-
+   
     if (addToCartButton) {
 
         addToCartButton.addEventListener(
@@ -487,13 +464,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             checkbox.dataset.medicineId;
 
 
-                        /*
-                         * The prescription ID comes
-                         * from the current prescription
-                         * results page URL.
-                         *
-                         * This is the important fix.
-                         */
+                       
 
                         await apiRequest(
                             "/cart/items/",
@@ -516,10 +487,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
 
 
-                    /*
-                     * All selected medicines were
-                     * successfully added.
-                     */
+                   
 
                     window.location.href =
                         "/cart/";
@@ -555,10 +523,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    /* -----------------------------
-       HTML ESCAPE
-    ----------------------------- */
-
     function escapeHtml(value) {
 
         const div =
@@ -570,10 +534,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return div.innerHTML;
     }
 
-
-    /* -----------------------------
-       START
-    ----------------------------- */
 
     await loadResults();
 

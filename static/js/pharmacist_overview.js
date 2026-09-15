@@ -31,10 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("overviewError");
 
 
-    /* =========================================
-       LOAD ORDERS
-    ========================================== */
-
+   
     async function loadOverview() {
 
         showLoading();
@@ -81,10 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* =========================================
-       STATISTICS
-    ========================================== */
 
     function updateStatistics(orders) {
 
@@ -139,27 +132,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================================
-       ORDERS NEEDING ATTENTION
-    ========================================== */
-
     function renderRecentOrders(orders) {
 
         recentOrdersElement.innerHTML = "";
 
 
-        /*
-         * Only show orders that still need
-         * pharmacist action.
-         *
-         * PLACED     → needs processing
-         * PROCESSING → needs processing
-         *
-         * PACKED      → no longer needs attention
-         * SHIPPED     → no longer needs attention
-         * DELIVERED   → no longer needs attention
-         * CANCELLED   → no longer needs attention
-         */
 
         const attentionOrders =
             orders.filter(function (order) {
@@ -265,10 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================================
-       ORDER STATUS
-    ========================================== */
-
+  
     function renderOrderStatus(orders) {
 
         statusList.innerHTML = "";
@@ -387,10 +361,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================================
-       FORMAT ORDER ID
-    ========================================== */
-
     function formatOrderId(id) {
 
         if (!id) {
@@ -405,10 +375,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* =========================================
-       FORMAT AMOUNT
-    ========================================== */
 
     function formatAmount(amount) {
 
@@ -433,10 +399,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* =========================================
-       FORMAT DATE
-    ========================================== */
 
     function formatDate(dateString) {
 
@@ -466,10 +428,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================================
-       FORMAT STATUS
-    ========================================== */
-
+    
     function formatStatus(status) {
 
         const statuses = {
@@ -496,10 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================================
-       STATUS CLASS
-    ========================================== */
-
+    
     function getStatusClass(status) {
 
         const classes = {
@@ -531,10 +487,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =========================================
-       LOADING
-    ========================================== */
-
+    
     function showLoading() {
 
         ordersLoading.style.display =
@@ -560,11 +513,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* =========================================
-       ERROR
-    ========================================== */
-
     function showError(message) {
 
         hideLoading();
@@ -576,11 +524,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "block";
 
     }
-
-
-    /* =========================================
-       INITIAL LOAD
-    ========================================== */
 
     loadOverview();
 

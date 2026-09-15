@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    /* =====================================================
-       GET ORDER ID FROM URL
-    ===================================================== */
 
     const pathParts = window.location.pathname
         .split("/")
@@ -15,11 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
         showError("Order ID could not be found.");
         return;
     }
-
-
-    /* =====================================================
-       ELEMENTS
-       ===================================================== */
 
     const detailLoading =
         document.getElementById("detailLoading");
@@ -96,10 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPrescriptions = [];
 
 
-    /* =====================================================
-       LOAD ORDER
-       ===================================================== */
-
     async function loadOrder() {
 
         showLoading();
@@ -132,10 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       RENDER ORDER
-       ===================================================== */
-
+ 
     function renderOrder(order) {
 
         hideLoading();
@@ -155,10 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderActions(order);
     }
 
-
-    /* =====================================================
-       HEADER
-       ===================================================== */
 
     function renderHeader(order) {
 
@@ -182,10 +163,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       DELIVERY
-       ===================================================== */
-
     function renderDelivery(order) {
 
         shippingAddress.textContent =
@@ -193,10 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "No shipping address available.";
     }
 
-
-    /* =====================================================
-       ITEMS
-       ===================================================== */
 
     function renderItems(order) {
 
@@ -268,10 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       PAYMENT
-       ===================================================== */
-
     function renderPayment(order) {
 
         paymentMethod.textContent =
@@ -301,10 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       PRESCRIPTIONS
-       ===================================================== */
-
+   
     function renderPrescriptions(order) {
 
         const items =
@@ -313,11 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 : [];
 
 
-        /*
-         * Find every prescription actually attached
-         * to an order item.
-         */
-
+     
         currentPrescriptions = [];
 
         items.forEach(function (item) {
@@ -356,9 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
 
-        /*
-         * No prescription attached
-         */
+       
 
         if (currentPrescriptions.length === 0) {
 
@@ -375,10 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-         * Prescription attached
-         */
-
+      
         prescriptionPanel.style.display =
             "block";
 
@@ -398,10 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePrescriptionUI();
     }
 
-
-    /* =====================================================
-       CREATE PRESCRIPTION ITEM
-       ===================================================== */
 
     function createPrescriptionItem(
         prescription
@@ -482,10 +435,6 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
     }
 
-
-    /* =====================================================
-       PRESCRIPTION UI
-       ===================================================== */
 
     function updatePrescriptionUI() {
 
@@ -571,11 +520,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
-    /* =====================================================
-       VERIFY PRESCRIPTION
-       ===================================================== */
-
     if (verifyPrescriptionButton) {
 
         verifyPrescriptionButton.addEventListener(
@@ -592,10 +536,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       REJECT PRESCRIPTION
-       ===================================================== */
-
     if (rejectPrescriptionButton) {
 
         rejectPrescriptionButton.addEventListener(
@@ -611,10 +551,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* =====================================================
-       UPDATE PRESCRIPTION STATUS
-       ===================================================== */
 
     async function updatePrescriptionStatus(
         newStatus
@@ -638,10 +574,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let pharmacistNote = "";
 
-
-        /*
-         * REJECT
-         */
 
         if (newStatus === "REJECTED") {
 
@@ -795,20 +727,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       ORDER ACTIONS
-       ===================================================== */
-
+  
     function renderActions(order) {
 
         orderActions.innerHTML = "";
 
         const status = order.status;
 
-
-        /*
-         * PLACED
-         */
 
         if (status === "PLACED") {
 
@@ -943,10 +868,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       PROCESS ORDER
-       ===================================================== */
-
+ 
     async function processOrder() {
 
         const button =
@@ -1025,10 +947,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       UPDATE STATUS
-       ===================================================== */
-
+  
     updateStatusButton.addEventListener(
         "click",
         updateOrderStatus
@@ -1126,10 +1045,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       CUSTOM CONFIRMATION DIALOG
-       ===================================================== */
-
+   
     function showMedicineConfirm(
         title,
         message
@@ -1315,10 +1231,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       CUSTOM INPUT DIALOG
-       ===================================================== */
-
+ 
     function showMedicineInputDialog(
         title,
         message,
@@ -1574,11 +1487,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-
-    /* =====================================================
-       CUSTOM TOAST
-       ===================================================== */
-
     function showMedicineToast(
         message,
         type = "success"
@@ -1684,10 +1592,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       REMOVE TOAST
-       ===================================================== */
-
     function removeMedicineToast(
         toast
     ) {
@@ -1714,10 +1618,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-
-    /* =====================================================
-       DATE
-       ===================================================== */
 
     function formatDateTime(value) {
 
@@ -1752,10 +1652,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       CURRENCY
-       ===================================================== */
-
     function formatCurrency(value) {
 
         const amount =
@@ -1776,11 +1672,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         ).format(amount);
     }
-
-
-    /* =====================================================
-       STATUS HELPERS
-       ===================================================== */
 
     function getStatusClass(status) {
 
@@ -1838,10 +1729,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       PAYMENT HELPERS
-       ===================================================== */
-
     function getPaymentClass(status) {
 
         switch (status) {
@@ -1896,10 +1783,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       LOADING / ERROR
-       ===================================================== */
-
     function showLoading() {
 
         detailLoading.style.display =
@@ -1935,11 +1818,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "block";
     }
 
-
-    /* =====================================================
-       BASIC HTML ESCAPING
-       ===================================================== */
-
     function escapeHtml(value) {
 
         return String(value)
@@ -1966,10 +1844,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       START
-       ===================================================== */
-
+ 
     loadOrder();
 
 });

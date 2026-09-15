@@ -19,10 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("paymentFilter");
 
 
-    /* =====================================================
-       ACTIVE ORDERS ELEMENTS
-       ===================================================== */
-
+  
     const activeOrdersList =
         document.getElementById("activeOrdersList");
 
@@ -41,10 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let allOrders = [];
 
-
-    /* =====================================================
-       LOAD ORDERS
-       ===================================================== */
 
     async function loadOrders() {
 
@@ -93,10 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       RENDER ALL ORDERS
-       ===================================================== */
-
+   
     function renderOrders() {
 
         hideLoading();
@@ -177,10 +167,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       RENDER ACTIVE ORDERS
-       ===================================================== */
-
     function renderActiveOrders() {
 
         if (!activeOrdersList) {
@@ -256,10 +242,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .join("");
     }
 
-
-    /* =====================================================
-       CREATE ACTIVE ORDER ITEM
-       ===================================================== */
 
     function createActiveOrderItem(order) {
 
@@ -348,10 +330,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       CUSTOMER NAME
-       ===================================================== */
-
     function getCustomerName(order) {
 
         if (order.customer_name) {
@@ -396,10 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       CREATE ORDER ROW
-       ===================================================== */
-
+  
     function createOrderRow(order) {
 
         const orderId =
@@ -557,10 +532,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       RELATIVE TIME
-       ===================================================== */
-
     function formatRelativeTime(dateValue) {
 
         if (!dateValue) {
@@ -666,10 +637,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       DATE FORMAT
-       ===================================================== */
-
     function formatDate(dateValue) {
 
         if (!dateValue) {
@@ -697,10 +664,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       STATUS HELPERS
-       ===================================================== */
-
+   
     function getStatusClass(status) {
 
         switch (status) {
@@ -757,10 +721,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       PAYMENT HELPERS
-       ===================================================== */
-
     function getPaymentClass(paymentStatus) {
 
         switch (paymentStatus) {
@@ -801,10 +761,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
-    /* =====================================================
-       ACTIVE ORDERS LOADING
-       ===================================================== */
 
     function hideActiveOrdersLoading() {
 
@@ -848,10 +804,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       MAIN LOADING STATE
-       ===================================================== */
-
     function showLoading() {
 
         ordersLoading.style.display =
@@ -874,10 +826,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /* =====================================================
-       SEARCH
-       ===================================================== */
-
+  
     orderSearch.addEventListener(
         "input",
         function () {
@@ -885,10 +834,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     );
 
-
-    /* =====================================================
-       FILTERS
-       ===================================================== */
 
     statusFilter.addEventListener(
         "change",
@@ -906,10 +851,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    /* =====================================================
-       HTML ESCAPE
-       ===================================================== */
-
+   
     function escapeHtml(value) {
 
         const div =
@@ -920,11 +862,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return div.innerHTML;
     }
-
-
-    /* =====================================================
-       START
-       ===================================================== */
 
     loadOrders();
 

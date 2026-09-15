@@ -1,11 +1,3 @@
-/* =========================================
-   ADDRESSES PAGE
-========================================= */
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
 
 const addressesList =
     document.getElementById("addressesList");
@@ -64,11 +56,6 @@ const city =
 const pincode =
     document.getElementById("pincode");
 
-
-/* =========================================
-   DELETE MODAL ELEMENTS
-========================================= */
-
 const deleteModal =
     document.getElementById("deleteModal");
 
@@ -83,18 +70,11 @@ const confirmDeleteButton =
     );
 
 
-/* =========================================
-   STATE
-========================================= */
-
 let addresses = [];
 
 let addressToDelete = null;
 
 
-/* =========================================
-   LOAD ADDRESSES
-========================================= */
 
 async function loadAddresses() {
 
@@ -152,10 +132,6 @@ async function loadAddresses() {
 
 }
 
-
-/* =========================================
-   RENDER ADDRESSES
-========================================= */
 
 function renderAddresses() {
 
@@ -322,16 +298,9 @@ function renderAddresses() {
 }
 
 
-/* =========================================
-   ADDRESS ACTIONS
-========================================= */
-
 function attachAddressActions() {
 
 
-    /* =====================================
-       EDIT
-    ===================================== */
 
     document
         .querySelectorAll(
@@ -359,10 +328,7 @@ function attachAddressActions() {
         );
 
 
-    /* =====================================
-       DELETE
-    ===================================== */
-
+    
     document
         .querySelectorAll(
             ".delete-address-button"
@@ -389,10 +355,7 @@ function attachAddressActions() {
         );
 
 
-    /* =====================================
-       SET DEFAULT
-    ===================================== */
-
+    
     document
         .querySelectorAll(
             ".default-address-button"
@@ -421,9 +384,6 @@ function attachAddressActions() {
 }
 
 
-/* =========================================
-   OPEN ADD FORM
-========================================= */
 
 addAddressButton.addEventListener(
     "click",
@@ -445,9 +405,6 @@ emptyAddAddressButton.addEventListener(
 );
 
 
-/* =========================================
-   OPEN ADD FORM
-========================================= */
 
 function openAddForm() {
 
@@ -473,10 +430,6 @@ function openAddForm() {
 
 }
 
-
-/* =========================================
-   EDIT ADDRESS INLINE
-========================================= */
 
 function startEditingAddress(id) {
 
@@ -738,11 +691,6 @@ function startEditingAddress(id) {
     );
 
 
-    /*
-     * Bring the edited card into view
-     * without moving it underneath navbar.
-     */
-
     addressElement.scrollIntoView({
         behavior: "smooth",
         block: "center"
@@ -750,10 +698,6 @@ function startEditingAddress(id) {
 
 }
 
-
-/* =========================================
-   SAVE INLINE EDIT
-========================================= */
 
 async function saveInlineEdit(id) {
 
@@ -860,12 +804,7 @@ async function saveInlineEdit(id) {
         );
 
 
-        /*
-         * Reload from backend.
-         *
-         * This restores the normal
-         * address card automatically.
-         */
+       
 
         await loadAddresses();
 
@@ -896,27 +835,12 @@ async function saveInlineEdit(id) {
 }
 
 
-/* =========================================
-   CANCEL INLINE EDIT
-========================================= */
-
 function cancelInlineEdit(id) {
-
-    /*
-     * Re-render the addresses.
-     *
-     * This removes the edit form and
-     * restores the original address card.
-     */
 
     renderAddresses();
 
 }
 
-
-/* =========================================
-   CANCEL ADD ADDRESS FORM
-========================================= */
 
 cancelAddressButton.addEventListener(
     "click",
@@ -942,10 +866,6 @@ function closeAddressForm() {
 
 }
 
-
-/* =========================================
-   SAVE NEW ADDRESS
-========================================= */
 
 addressForm.addEventListener(
     "submit",
@@ -980,10 +900,7 @@ addressForm.addEventListener(
         };
 
 
-        /* =================================
-           BASIC VALIDATION
-        ================================= */
-
+        
         if (
             !data.full_name ||
             !data.phone_number ||
@@ -1059,11 +976,6 @@ addressForm.addEventListener(
     }
 );
 
-
-/* =========================================
-   SET DEFAULT ADDRESS
-========================================= */
-
 async function setDefaultAddress(id) {
 
     try {
@@ -1105,10 +1017,6 @@ async function setDefaultAddress(id) {
 }
 
 
-/* =========================================
-   OPEN DELETE MODAL
-========================================= */
-
 function deleteAddress(id) {
 
     addressToDelete =
@@ -1121,10 +1029,6 @@ function deleteAddress(id) {
 }
 
 
-/* =========================================
-   CANCEL DELETE
-========================================= */
-
 cancelDeleteButton.addEventListener(
     "click",
     function () {
@@ -1134,10 +1038,6 @@ cancelDeleteButton.addEventListener(
     }
 );
 
-
-/* =========================================
-   CONFIRM DELETE
-========================================= */
 
 confirmDeleteButton.addEventListener(
     "click",
@@ -1208,10 +1108,6 @@ confirmDeleteButton.addEventListener(
 );
 
 
-/* =========================================
-   CLOSE DELETE MODAL
-========================================= */
-
 function closeDeleteModal() {
 
     addressToDelete =
@@ -1222,11 +1118,6 @@ function closeDeleteModal() {
         "none";
 
 }
-
-
-/* =========================================
-   CLOSE MODAL WHEN CLICKING OUTSIDE
-========================================= */
 
 deleteModal.addEventListener(
     "click",
@@ -1245,10 +1136,6 @@ deleteModal.addEventListener(
 );
 
 
-/* =========================================
-   CLOSE MODAL WITH ESCAPE
-========================================= */
-
 document.addEventListener(
     "keydown",
     function (event) {
@@ -1265,10 +1152,6 @@ document.addEventListener(
     }
 );
 
-
-/* =========================================
-   ADDRESS LABEL
-========================================= */
 
 function getAddressLabel(label) {
 
@@ -1293,10 +1176,6 @@ function getAddressLabel(label) {
 }
 
 
-/* =========================================
-   ADDRESS ICON
-========================================= */
-
 function getAddressIcon(label) {
 
     if (label === "HOME") {
@@ -1318,10 +1197,6 @@ function getAddressIcon(label) {
 }
 
 
-/* =========================================
-   SHOW ERROR
-========================================= */
-
 function showAddressError(message) {
 
     addressError.textContent =
@@ -1334,10 +1209,6 @@ function showAddressError(message) {
 }
 
 
-/* =========================================
-   CLEAR ERROR
-========================================= */
-
 function clearAddressError() {
 
     addressError.textContent =
@@ -1348,11 +1219,6 @@ function clearAddressError() {
         "none";
 
 }
-
-
-/* =========================================
-   HTML ESCAPE
-========================================= */
 
 function escapeHTML(value) {
 
@@ -1395,9 +1261,5 @@ function escapeHTML(value) {
 
 }
 
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadAddresses();

@@ -8,10 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const retryBtn = document.getElementById("retryBtn");
 
 
-    // =========================
-    // Load Prescriptions
-    // =========================
-
     async function loadPrescriptions() {
 
         showLoading();
@@ -38,10 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // Render Prescriptions
-    // =========================
-
+    
     function renderPrescriptions(prescriptions) {
 
         container.innerHTML = "";
@@ -79,18 +72,10 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
 
 
-            // =========================
-            // Open Prescription
-            // =========================
-
+            
             card.addEventListener("click", function () {
                 openPrescription(prescription.id);
             });
-
-
-            // =========================
-            // Download Prescription
-            // =========================
 
             const downloadButton =
                 card.querySelector(".prescription-download");
@@ -114,10 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // Open Original File
-    // =========================
-
+    
     async function openPrescription(id) {
 
         try {
@@ -154,10 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // Download Original File
-    // =========================
-
+    
     async function downloadPrescription(id) {
 
         try {
@@ -220,10 +199,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // File Name
-    // =========================
-
     function getFileName(fileUrl, id) {
 
         try {
@@ -249,10 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // Format Date
-    // =========================
-
+    
     function formatDate(dateString) {
 
         if (!dateString) {
@@ -275,10 +247,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-
-    // =========================
-    // UI States
-    // =========================
 
     function showLoading() {
 
@@ -318,19 +286,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================
-    // Retry
-    // =========================
-
     retryBtn.addEventListener(
         "click",
         loadPrescriptions
     );
 
-
-    // =========================
-    // Initial Load
-    // =========================
 
     loadPrescriptions();
 

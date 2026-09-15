@@ -1,6 +1,3 @@
-/* =========================================
-   CART ELEMENTS
-========================================= */
 
 const cartItems =
     document.getElementById("cartItems");
@@ -21,10 +18,6 @@ const checkoutButton =
     document.getElementById("checkoutButton");
 
 
-
-/* =========================================
-   API HELPER
-========================================= */
 
 async function cartAPI(url, options = {}) {
 
@@ -85,10 +78,6 @@ async function cartAPI(url, options = {}) {
 }
 
 
-
-/* =========================================
-   LOAD CART
-========================================= */
 
 async function loadCart() {
 
@@ -164,17 +153,11 @@ async function loadCart() {
 
 
 
-/* =========================================
-   RENDER CART
-========================================= */
 
 function renderCart(cart) {
 
 
-    /* ================================
-       EMPTY CART
-    ================================= */
-
+   
     if (
         !cart ||
         !cart.items ||
@@ -188,10 +171,7 @@ function renderCart(cart) {
     }
 
 
-    /* ================================
-       CART HAS ITEMS
-    ================================= */
-
+   
     cartLayout.classList.remove(
         "empty-cart-layout"
     );
@@ -215,11 +195,6 @@ function renderCart(cart) {
 
 }
 
-
-
-/* =========================================
-   EMPTY CART
-========================================= */
 
 function renderEmptyCart() {
 
@@ -278,11 +253,6 @@ function renderEmptyCart() {
 
 }
 
-
-
-/* =========================================
-   CREATE CART ITEM
-========================================= */
 
 function createCartItemHTML(item) {
 
@@ -405,11 +375,6 @@ function createCartItemHTML(item) {
 }
 
 
-
-/* =========================================
-   UPDATE SUMMARY
-========================================= */
-
 function updateSummary(cart) {
 
     let totalQuantity = 0;
@@ -437,11 +402,6 @@ function updateSummary(cart) {
 }
 
 
-
-/* =========================================
-   INCREASE QUANTITY
-========================================= */
-
 async function increaseQuantity(
     itemId,
     currentQuantity
@@ -455,10 +415,6 @@ async function increaseQuantity(
 }
 
 
-
-/* =========================================
-   DECREASE QUANTITY
-========================================= */
 
 async function decreaseQuantity(
     itemId,
@@ -479,11 +435,6 @@ async function decreaseQuantity(
 
 }
 
-
-
-/* =========================================
-   UPDATE QUANTITY
-========================================= */
 
 async function updateQuantity(
     itemId,
@@ -520,10 +471,6 @@ async function updateQuantity(
 
 
 
-/* =========================================
-   REMOVE CART ITEM
-========================================= */
-
 async function removeCartItem(itemId) {
 
     try {
@@ -550,12 +497,6 @@ async function removeCartItem(itemId) {
 
 }
 
-
-
-/* =========================================
-   CHECKOUT
-========================================= */
-
 checkoutButton.addEventListener(
     "click",
     function () {
@@ -573,11 +514,6 @@ checkoutButton.addEventListener(
     }
 );
 
-
-
-/* =========================================
-   HTML ESCAPE
-========================================= */
 
 function escapeHTML(value) {
 
@@ -620,10 +556,5 @@ function escapeHTML(value) {
 
 }
 
-
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadCart();

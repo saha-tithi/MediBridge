@@ -43,10 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxFileSize = 10 * 1024 * 1024;
 
 
-    /* -----------------------------
-       ERROR
-    ----------------------------- */
-
+    
     function showError(message) {
 
         if (!prescriptionError) {
@@ -69,10 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -----------------------------
-       FILE SIZE
-    ----------------------------- */
-
     function formatFileSize(bytes) {
 
         if (bytes < 1024) {
@@ -85,11 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
-
-
-    /* -----------------------------
-       RESET FILE
-    ----------------------------- */
 
     function resetFile() {
 
@@ -110,10 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
         hideError();
     }
 
-
-    /* -----------------------------
-       FILE SELECTION
-    ----------------------------- */
 
     if (prescriptionFile) {
 
@@ -184,10 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -----------------------------
-       REMOVE FILE
-    ----------------------------- */
-
     if (removeFileButton) {
 
         removeFileButton.addEventListener(
@@ -198,10 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
-    /* -----------------------------
-       UPLOAD + IDENTIFY
-    ----------------------------- */
 
     if (uploadButton) {
 
@@ -244,10 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 try {
 
-                    /* -----------------------------
-                       STEP 1 — UPLOAD
-                    ----------------------------- */
-
+                  
                     const formData =
                         new FormData();
 
@@ -273,10 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                    /*
-                     * Your upload API may return the ID
-                     * either directly or inside data.
-                     */
+                    
 
                     const prescriptionId =
                         uploadResult.data?.id ||
@@ -292,10 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
 
-                    /* -----------------------------
-                       STEP 2 — IDENTIFY MEDICINES
-                    ----------------------------- */
-
+                  
                     if (uploadButtonText) {
                         uploadButtonText.textContent =
                             "Identifying medicines...";
@@ -317,10 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                    /* -----------------------------
-                       STEP 3 — RESULTS PAGE
-                    ----------------------------- */
-
+                    
                     window.location.href =
                         `/prescription-results/${prescriptionId}/`;
 

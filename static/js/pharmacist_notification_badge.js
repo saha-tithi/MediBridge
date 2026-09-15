@@ -42,12 +42,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // Initial count
+    
     loadUnreadCount();
 
 
-    // Refresh periodically so the shared
-    // pharmacy notification count stays current.
     setInterval(
         loadUnreadCount,
         30000

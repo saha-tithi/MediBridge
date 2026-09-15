@@ -1,11 +1,3 @@
-/* =========================================
-   ORDER DETAIL PAGE
-========================================= */
-
-
-/* =========================================
-   ELEMENTS
-========================================= */
 
 const orderIdElement =
     document.getElementById("orderId");
@@ -37,10 +29,6 @@ const paymentTotal =
 const statusMessage =
     document.getElementById("statusMessage");
 
-
-/* =========================================
-   LOAD ORDER
-========================================= */
 
 async function loadOrder() {
 
@@ -104,9 +92,6 @@ async function loadOrder() {
 }
 
 
-/* =========================================
-   RENDER ORDER
-========================================= */
 
 function renderOrder(order) {
 
@@ -160,9 +145,6 @@ function renderOrder(order) {
 }
 
 
-/* =========================================
-   RENDER ORDER ITEMS
-========================================= */
 
 function renderOrderItems(items) {
 
@@ -297,9 +279,6 @@ function renderOrderItems(items) {
 }
 
 
-/* =========================================
-   STATUS TRACKER
-========================================= */
 
 function updateStatusTracker(status) {
 
@@ -404,9 +383,6 @@ function updateStatusTracker(status) {
 }
 
 
-/* =========================================
-   STATUS MESSAGE
-========================================= */
 
 function updateStatusMessage(status) {
 
@@ -432,12 +408,6 @@ function updateStatusMessage(status) {
         "Your order is being processed.";
 
 }
-
-
-/* =========================================
-   PAYMENT METHOD
-========================================= */
-
 function formatPaymentMethod(method) {
 
     const methods = {
@@ -457,10 +427,6 @@ function formatPaymentMethod(method) {
 
 }
 
-
-/* =========================================
-   PAYMENT STATUS
-========================================= */
 
 function formatPaymentStatus(status) {
 
@@ -484,10 +450,6 @@ function formatPaymentStatus(status) {
 
 }
 
-
-/* =========================================
-   DATE
-========================================= */
 
 function formatDate(dateString) {
 
@@ -516,9 +478,6 @@ function formatDate(dateString) {
 }
 
 
-/* =========================================
-   ERROR
-========================================= */
 
 function showOrderError(message) {
 
@@ -531,9 +490,6 @@ function showOrderError(message) {
 }
 
 
-/* =========================================
-   HTML ESCAPE
-========================================= */
 
 function escapeHTML(value) {
 
@@ -576,9 +532,5 @@ function escapeHTML(value) {
 
 }
 
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadOrder();

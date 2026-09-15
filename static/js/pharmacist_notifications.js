@@ -21,10 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    // =========================================================
-    // LOAD NOTIFICATIONS
-    // =========================================================
-
+    
     async function loadNotifications() {
 
         showLoading();
@@ -51,10 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
-    // =========================================================
-    // RENDER NOTIFICATIONS
-    // =========================================================
 
     function renderNotifications(
         notifications
@@ -113,10 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // GROUP NOTIFICATIONS BY DATE
-    // =========================================================
-
+ 
     function groupNotificationsByDate(
         notifications
     ) {
@@ -157,10 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // DATE KEY
-    // =========================================================
-
+   
     function getDateKey(date) {
 
         return [
@@ -170,10 +157,6 @@ document.addEventListener("DOMContentLoaded", function () {
         ].join("-");
     }
 
-
-    // =========================================================
-    // DATE LABEL
-    // =========================================================
 
     function getDateLabel(date) {
 
@@ -217,10 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // CREATE NOTIFICATION ELEMENT
-    // =========================================================
-
+    
     function createNotificationElement(
         notification
     ) {
@@ -313,21 +293,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // OPEN NOTIFICATION
-    // =========================================================
-
+    
     async function openNotification(
         notification,
         element
     ) {
 
-        /*
-         * Mark it as read first.
-         *
-         * Navigation happens only after the
-         * read request succeeds.
-         */
+      
 
         if (!notification.is_read) {
 
@@ -367,10 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // =====================================================
-        // NEW ORDER
-        // =====================================================
-
         if (
             notification.notification_type ===
             "NEW_ORDER"
@@ -386,10 +354,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        // =====================================================
-        // LOW STOCK
-        // =====================================================
-
         if (
             notification.notification_type ===
             "LOW_STOCK"
@@ -402,10 +366,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-
-    // =========================================================
-    // MARK ALL AS READ
-    // =========================================================
 
     markAllReadButton.addEventListener(
         "click",
@@ -471,10 +431,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 
-    // =========================================================
-    // FORMAT TIME
-    // =========================================================
-
     function formatNotificationTime(
         createdAt
     ) {
@@ -492,10 +448,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // LOADING
-    // =========================================================
-
     function showLoading() {
 
         loading.style.display = "block";
@@ -507,10 +459,6 @@ document.addEventListener("DOMContentLoaded", function () {
         container.style.display = "none";
     }
 
-
-    // =========================================================
-    // ERROR
-    // =========================================================
 
     function showError(message) {
 
@@ -528,10 +476,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // HTML ESCAPE
-    // =========================================================
-
     function escapeHtml(value) {
 
         const div =
@@ -544,10 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // =========================================================
-    // INITIAL LOAD
-    // =========================================================
-
+   
     loadNotifications();
 
 });

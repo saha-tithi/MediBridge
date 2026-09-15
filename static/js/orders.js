@@ -1,6 +1,3 @@
-/* =========================================
-   ORDERS PAGE ELEMENTS
-========================================= */
 
 const ordersList =
     document.getElementById("ordersList");
@@ -14,11 +11,6 @@ const ordersEmpty =
 const ordersError =
     document.getElementById("ordersError");
 
-
-
-/* =========================================
-   LOAD ORDERS
-========================================= */
 
 async function loadOrders() {
 
@@ -35,10 +27,6 @@ async function loadOrders() {
         ordersError.style.display =
             "none";
 
-
-        /* ==============================
-           FETCH CUSTOMER ORDERS
-        ============================== */
 
         const response =
             await apiRequest(
@@ -63,10 +51,7 @@ async function loadOrders() {
             "none";
 
 
-        /* ==============================
-           EMPTY ORDERS
-        ============================== */
-
+    
         if (
             !orders ||
             orders.length === 0
@@ -80,10 +65,7 @@ async function loadOrders() {
         }
 
 
-        /* ==============================
-           RENDER ORDERS
-        ============================== */
-
+       
         ordersList.innerHTML =
             orders
                 .map(
@@ -123,10 +105,6 @@ async function loadOrders() {
 }
 
 
-
-/* =========================================
-   ORDER CARD
-========================================= */
 
 function renderOrderCard(order) {
 
@@ -290,10 +268,6 @@ function renderOrderCard(order) {
 
 
 
-/* =========================================
-   ITEM PREVIEW
-========================================= */
-
 function renderItemPreview(items) {
 
     if (
@@ -363,11 +337,6 @@ function renderItemPreview(items) {
 }
 
 
-
-/* =========================================
-   ORDER STATUS
-========================================= */
-
 function formatStatus(status) {
 
     const labels = {
@@ -399,11 +368,6 @@ function formatStatus(status) {
 }
 
 
-
-/* =========================================
-   PAYMENT STATUS
-========================================= */
-
 function formatPaymentStatus(status) {
 
     const labels = {
@@ -425,11 +389,6 @@ function formatPaymentStatus(status) {
 
 }
 
-
-
-/* =========================================
-   DATE
-========================================= */
 
 function formatDate(dateString) {
 
@@ -454,12 +413,6 @@ function formatDate(dateString) {
     );
 
 }
-
-
-
-/* =========================================
-   HTML ESCAPE
-========================================= */
 
 function escapeHTML(value) {
 
@@ -502,10 +455,5 @@ function escapeHTML(value) {
 
 }
 
-
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
 
 loadOrders();

@@ -1,13 +1,7 @@
-/* =========================================================
-   PHARMACIST MEDICINE DETAIL
-========================================================= */
 
 let medicineDetailData = null;
 
 
-/* =========================================================
-   GET MEDICINE ID FROM URL
-========================================================= */
 
 function getMedicineIdFromUrl() {
 
@@ -16,19 +10,11 @@ function getMedicineIdFromUrl() {
             .split("/")
             .filter(Boolean);
 
-    /*
-     * Expected URL:
-     *
-     * /pharmacist/medicines/<uuid>/
-     */
-
+  
     return pathParts[pathParts.length - 1];
 }
 
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
 
 const medicineDetailName =
     document.getElementById(
@@ -131,10 +117,6 @@ const toggleMedicineButton =
     );
 
 
-/* =========================================================
-   EDIT MEDICINE ELEMENTS
-========================================================= */
-
 const editMedicineModal =
     document.getElementById(
         "editMedicineModal"
@@ -206,10 +188,6 @@ const saveMedicineButton =
     );
 
 
-/* =========================================================
-   LOAD MEDICINE
-========================================================= */
-
 async function loadMedicineDetail() {
 
     const medicineId =
@@ -263,10 +241,6 @@ async function loadMedicineDetail() {
 }
 
 
-/* =========================================================
-   EXTRACT API DATA
-========================================================= */
-
 function extractMedicineDetailData(
     response
 ) {
@@ -301,9 +275,6 @@ function extractMedicineDetailData(
 }
 
 
-/* =========================================================
-   LOADING STATE
-========================================================= */
 
 function showMedicineDetailLoading() {
 
@@ -325,9 +296,6 @@ function hideMedicineDetailLoading() {
 }
 
 
-/* =========================================================
-   ERROR STATE
-========================================================= */
 
 function showMedicineDetailError(
     message
@@ -347,17 +315,10 @@ function showMedicineDetailError(
 }
 
 
-/* =========================================================
-   RENDER MEDICINE DETAIL
-========================================================= */
 
 function renderMedicineDetail(
     medicine
 ) {
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
 
     medicineDetailName.textContent =
         medicine.brand_name ||
@@ -371,9 +332,6 @@ function renderMedicineDetail(
         }`;
 
 
-    /* =====================================================
-       STATUS
-    ====================================================== */
 
     if (medicine.is_active) {
 
@@ -395,10 +353,7 @@ function renderMedicineDetail(
     }
 
 
-    /* =====================================================
-       BASIC INFORMATION
-    ====================================================== */
-
+   
     detailBrandName.textContent =
         medicine.brand_name ||
         "—";
@@ -426,10 +381,6 @@ function renderMedicineDetail(
             ? "Prescription Required"
             : "OTC";
 
-
-    /* =====================================================
-       IMAGE
-    ====================================================== */
 
     medicineDetailImage.innerHTML =
         "";
@@ -471,10 +422,7 @@ function renderMedicineDetail(
     }
 
 
-    /* =====================================================
-       DESCRIPTION
-    ====================================================== */
-
+    
     if (
         medicine.description &&
         medicine.description.trim()
@@ -493,9 +441,6 @@ function renderMedicineDetail(
     }
 
 
-    /* =====================================================
-       INVENTORY SUMMARY
-    ====================================================== */
 
     const inventories =
         Array.isArray(
@@ -546,10 +491,7 @@ function renderMedicineDetail(
         expiringSoon;
 
 
-    /* =====================================================
-       TOGGLE BUTTON
-    ====================================================== */
-
+   
     if (medicine.is_active) {
 
         toggleMedicineButton.textContent =
@@ -570,18 +512,12 @@ function renderMedicineDetail(
     }
 
 
-    /* =====================================================
-       SHOW CONTENT
-    ====================================================== */
-
+    
     medicineDetailContent.style.display =
         "block";
 }
 
 
-/* =========================================================
-   EXPIRING SOON
-========================================================= */
 
 function getExpiringSoonCount(
     inventories
@@ -647,10 +583,6 @@ function getExpiringSoonCount(
 }
 
 
-/* =========================================================
-   OPEN EDIT MEDICINE MODAL
-========================================================= */
-
 function openEditMedicineModal() {
 
     if (!medicineDetailData) {
@@ -707,9 +639,6 @@ function openEditMedicineModal() {
 }
 
 
-/* =========================================================
-   CLOSE EDIT MEDICINE MODAL
-========================================================= */
 
 function closeEditMedicineModal() {
 
@@ -720,10 +649,6 @@ function closeEditMedicineModal() {
         "";
 }
 
-
-/* =========================================================
-   LOAD CATEGORIES
-========================================================= */
 
 async function loadEditCategories() {
 
@@ -807,9 +732,6 @@ async function loadEditCategories() {
 }
 
 
-/* =========================================================
-   EXTRACT CATEGORY DATA
-========================================================= */
 
 function extractCategoryData(
     response
@@ -833,10 +755,6 @@ function extractCategoryData(
     return [];
 }
 
-
-/* =========================================================
-   EDIT MEDICINE MESSAGE
-========================================================= */
 
 function showEditMedicineMessage(
     message,
@@ -864,9 +782,6 @@ function showEditMedicineMessage(
 }
 
 
-/* =========================================================
-   SAVE MEDICINE CHANGES
-========================================================= */
 
 async function saveMedicineChanges() {
 
@@ -914,10 +829,7 @@ async function saveMedicineChanges() {
     };
 
 
-    /* =====================================================
-       VALIDATION
-    ====================================================== */
-
+  
     if (!requestData.category) {
 
         showEditMedicineMessage(
@@ -969,10 +881,7 @@ async function saveMedicineChanges() {
     }
 
 
-    /* =====================================================
-       SAVE STATE
-    ====================================================== */
-
+   
     saveMedicineButton.disabled =
         true;
 
@@ -1024,11 +933,7 @@ async function saveMedicineChanges() {
         await loadMedicineDetail();
 
 
-        /*
-         * Use the custom success toast
-         * instead of browser alert.
-         */
-
+        
         showMedicineToast(
             "Medicine updated successfully.",
             "success"
@@ -1060,9 +965,6 @@ async function saveMedicineChanges() {
 }
 
 
-/* =========================================================
-   EDIT BUTTON
-========================================================= */
 
 editMedicineButton.addEventListener(
     "click",
@@ -1074,9 +976,6 @@ editMedicineButton.addEventListener(
 );
 
 
-/* =========================================================
-   CLOSE BUTTON
-========================================================= */
 
 closeEditMedicineButton.addEventListener(
     "click",
@@ -1088,10 +987,6 @@ closeEditMedicineButton.addEventListener(
 );
 
 
-/* =========================================================
-   CANCEL BUTTON
-========================================================= */
-
 cancelEditMedicineButton.addEventListener(
     "click",
     function () {
@@ -1102,9 +997,6 @@ cancelEditMedicineButton.addEventListener(
 );
 
 
-/* =========================================================
-   OVERLAY CLICK
-========================================================= */
 
 editMedicineModalOverlay.addEventListener(
     "click",
@@ -1116,9 +1008,6 @@ editMedicineModalOverlay.addEventListener(
 );
 
 
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
 
 document.addEventListener(
     "keydown",
@@ -1135,9 +1024,6 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   SAVE FORM
-========================================================= */
 
 editMedicineForm.addEventListener(
     "submit",
@@ -1151,9 +1037,6 @@ editMedicineForm.addEventListener(
 );
 
 
-/* =========================================================
-   ENABLE / DISABLE MEDICINE
-========================================================= */
 
 toggleMedicineButton.addEventListener(
     "click",
@@ -1177,9 +1060,6 @@ toggleMedicineButton.addEventListener(
                 : "disable";
 
 
-        /*
-         * Use a custom confirmation dialog.
-         */
 
         const confirmed =
             await showMedicineConfirm(
@@ -1260,9 +1140,6 @@ toggleMedicineButton.addEventListener(
 );
 
 
-/* =========================================================
-   CUSTOM CONFIRMATION DIALOG
-========================================================= */
 
 function showMedicineConfirm(
     title,
@@ -1443,9 +1320,6 @@ function showMedicineConfirm(
 }
 
 
-/* =========================================================
-   CUSTOM TOAST
-========================================================= */
 
 function showMedicineToast(
     message,
@@ -1549,9 +1423,6 @@ function showMedicineToast(
 }
 
 
-/* =========================================================
-   REMOVE TOAST
-========================================================= */
 
 function removeMedicineToast(
     toast
@@ -1581,10 +1452,6 @@ function removeMedicineToast(
     );
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
 
 function escapeMedicineHtml(
     value
@@ -1623,8 +1490,5 @@ function escapeMedicineHtml(
 }
 
 
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
 
 loadMedicineDetail();
