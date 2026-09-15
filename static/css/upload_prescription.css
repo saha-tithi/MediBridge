@@ -5,8 +5,6 @@
 }
 
 
-/* INTRO */
-
 .prescription-intro {
     text-align: center;
     margin-bottom: 30px;
@@ -41,7 +39,7 @@
 }
 
 
-/* MAIN CARD */
+
 
 .upload-card {
     padding: 30px;
@@ -103,8 +101,6 @@
     line-height: 1.55;
 }
 
-
-/* UPLOAD AREA */
 
 .upload-area {
     min-height: 250px;
@@ -183,9 +179,6 @@
     color: #8a9aa2;
     font-size: 11px;
 }
-
-
-/* SELECTED FILE */
 
 .selected-file {
     display: flex;

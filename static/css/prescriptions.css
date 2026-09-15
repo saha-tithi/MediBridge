@@ -4,10 +4,6 @@
     padding: 42px 28px 60px;
 }
 
-/* =========================
-   Header
-========================= */
-
 .prescriptions-header {
     margin-bottom: 28px;
 }
@@ -27,9 +23,6 @@
 }
 
 
-/* =========================
-   Prescription List
-========================= */
 
 .prescriptions-list {
     display: flex;
@@ -38,9 +31,6 @@
 }
 
 
-/* =========================
-   Prescription Card
-========================= */
 
 .prescription-card {
     width: 100%;
@@ -71,9 +61,6 @@
 }
 
 
-/* =========================
-   File Icon
-========================= */
 
 .prescription-file-icon {
     width: 44px;
@@ -92,10 +79,6 @@
     font-size: 21px;
 }
 
-
-/* =========================
-   Card Information
-========================= */
 
 .prescription-info {
     min-width: 0;
@@ -116,11 +99,6 @@
     color: #7b8d94;
     font-size: 13px;
 }
-
-
-/* =========================
-   Download Button
-========================= */
 
 .prescription-download {
     width: 38px;
@@ -158,9 +136,6 @@
 }
 
 
-/* =========================
-   Loading / Empty / Error
-========================= */
 
 .prescriptions-state {
     min-height: 220px;
@@ -184,10 +159,6 @@
 }
 
 
-/* =========================
-   Loading Spinner
-========================= */
-
 .loading-spinner {
     width: 30px;
     height: 30px;
@@ -205,10 +176,6 @@
     }
 }
 
-
-/* =========================
-   Empty State
-========================= */
 
 .empty-icon {
     width: 58px;
@@ -236,9 +203,6 @@
 }
 
 
-/* =========================
-   Upload Button
-========================= */
 
 .upload-prescription-btn {
     margin-top: 20px;
@@ -267,10 +231,6 @@
     transform: translateY(-1px);
 }
 
-
-/* =========================
-   Error State
-========================= */
 
 .error-icon {
     width: 44px;
@@ -309,10 +269,6 @@
     background: #f5f9fa;
 }
 
-
-/* =========================
-   Mobile
-========================= */
 
 @media (max-width: 600px) {
 

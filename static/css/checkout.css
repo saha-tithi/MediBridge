@@ -1,6 +1,4 @@
-/* =========================================
-   CHECKOUT PAGE
-========================================= */
+
 
 .checkout-page {
     min-height: calc(100vh - 80px);
@@ -15,10 +13,6 @@
 }
 
 
-
-/* =========================================
-   HEADER
-========================================= */
 
 .checkout-header {
     margin-bottom: 34px;
@@ -41,9 +35,6 @@
 
 
 
-/* =========================================
-   ADDRESS SECTION
-========================================= */
 
 .address-section {
     background: #ffffff;
@@ -67,9 +58,6 @@
 
 
 
-/* =========================================
-   ADDRESS GRID
-========================================= */
 
 .address-list {
     display: grid;
@@ -78,10 +66,6 @@
 }
 
 
-
-/* =========================================
-   ADDRESS CARD
-========================================= */
 
 .address-card {
     position: relative;
@@ -115,10 +99,6 @@
 
 
 
-/* =========================================
-   ADDRESS SELECT
-========================================= */
-
 .address-select {
     display: flex;
     gap: 12px;
@@ -150,11 +130,6 @@
     background: #438f89;
 }
 
-
-
-/* =========================================
-   ADDRESS CONTENT
-========================================= */
 
 .address-content {
     min-width: 0;
@@ -188,10 +163,6 @@
 }
 
 
-
-/* =========================================
-   ADDRESS ACTIONS
-========================================= */
 
 .address-actions {
     display: flex;
@@ -230,9 +201,6 @@
 
 
 
-/* =========================================
-   ADD ADDRESS BUTTON
-========================================= */
 
 .add-address-button {
     width: 100%;
@@ -275,9 +243,6 @@
 
 
 
-/* =========================================
-   NEW ADDRESS FORM
-========================================= */
 
 .new-address-form {
     margin-top: 22px;
@@ -338,9 +303,6 @@
 
 
 
-/* =========================================
-   FORM
-========================================= */
 
 .form-group {
     margin-bottom: 18px;
@@ -404,11 +366,6 @@
 }
 
 
-
-/* =========================================
-   ADDRESS TYPE
-========================================= */
-
 .address-type-options {
     display: flex;
     gap: 10px;
@@ -451,21 +408,12 @@
 
 
 
-/* =========================================
-   FORM ROW
-========================================= */
-
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
-
-
-/* =========================================
-   DEFAULT ADDRESS
-========================================= */
 
 .default-address-option {
     display: flex;
@@ -491,11 +439,6 @@
 }
 
 
-
-/* =========================================
-   ERROR
-========================================= */
-
 .address-form-error {
     margin-bottom: 16px;
     padding: 10px 12px;
@@ -509,12 +452,6 @@
     font-size: 13px;
 }
 
-
-
-/* =========================================
-   FORM ACTIONS
-========================================= */
-
 .address-form-actions {
     display: flex;
     justify-content: flex-end;
@@ -523,9 +460,6 @@
 
 
 
-/* =========================================
-   BUTTONS
-========================================= */
 
 .primary-button,
 .secondary-button {
@@ -588,9 +522,6 @@
 
 
 
-/* =========================================
-   CHECKOUT ACTIONS
-========================================= */
 
 .checkout-actions {
     display: flex;
@@ -605,11 +536,6 @@
     min-width: 125px;
 }
 
-
-
-/* =========================================
-   EMPTY STATE
-========================================= */
 
 .no-addresses {
     grid-column: 1 / -1;
@@ -651,9 +577,6 @@
 
 
 
-/* =========================================
-   LOADING
-========================================= */
 
 .address-loading {
     grid-column: 1 / -1;
@@ -689,11 +612,6 @@
 }
 
 
-
-/* =========================================
-   ERROR
-========================================= */
-
 .address-error {
     grid-column: 1 / -1;
 
@@ -721,10 +639,6 @@
 
 
 
-/* =========================================
-   RESPONSIVE
-========================================= */
-
 @media (max-width: 700px) {
 
     .checkout-page {
@@ -743,9 +657,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
 
-    /* Important:
-       Don't stretch the other card when
-       one card becomes taller. */
     align-items: start;
 }
 
@@ -797,9 +708,6 @@
     }
 
 }
-/* =========================================
-   COMPACT ADDRESS CARD
-========================================= */
 
 .address-card {
     min-height: auto;
@@ -892,10 +800,6 @@
 
 
 
-/* =========================================
-   EXPANDED CONTENT
-========================================= */
-
 .address-expanded-content {
     display: none;
 
@@ -986,11 +890,6 @@
 }
 
 
-
-/* =========================================
-   SELECTED CARD
-========================================= */
-
 .address-card.selected {
     border-color: #438f89;
 }
@@ -1000,9 +899,6 @@
 .address-card-header {
     background: #f5faf9;
 }
-/* =========================================
-   ADDRESS RADIO
-========================================= */
 
 .address-radio {
     position: relative;
@@ -1060,10 +956,6 @@
 }
 
 
-/* =========================================
-   FIX ADDRESS CARD EXPANSION
-========================================= */
-
 .address-list {
     display: grid !important;
 
@@ -1077,13 +969,6 @@
     grid-auto-rows: max-content;
 }
 
-
-/*
- * Every card must keep its own height.
- * The card beside an expanded card
- * must NOT stretch.
- */
-
 .address-card {
     align-self: start !important;
 
@@ -1095,27 +980,16 @@
 }
 
 
-/*
- * Expanded card is allowed to grow naturally.
- */
 
 .address-card.expanded {
     height: auto !important;
 }
 
 
-/*
- * Collapsed card must stay compact.
- */
-
 .address-card:not(.expanded) {
     height: max-content !important;
 }
 
-
-/* =========================================
-   EXPANDED CONTENT
-========================================= */
 
 .address-expanded-content {
     display: none !important;
@@ -1126,11 +1000,6 @@
 .address-expanded-content {
     display: block !important;
 }
-
-
-/* =========================================
-   EDIT / DELETE
-========================================= */
 
 .address-expanded-actions {
     display: flex !important;
