@@ -7,11 +7,16 @@ from rest_framework.response import Response
 
 from .models import Notification, NotificationRead
 from .serializers import NotificationSerializer
+from common.pagination import DefaultPagination
 
 
 class NotificationListAPIView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
+
+    # pharmacist_notifications.js already unwraps `data.results`,
+    # so this endpoint is safe to paginate.
+    pagination_class = DefaultPagination
 
     def get_queryset(self):
         user = self.request.user

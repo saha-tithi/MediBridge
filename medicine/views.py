@@ -17,9 +17,12 @@ from .serializers import (
 )
 
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from orders.permissions import IsPharmacistOrAdmin
 from notifications.services import update_low_stock_notification
+from common.pagination import DefaultPagination
 
 class MedicineListAPIView(generics.ListAPIView):
 
@@ -85,6 +88,7 @@ def medicine_list_page(request):
     medicines = (
         Medicine.objects
         .select_related("category")
+        .filter(is_active=True)
         .all()
     )
 
@@ -98,14 +102,23 @@ def medicine_list_page(request):
 
 def medicine_detail_page(request, pk):
 
-    medicine = (
+    medicine = get_object_or_404(
         Medicine.objects
         .select_related("category")
-        .prefetch_related("inventories")
-        .get(
-            pk=pk,
-            is_active=True
+        .prefetch_related("inventories"),
+        pk=pk,
+        is_active=True,
+    )
+
+    active_inventory = (
+        medicine.inventories
+        .filter(
+            is_available=True,
+            stock__gt=0,
+            expiry_date__gte=timezone.now().date(),
         )
+        .order_by("expiry_date")
+        .first()
     )
 
     return render(
@@ -113,6 +126,7 @@ def medicine_detail_page(request, pk):
         "medicines/medicine_detail.html",
         {
             "medicine": medicine,
+            "active_inventory": active_inventory,
         },
     )
 
@@ -292,6 +306,11 @@ class PharmacistMedicineListAPIView(
     )
 
     serializer_class = MedicineDetailSerializer
+
+    # Only the pharmacist endpoints whose JS already unwraps
+    # `.results` are paginated — the public/customer list endpoints
+    # must stay bare arrays (see config/settings.py note).
+    pagination_class = DefaultPagination
 
     permission_classes = [
         IsPharmacistOrAdmin

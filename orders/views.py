@@ -24,6 +24,7 @@ import razorpay
 from django.conf import settings
 
 from cart.models import Cart
+from notifications.models import Notification
 
 
 class CreateOrderAPIView(APIView):
@@ -65,10 +66,21 @@ class CreateOrderAPIView(APIView):
             order
         )
 
+        # An ONLINE order is only an intent to pay until the Razorpay
+        # signature is verified, so it must not be reported — or shown
+        # to the pharmacist — as "placed".
+        if order.payment_method == Order.PaymentMethod.COD:
+            message = "Order placed successfully."
+
+        else:
+            message = (
+                "Order created. Complete the payment to confirm it."
+            )
+
         return Response(
             {
                 "success": True,
-                "message": "Order placed successfully.",
+                "message": message,
                 "data": response_serializer.data,
             },
             status=status.HTTP_201_CREATED,
@@ -290,14 +302,40 @@ class VerifyRazorpayPaymentAPIView(APIView):
             ]
         )
 
-        # Clear cart after successful payment
+        # The order is genuinely "placed" only now. create_order
+        # defers the NEW_ORDER notification for online payments, so
+        # the pharmacist hears about it once — and only if — the
+        # money actually arrived. get_or_create keeps repeated
+        # verifies idempotent.
+        Notification.objects.get_or_create(
+            notification_type=(
+                Notification.NotificationType.NEW_ORDER
+            ),
+            order=order,
+            defaults={
+                "title": "New Order",
+                "message": (
+                    f"Order #{str(order.id)[:8].upper()} has been "
+                    f"placed for ₹{order.total_amount}."
+                ),
+            },
+        )
+
+        # Clear only the lines that belong to this order.
+        # (Deleting cart.items.all() would silently discard anything
+        # the customer added to the cart after placing this order.)
 
         try:
             cart = Cart.objects.get(
                 customer=request.user
             )
 
-            cart.items.all().delete()
+            for item in order.items.all():
+
+                cart.items.filter(
+                    medicine=item.medicine,
+                    prescription=item.prescription,
+                ).delete()
 
         except Cart.DoesNotExist:
             pass
@@ -550,73 +588,6 @@ class PharmacistUpdateOrderStatusAPIView(APIView):
                 "success": True,
                 "message": (
                     "Order status updated successfully."
-                ),
-                "data": serializer.data,
-            },
-            status=status.HTTP_200_OK,
-        )
-
-
-class OrderPaymentAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def patch(self, request, pk):
-        order = get_object_or_404(
-            Order,
-            id=pk,
-            customer=request.user,
-        )
-
-        if (
-            order.payment_method
-            != Order.PaymentMethod.ONLINE
-        ):
-            return Response(
-                {
-                    "success": False,
-                    "message": (
-                        "Payment is not required "
-                        "for COD orders."
-                    ),
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        if (
-            order.payment_status
-            != Order.PaymentStatus.PENDING
-        ):
-            return Response(
-                {
-                    "success": False,
-                    "message": (
-                        "Payment cannot be updated "
-                        "for this order."
-                    ),
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        order.payment_status = (
-            Order.PaymentStatus.PAID
-        )
-
-        order.save(
-            update_fields=[
-                "payment_status",
-                "updated_at",
-            ]
-        )
-
-        serializer = OrderSerializer(
-            order
-        )
-
-        return Response(
-            {
-                "success": True,
-                "message": (
-                    "Payment marked as successful."
                 ),
                 "data": serializer.data,
             },

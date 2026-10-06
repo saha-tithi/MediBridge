@@ -1,0 +1,45 @@
+{% extends "admin/index.html" %}
+{% load i18n medibridge_admin %}
+
+{% block content %}
+{% get_admin_stats as stats %}
+
+<section class="mb-stats" aria-label="{% translate 'Store overview' %}">
+
+  <a class="mb-stat" href="{% url 'admin:orders_order_changelist' %}">
+    <span class="mb-stat__value">{{ stats.orders_today }}</span>
+    <span class="mb-stat__label">{% translate "Orders today" %}</span>
+  </a>
+
+  <div class="mb-stat mb-stat--money">
+    <span class="mb-stat__value">&#8377;{{ stats.revenue|floatformat:2 }}</span>
+    <span class="mb-stat__label">{% translate "Revenue collected" %}</span>
+  </div>
+
+  <a class="mb-stat {% if stats.pending_prescriptions %}mb-stat--warn{% endif %}"
+     href="{% url 'admin:prescriptions_prescription_changelist' %}?status__exact=PENDING">
+    <span class="mb-stat__value">{{ stats.pending_prescriptions }}</span>
+    <span class="mb-stat__label">{% translate "Prescriptions awaiting review" %}</span>
+  </a>
+
+  <a class="mb-stat {% if stats.unpaid_online %}mb-stat--danger{% endif %}"
+     href="{% url 'admin:orders_order_changelist' %}?payment_method__exact=ONLINE&amp;payment_status__exact=PENDING">
+    <span class="mb-stat__value">{{ stats.unpaid_online }}</span>
+    <span class="mb-stat__label">{% translate "Unpaid online orders" %}</span>
+  </a>
+
+  <a class="mb-stat {% if stats.low_stock %}mb-stat--warn{% endif %}"
+     href="{% url 'admin:medicine_medicine_changelist' %}">
+    <span class="mb-stat__value">{{ stats.low_stock }}</span>
+    <span class="mb-stat__label">{% blocktranslate with threshold=stats.low_stock_threshold %}Low stock (at or below {{ threshold }} units){% endblocktranslate %}</span>
+  </a>
+
+  <a class="mb-stat" href="{% url 'admin:accounts_user_changelist' %}?role__exact=CUSTOMER">
+    <span class="mb-stat__value">{{ stats.customers }}</span>
+    <span class="mb-stat__label">{% translate "Customers" %}</span>
+  </a>
+
+</section>
+
+{{ block.super }}
+{% endblock %}

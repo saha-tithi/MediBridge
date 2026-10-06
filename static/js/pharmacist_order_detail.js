@@ -8,11 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const orderId = pathParts[pathParts.length - 1];
 
 
-    if (!orderId) {
-        showError("Order ID could not be found.");
-        return;
-    }
-
+    // Declared before the guard below: showError() reads
+    // detailError, and accessing a const before its declaration
+    // throws ReferenceError (TDZ) instead of showing the message.
     const detailLoading =
         document.getElementById("detailLoading");
 
@@ -21,6 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const orderContent =
         document.getElementById("orderContent");
+
+
+    if (!orderId) {
+        showError("Order ID could not be found.");
+        return;
+    }
 
     const orderTitle =
         document.getElementById("orderTitle");

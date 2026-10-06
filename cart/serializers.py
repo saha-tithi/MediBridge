@@ -22,7 +22,8 @@ class AddToCartSerializer(serializers.Serializer):
     def validate_medicine_id(self, value):
 
         if not Medicine.objects.filter(
-            id=value
+            id=value,
+            is_active=True,
         ).exists():
 
             raise serializers.ValidationError(

@@ -31,7 +31,17 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
+# .strip() each entry: a value like "localhost, 127.0.0.1"
+# would otherwise yield a host with a leading space ->
+# DisallowedHost on every request.
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in env(
+        "ALLOWED_HOSTS",
+        default="localhost,127.0.0.1",
+    ).split(",")
+    if host.strip()
+]
 
 
 # Application definition
@@ -155,6 +165,14 @@ REST_FRAMEWORK = {
     ),
 
     "EXCEPTION_HANDLER": "common.exceptions.custom_exception_handler",
+
+    # NOTE: no DEFAULT_PAGINATION_CLASS on purpose. Most list
+    # endpoints (medicine, addresses, prescriptions, orders) are
+    # consumed as bare JSON arrays by the frontend and there is no
+    # pagination UI anywhere, so enabling it globally would break
+    # them AND silently cap pages at 10 items. Opt in per-view with
+    # common.pagination.DefaultPagination only where the consumer
+    # already unwraps `results` (pharmacist medicines, notifications).
 
 }
 SIMPLE_JWT = {

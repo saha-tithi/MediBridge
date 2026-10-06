@@ -1,13 +1,44 @@
+import logging
+
 from django.core.mail import send_mail
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
+
+
+def _send(order, subject, body):
+
+    # Email delivery must never fail the request: by the time these
+    # helpers run, the order/payment has already been committed and
+    # the cart cleared. Raising here turned a successful operation
+    # into an HTTP 500 the client reports as a failure.
+
+    try:
+
+        send_mail(
+            subject=subject,
+            message=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.customer.email],
+            fail_silently=False,
+        )
+
+    except Exception:
+
+        logger.exception(
+            "Failed to send email %r for order %s",
+            subject,
+            order.id,
+        )
 
 
 def send_order_placed_email(order):
     customer = order.customer
 
-    send_mail(
-        subject="MediBridge - Order Placed Successfully",
-        message=(
+    _send(
+        order,
+        "MediBridge - Order Placed Successfully",
+        (
             f"Hello {customer.username},\n\n"
             f"Your MediBridge order has been placed successfully.\n\n"
             f"Order ID: {order.id}\n"
@@ -15,18 +46,16 @@ def send_order_placed_email(order):
             f"Status: {order.status}\n\n"
             f"Thank you for using MediBridge."
         ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[customer.email],
-        fail_silently=False,
     )
 
 
 def send_order_delivered_email(order):
     customer = order.customer
 
-    send_mail(
-        subject="MediBridge - Order Delivered",
-        message=(
+    _send(
+        order,
+        "MediBridge - Order Delivered",
+        (
             f"Hello {customer.username},\n\n"
             f"Your MediBridge order has been delivered successfully.\n\n"
             f"Order ID: {order.id}\n"
@@ -34,7 +63,4 @@ def send_order_delivered_email(order):
             f"Status: {order.status}\n\n"
             f"Thank you for using MediBridge."
         ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[customer.email],
-        fail_silently=False,
     )

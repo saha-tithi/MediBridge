@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from .models import Category, Medicine, Inventory
@@ -78,11 +79,16 @@ class MedicineDetailSerializer(serializers.ModelSerializer):
 
     def get_available_stock(self, obj):
 
+        # Exclude expired batches so the number matches what
+        # cart/services.get_total_available_stock will accept.
+        today = timezone.now().date()
+
         return sum(
             inventory.stock
             for inventory in obj.inventories.all()
             if inventory.is_available
             and inventory.stock > 0
+            and inventory.expiry_date >= today
         )
 
 

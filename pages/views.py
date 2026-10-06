@@ -1,4 +1,5 @@
 from django.shortcuts import render,get_object_or_404
+from django.utils import timezone
 from medicine.models import Medicine
 
 
@@ -91,16 +92,33 @@ def medicine_detail_page(request, pk):
         .select_related("category")
         .prefetch_related("inventories"),
         pk=pk,
+        is_active=True,
     )
 
+    # Exclude expired batches, matching cart/services.py —
+    # otherwise the page can show an expired batch's price/expiry
+    # that add_to_cart will later refuse.
     active_inventory = (
         medicine.inventories
         .filter(
             is_available=True,
             stock__gt=0,
+            expiry_date__gte=timezone.now().date(),
         )
         .order_by("expiry_date")
         .first()
+    )
+
+    # The template renders a model instance (not the serializer),
+    # so available_stock must be supplied here — otherwise
+    # data-stock="" -> parseInt -> NaN and the client-side
+    # stock limiter in medicine_detail.js never triggers.
+    available_stock = sum(
+        inventory.stock
+        for inventory in medicine.inventories.all()
+        if inventory.is_available
+        and inventory.stock > 0
+        and inventory.expiry_date >= timezone.now().date()
     )
 
     return render(
@@ -109,6 +127,7 @@ def medicine_detail_page(request, pk):
         {
             "medicine": medicine,
             "active_inventory": active_inventory,
+            "available_stock": available_stock,
         },
     )
 def pharmacist_medicines_page(request):

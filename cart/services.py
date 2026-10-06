@@ -49,7 +49,8 @@ def add_to_cart(
     try:
 
         medicine = Medicine.objects.get(
-            id=medicine_id
+            id=medicine_id,
+            is_active=True,
         )
 
     except Medicine.DoesNotExist:

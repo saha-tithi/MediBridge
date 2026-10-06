@@ -78,23 +78,21 @@ def normalize_medicine_name(name):
 
 
 # =========================================
-# CLEAN OCR/GEMINI TEXT
+# NORMALIZE STRENGTH
 # =========================================
 
-def clean_text(text):
+def normalize_strength(value):
 
-    if not text:
+    if not value:
         return ""
 
 
-    text = str(text).upper()
+    # "500 mg" -> "500MG", "500mg" -> "500MG",
+    # "0.5 mg" -> "0.5MG" — so spacing/case differences
+    # in what Gemini emits don't count as a mismatch.
 
-
-    text = re.sub(
-        r"\s+",
-        " ",
-        text
+    return re.sub(
+        r"[^A-Z0-9.]",
+        "",
+        str(value).upper()
     )
-
-
-    return text.strip()

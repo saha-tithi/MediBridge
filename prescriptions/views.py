@@ -37,7 +37,31 @@ class PrescriptionExtractAPIView(APIView):
 
         prescription = generics.get_object_or_404(Prescription,pk=pk,customer=request.user,)
 
-        result = process_prescription(prescription)
+        try:
+            result = process_prescription(prescription)
+
+        # These are plain Python errors raised by the Gemini/PIL
+        # layer, not DRF exceptions — without this they escape to a
+        # non-JSON Django 500 page, which the frontend can't parse.
+        except ValueError as error:
+            return Response(
+                {
+                    "success": False,
+                    "message": str(error),
+                    "data": None,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        except RuntimeError as error:
+            return Response(
+                {
+                    "success": False,
+                    "message": str(error),
+                    "data": None,
+                },
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
 
         return Response(
             {

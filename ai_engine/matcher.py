@@ -2,7 +2,7 @@ from rapidfuzz import fuzz
 
 from medicine.models import Medicine
 
-from .utils import normalize_medicine_name
+from .utils import normalize_medicine_name, normalize_strength
 
 
 # =========================================
@@ -10,6 +10,34 @@ from .utils import normalize_medicine_name
 # =========================================
 
 POSSIBLE_THRESHOLD = 75
+
+
+# =========================================
+# STRENGTH COMPATIBILITY
+# =========================================
+
+def strengths_compatible(prescription_strength, database_strength):
+
+    # No strength on the prescription -> cannot rule it out.
+
+    if not prescription_strength:
+        return True
+
+
+    database_normalized = normalize_strength(database_strength)
+
+
+    # DB row has no strength recorded -> treat as unknown,
+    # not as a mismatch.
+
+    if not database_normalized:
+        return True
+
+
+    return (
+        normalize_strength(prescription_strength)
+        == database_normalized
+    )
 
 
 # =========================================
@@ -99,7 +127,7 @@ def match_one_medicine(medicine_data):
     # DATABASE
     # =========================================
 
-    medicines = Medicine.objects.all()
+    medicines = Medicine.objects.filter(is_active=True)
 
     exact_matches = []
 
@@ -122,72 +150,36 @@ def match_one_medicine(medicine_data):
 
 
         # =====================================
-        # EXACT BRAND MATCH
+        # EXACT BRAND / GENERIC MATCH
         # =====================================
 
-        if normalized_name == brand_name:
+        exact_name_match = (
+            normalized_name == brand_name
+            or normalized_name == generic_name
+        )
 
-            # If prescription strength is known,
-            # verify it against database strength.
 
-            if prescription_strength:
+        if exact_name_match:
 
-                prescription_strength_normalized = (
-                    normalize_medicine_name(
-                        prescription_strength
-                    )
+            # If prescription strength is known, verify it against
+            # the database strength.
+
+            # NOTE: a mismatch deliberately does NOT `continue` —
+            # that used to skip the fuzzy scoring below as well and
+            # drop the row from both lists, reporting a medicine
+            # that IS in the catalog as "not available". Falling
+            # through lets it surface as a possible_match instead.
+
+            if strengths_compatible(
+                prescription_strength,
+                medicine.strength,
+            ):
+
+                exact_matches.append(
+                    medicine
                 )
 
-                database_strength_normalized = (
-                    normalize_medicine_name(
-                        medicine.strength
-                    )
-                )
-
-                if (
-                    prescription_strength_normalized
-                    != database_strength_normalized
-                ):
-                    continue
-
-            exact_matches.append(
-                medicine
-            )
-
-            continue
-
-
-        # =====================================
-        # EXACT GENERIC MATCH
-        # =====================================
-
-        if normalized_name == generic_name:
-
-            if prescription_strength:
-
-                prescription_strength_normalized = (
-                    normalize_medicine_name(
-                        prescription_strength
-                    )
-                )
-
-                database_strength_normalized = (
-                    normalize_medicine_name(
-                        medicine.strength
-                    )
-                )
-
-                if (
-                    prescription_strength_normalized
-                    != database_strength_normalized
-                ):
-                    continue
-
-            exact_matches.append(
-                medicine
-            )
-
-            continue
+                continue
 
 
         # =====================================

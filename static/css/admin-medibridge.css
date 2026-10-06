@@ -1,0 +1,423 @@
+/* =============================================================
+   MediBridge skin for the Django admin.
+
+   Django's admin is driven almost entirely by the custom properties
+   declared in admin/css/base.css, so recolouring those variables is
+   both more complete and less brittle than scattering selectors.
+   The three blocks below mirror how Django itself declares its own
+   light/dark palette (base.css -> dark_mode.css).
+   ============================================================= */
+
+:root {
+  /* --- MediBridge palette (see static/css/base.css) --- */
+  --primary: #2f9878;
+  --primary-fg: #ffffff;
+  --secondary: #25866b;
+  --accent: #8fd6bd;
+
+  --body-fg: #243f3b;
+  --body-bg: #ffffff;
+  --body-quiet-color: #58736e;
+  --body-medium-color: #405651;
+  --body-loud-color: #152f2c;
+
+  --header-color: #eafaf4;
+  --header-bg: #25866b;
+  --header-link-color: #ffffff;
+  --header-branding-color: #ffffff;
+
+  --breadcrumbs-fg: #a9ddcc;
+  --breadcrumbs-link-fg: #ffffff;
+  --breadcrumbs-bg: #1b6353;
+
+  --link-fg: #25866b;
+  --link-hover-color: #14513f;
+  --link-selected-fg: #1b6353;
+
+  --hairline-color: #e6eeec;
+  --border-color: #d7e6e2;
+
+  --error-fg: #b23b3b;
+  --message-success-bg: #e3f6ee;
+  --message-warning-bg: #fff4e0;
+  --message-error-bg: #fdecec;
+
+  --darkened-bg: #f7faf9;
+  --selected-bg: #e6f5f0;
+  --selected-row: #eef8f4;
+
+  --button-bg: #2f9878;
+  --button-hover-bg: #25866b;
+  --default-button-bg: #25866b;
+  --default-button-hover-bg: #1f7460;
+  --delete-button-bg: #c0504d;
+  --delete-button-hover-bg: #a63f3c;
+  --close-button-bg: #8a9d99;
+  --close-button-hover-bg: #5d706c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #1f7f65;
+    --primary-fg: #f7f7f7;
+    --secondary: #1b6353;
+    --accent: #7fd0b5;
+
+    --body-fg: #e6f1ee;
+    --body-bg: #10201e;
+    --body-quiet-color: #a7bfba;
+    --body-medium-color: #c6dad5;
+    --body-loud-color: #ffffff;
+
+    --header-color: #eafaf4;
+    --header-bg: #14513f;
+    --header-link-color: #ffffff;
+    --header-branding-color: #ffffff;
+
+    --breadcrumbs-fg: #8fc4b6;
+    --breadcrumbs-link-fg: #e6f1ee;
+    --breadcrumbs-bg: #14513f;
+
+    --link-fg: #6fd6b5;
+    --link-hover-color: #9ae7d0;
+    --link-selected-fg: #3d9c81;
+
+    --hairline-color: #1e3833;
+    --border-color: #27504a;
+
+    --error-fg: #f08a8a;
+    --message-success-bg: #10472c;
+    --message-warning-bg: #4a3512;
+    --message-error-bg: #4a1616;
+
+    --darkened-bg: #16302c;
+    --selected-bg: #1c3d38;
+    --selected-row: #173a34;
+
+    --button-bg: #1f7f65;
+    --button-hover-bg: #2a9a7c;
+    --default-button-bg: #2a9a7c;
+    --default-button-hover-bg: #1f7f65;
+    --delete-button-bg: #a63f3c;
+    --delete-button-hover-bg: #c0504d;
+    --close-button-bg: #2c4a45;
+    --close-button-hover-bg: #3d6059;
+  }
+}
+
+html[data-theme="dark"] {
+  --primary: #1f7f65;
+  --primary-fg: #f7f7f7;
+  --secondary: #1b6353;
+  --accent: #7fd0b5;
+
+  --body-fg: #e6f1ee;
+  --body-bg: #10201e;
+  --body-quiet-color: #a7bfba;
+  --body-medium-color: #c6dad5;
+  --body-loud-color: #ffffff;
+
+  --header-color: #eafaf4;
+  --header-bg: #14513f;
+  --header-link-color: #ffffff;
+  --header-branding-color: #ffffff;
+
+  --breadcrumbs-fg: #8fc4b6;
+  --breadcrumbs-link-fg: #e6f1ee;
+  --breadcrumbs-bg: #14513f;
+
+  --link-fg: #6fd6b5;
+  --link-hover-color: #9ae7d0;
+  --link-selected-fg: #3d9c81;
+
+  --hairline-color: #1e3833;
+  --border-color: #27504a;
+
+  --error-fg: #f08a8a;
+  --message-success-bg: #10472c;
+  --message-warning-bg: #4a3512;
+  --message-error-bg: #4a1616;
+
+  --darkened-bg: #16302c;
+  --selected-bg: #1c3d38;
+  --selected-row: #173a34;
+
+  --button-bg: #1f7f65;
+  --button-hover-bg: #2a9a7c;
+  --default-button-bg: #2a9a7c;
+  --default-button-hover-bg: #1f7f65;
+  --delete-button-bg: #a63f3c;
+  --delete-button-hover-bg: #c0504d;
+  --close-button-bg: #2c4a45;
+  --close-button-hover-bg: #3d6059;
+}
+
+/* The user explicitly picked light, so undo a dark system setting. */
+html[data-theme="light"] {
+  --primary: #2f9878;
+  --primary-fg: #ffffff;
+  --secondary: #25866b;
+  --accent: #8fd6bd;
+
+  --body-fg: #243f3b;
+  --body-bg: #ffffff;
+  --body-quiet-color: #58736e;
+  --body-medium-color: #405651;
+  --body-loud-color: #152f2c;
+
+  --header-color: #eafaf4;
+  --header-bg: #25866b;
+  --header-link-color: #ffffff;
+  --header-branding-color: #ffffff;
+
+  --breadcrumbs-fg: #a9ddcc;
+  --breadcrumbs-link-fg: #ffffff;
+  --breadcrumbs-bg: #1b6353;
+
+  --link-fg: #25866b;
+  --link-hover-color: #14513f;
+  --link-selected-fg: #1b6353;
+
+  --hairline-color: #e6eeec;
+  --border-color: #d7e6e2;
+
+  --error-fg: #b23b3b;
+  --message-success-bg: #e3f6ee;
+  --message-warning-bg: #fff4e0;
+  --message-error-bg: #fdecec;
+
+  --darkened-bg: #f7faf9;
+  --selected-bg: #e6f5f0;
+  --selected-row: #eef8f4;
+
+  --button-bg: #2f9878;
+  --button-hover-bg: #25866b;
+  --default-button-bg: #25866b;
+  --default-button-hover-bg: #1f7460;
+  --delete-button-bg: #c0504d;
+  --delete-button-hover-bg: #a63f3c;
+  --close-button-bg: #8a9d99;
+  --close-button-hover-bg: #5d706c;
+}
+
+
+/* -------------------------------------------------------------
+   Centre the page instead of stretching it across the viewport.
+   #container is a column flex box that holds the header, the
+   breadcrumbs, the main row and the footer, so constraining it
+   centres the whole admin at once. #nav-sidebar is position:
+   sticky rather than fixed, so it stays inside the container.
+   ------------------------------------------------------------- */
+
+#container {
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+
+/* -------------------------------------------------------------
+   Header
+   ------------------------------------------------------------- */
+
+/* Django colours this link with --accent, which does not have enough
+   contrast against the header in either mode. Force it white. */
+#site-name a:link,
+#site-name a:visited {
+  color: #ffffff;
+}
+
+#site-name a {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+#site-name a span {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+#user-tools a:hover {
+  color: var(--primary);
+}
+
+
+/* Django pairs .colMS's reserved 300px gutter with #content-related's
+   -300px pull, so the sidebar always lands inside #container. The one
+   thing that breaks the balance is Django pinning the dashboard column
+   to a fixed 600px, which leaves the centred container lopsided. Let it
+   fill the width .colMS already reserved. (responsive.css asks for the
+   same thing below 1024px, so this is unconditional.) */
+body.dashboard #content {
+  width: auto;
+}
+
+
+/* -------------------------------------------------------------
+   Dashboard stat cards (templates/admin/custom_index.html)
+   ------------------------------------------------------------- */
+
+.mb-stats {
+  display: grid;
+  /* 3 x 2 on a desktop, 3 rows of 2 on a laptop, single column on
+     a phone — always an even grid, never a stray last card. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 24px;
+}
+
+@media (max-width: 1024px) {
+  .mb-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .mb-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Django's `a:link` rule wins the cascade on transition for anchors and
+   only animates background, which makes theme toggles flash. Declare it
+   explicitly for both the <a> cards and the plain <div> card. */
+.mb-stat,
+a.mb-stat:link,
+a.mb-stat:visited {
+  transition: color 0.15s ease, background 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mb-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  background: var(--body-bg);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+a.mb-stat:hover {
+  color: inherit;
+  border-color: var(--primary);
+  box-shadow: 0 2px 10px rgba(31, 127, 101, 0.14);
+}
+
+.mb-stat--money {
+  border-left-color: var(--secondary);
+}
+
+.mb-stat--warn {
+  border-left-color: #d9822b;
+}
+
+.mb-stat--danger {
+  border-left-color: #c94f4f;
+}
+
+.mb-stat__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--body-loud-color);
+}
+
+.mb-stat__label {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--body-quiet-color);
+}
+
+
+/* -------------------------------------------------------------
+   Status pills
+   ------------------------------------------------------------- */
+
+.mb-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--selected-bg);
+  color: var(--body-fg);
+}
+
+.mb-badge--placed,
+.mb-badge--pending     { background: #fdf1de; color: #8a5a12; }
+.mb-badge--processing  { background: #e7f0fd; color: #2b5ba8; }
+.mb-badge--packed      { background: #eef0fd; color: #4b4fa8; }
+.mb-badge--shipped     { background: #e2f2fb; color: #1f6f96; }
+.mb-badge--delivered,
+.mb-badge--verified    { background: #e0f5ea; color: #1c7a53; }
+.mb-badge--cancelled,
+.mb-badge--rejected    { background: #fdeaea; color: #a83232; }
+.mb-badge--out         { background: #fdeaea; color: #a83232; }
+
+html[data-theme="dark"] .mb-badge--placed,
+html[data-theme="dark"] .mb-badge--pending     { background: #4a3512; color: #f0c987; }
+html[data-theme="dark"] .mb-badge--processing  { background: #1b3355; color: #9dc0f5; }
+html[data-theme="dark"] .mb-badge--packed      { background: #232a55; color: #b0b3f5; }
+html[data-theme="dark"] .mb-badge--shipped     { background: #123d4f; color: #8ecdea; }
+html[data-theme="dark"] .mb-badge--delivered,
+html[data-theme="dark"] .mb-badge--verified    { background: #10472c; color: #7fdcb2; }
+html[data-theme="dark"] .mb-badge--cancelled,
+html[data-theme="dark"] .mb-badge--rejected,
+html[data-theme="dark"] .mb-badge--out         { background: #4a1616; color: #f1a1a1; }
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .mb-badge--placed,
+  html:not([data-theme="light"]) .mb-badge--pending     { background: #4a3512; color: #f0c987; }
+  html:not([data-theme="light"]) .mb-badge--processing  { background: #1b3355; color: #9dc0f5; }
+  html:not([data-theme="light"]) .mb-badge--packed      { background: #232a55; color: #b0b3f5; }
+  html:not([data-theme="light"]) .mb-badge--shipped     { background: #123d4f; color: #8ecdea; }
+  html:not([data-theme="light"]) .mb-badge--delivered,
+  html:not([data-theme="light"]) .mb-badge--verified    { background: #10472c; color: #7fdcb2; }
+  html:not([data-theme="light"]) .mb-badge--cancelled,
+  html:not([data-theme="light"]) .mb-badge--rejected,
+  html:not([data-theme="light"]) .mb-badge--out         { background: #4a1616; color: #f1a1a1; }
+}
+
+
+/* -------------------------------------------------------------
+   Tables, filters and misc polish
+   ------------------------------------------------------------- */
+
+#result_list th {
+  background: var(--darkened-bg);
+  white-space: nowrap;
+}
+
+#result_list tbody tr:hover {
+  background: var(--selected-bg);
+}
+
+.module h2,
+.module h3 {
+  border-bottom-color: var(--hairline-color);
+}
+
+#changelist-filter h3 {
+  color: var(--link-fg);
+}
+
+.change-list .toplinks {
+  border-bottom-color: var(--hairline-color);
+}
+
+.submit-row input[type="submit"] {
+  border-radius: 6px;
+}
+
+.breadcrumbs {
+  border-radius: 0;
+}

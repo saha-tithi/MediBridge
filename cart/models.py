@@ -1,6 +1,7 @@
 import uuid
 from django.conf import settings
 from django.db import models
+from django.db.models import Q, UniqueConstraint
 from medicine.models import Medicine
 from prescriptions.models import Prescription
 
@@ -27,11 +28,22 @@ class CartItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,)
 
     class Meta:
-        unique_together = (
-            "cart",
-            "medicine",
-            "prescription",
-        )
+        # unique_together is NOT sufficient here: prescription is
+        # nullable, and on PostgreSQL NULLs are distinct, so
+        # (cart, medicine, NULL) was never actually unique —
+        # double-clicking "Add to cart" could create duplicate lines.
+        constraints = [
+            UniqueConstraint(
+                fields=["cart", "medicine"],
+                condition=Q(prescription__isnull=True),
+                name="uniq_cart_medicine_no_rx",
+            ),
+            UniqueConstraint(
+                fields=["cart", "medicine", "prescription"],
+                condition=Q(prescription__isnull=False),
+                name="uniq_cart_medicine_rx",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.medicine.brand_name} x {self.quantity}"

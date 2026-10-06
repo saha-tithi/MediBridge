@@ -1,4 +1,6 @@
 import json
+import random
+import re
 import time
 
 from PIL import Image
@@ -12,7 +14,10 @@ from config.settings import env
 # GEMINI CONFIGURATION
 # =========================================
 
-API_KEY = env("GEMINI_API_KEY")
+# default="" so a missing key reaches the friendly error below.
+# Without it, python-decouple raises UndefinedValueError first
+# and this guard could never run.
+API_KEY = env("GEMINI_API_KEY", default="")
 
 if not API_KEY:
     raise ValueError(
@@ -25,7 +30,35 @@ MODEL_NAME = "gemini-3.6-flash"
 # 2 minutes per Gemini request
 GEMINI_TIMEOUT = 120000
 
-MAX_RETRIES = 3
+# Gemini intermittently answers with 503 "high demand". The original
+# 3 attempts spaced 3s/6s (~9s of waiting) all landed inside the same
+# spike, so every upload failed. 7 attempts over ~61s ride it out;
+# non-transient errors (bad key, unknown model) bail out immediately.
+MAX_RETRIES = 7
+
+RETRY_BASE_DELAY = 1
+
+MAX_RETRY_DELAY = 30
+
+# HTTP statuses that retrying can never fix (bad key, unknown model,
+# payload too large). Everything else — notably 429/5xx — is transient.
+NON_RETRYABLE_STATUS_CODES = frozenset({400, 401, 403, 404, 413})
+
+# Google embeds a RetryInfo detail in 429/503 bodies, e.g.
+# 'retryDelay': '46s' or 'retryDelay': '416ms'. Honouring it beats
+# guessing with exponential backoff.
+RETRY_DELAY_RE = re.compile(
+    r"retryDelay['\"]?\s*:\s*['\"]?(\d+(?:\.\d+)?)(ms|s)"
+)
+
+# Per-plan quota line, e.g.
+# "... limit: 20, model: gemini-3.6-flash".
+QUOTA_RE = re.compile(r"limit:\s*(\d+),\s*model:\s*([\w.-]+)")
+
+# Total seconds this call may spend sleeping between attempts. A
+# request that needs to wait longer than this is not worth blocking
+# the customer's upload for — better to fail with a clear reason.
+TOTAL_RETRY_BUDGET = 90
 
 
 def create_client():
@@ -35,6 +68,70 @@ def create_client():
             timeout=GEMINI_TIMEOUT
         )
     )
+
+
+def is_retryable(error):
+    """True when retrying this Gemini failure might succeed."""
+    # A per-day quota (GenerateRequestsPerDay...) cannot recover
+    # inside TOTAL_RETRY_BUDGET — burning 90s of retries only to
+    # learn the same thing helps nobody.
+    if "PerDay" in str(error):
+
+        return False
+
+    code = getattr(error, "code", None)
+
+    # No HTTP status (timeout, connection reset, DNS hiccup) -> retry.
+    if code is None:
+        return True
+
+    return code not in NON_RETRYABLE_STATUS_CODES
+
+
+def server_retry_delay(error):
+    """Seconds Google asked us to wait, or None if it did not say."""
+    match = RETRY_DELAY_RE.search(str(error))
+
+    if match is None:
+        return None
+
+    value = float(match.group(1))
+
+    return value / 1000.0 if match.group(2) == "ms" else value
+
+
+def describe_failure(error, attempts):
+    """A message someone can act on, not a raw SDK dump."""
+    quota = QUOTA_RE.search(str(error))
+
+    if quota is not None:
+
+        return (
+            f"Gemini API quota exhausted: the current plan allows "
+            f"{quota.group(1)} request(s) for {quota.group(2)}. "
+            f"Wait for the quota to reset, or upgrade the API key's "
+            f"plan. (gave up after {attempts} attempt(s))"
+        )
+
+    detail = repr(error)
+
+    # repr() of some SDK/transport exceptions omits the status; the
+    # code is the single most useful thing in a support request.
+    code = getattr(error, "code", None)
+
+    if code is not None:
+
+        detail = f"HTTP {code}: {detail}"
+
+    if len(detail) > 300:
+
+        detail = detail[:300] + "..."
+
+    return (
+        f"Gemini could not process the prescription after "
+        f"{attempts} attempt(s): {detail}"
+    )
+
 
 
 # =========================================
@@ -172,6 +269,8 @@ def read_medicines_from_image(file_path):
 
     last_error = None
 
+    sleep_budget = 0.0
+
 
     for attempt in range(1, MAX_RETRIES + 1):
 
@@ -223,15 +322,49 @@ def read_medicines_from_image(file_path):
             )
 
 
-            if attempt < MAX_RETRIES:
+            if attempt >= MAX_RETRIES or not is_retryable(error):
 
-                delay = 3 * attempt
+                break
+
+
+            # Exponential backoff — 1s, 2s, 4s, 8s, 16s, 30s — plus
+            # up to 1s of jitter so simultaneous uploads do not retry
+            # in lockstep. The first retry is deliberately quick: a
+            # 503 spike is often over before a longer wait elapses.
+
+            delay = (
+                min(
+                    RETRY_BASE_DELAY * (2 ** (attempt - 1)),
+                    MAX_RETRY_DELAY,
+                )
+                + random.uniform(0, 1)
+            )
+
+            # Google's own RetryInfo beats our guess.
+            asked = server_retry_delay(error)
+
+            if asked is not None:
+
+                delay = max(delay, asked)
+
+
+            if sleep_budget + delay > TOTAL_RETRY_BUDGET:
 
                 print(
-                    f"Retrying Gemini in {delay} seconds..."
+                    "Gemini asked us to wait longer than the retry "
+                    "budget allows; giving up."
                 )
 
-                time.sleep(delay)
+                break
+
+
+            print(
+                f"Retrying Gemini in {delay:.1f} seconds..."
+            )
+
+            time.sleep(delay)
+
+            sleep_budget += delay
 
 
     # =========================================
@@ -240,9 +373,12 @@ def read_medicines_from_image(file_path):
 
     if response is None:
 
+        # Surface the real cause — a bare "after multiple attempts"
+        # left the API consumer with no idea whether the key, model
+        # or quota was at fault. describe_failure() turns the common
+        # quota case into something actionable.
         raise RuntimeError(
-            "Gemini could not process the prescription "
-            "after multiple attempts."
+            describe_failure(last_error, attempt)
         ) from last_error
 
 
@@ -250,7 +386,9 @@ def read_medicines_from_image(file_path):
     # GET RESPONSE TEXT
     # =========================================
 
-    response_text = response.text.strip()
+    # response.text is Optional[str] in the SDK — it is None when
+    # the response has no candidates/parts (e.g. safety block).
+    response_text = (response.text or "").strip()
 
 
     if not response_text:

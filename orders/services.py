@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import transaction
+from django.utils import timezone
 
 from cart.models import Cart
 from orders.models import Order, OrderItem
@@ -17,7 +18,7 @@ def create_order(
 ):
 
     try:
-        cart = Cart.objects.get(
+        cart = Cart.objects.select_for_update().get(
             customer=customer
         )
 
@@ -47,14 +48,66 @@ def create_order(
         total_amount += cart_item.subtotal
 
 
-    order = Order.objects.create(
-        customer=customer,
-        status=Order.Status.PLACED,
-        payment_status=Order.PaymentStatus.PENDING,
-        payment_method=payment_method,
-        total_amount=total_amount,
-        shipping_address=shipping_address,
-    )
+    # =========================================================
+    # ONLINE ORDERS: reuse the outstanding unpaid order
+    # =========================================================
+    #
+    # The cart is deliberately left intact until the Razorpay payment
+    # is verified, so previously EVERY abandoned or retried checkout
+    # minted another PLACED/PENDING order (measured: 12 -> 13 from a
+    # single retry). Reuse the newest unpaid one and rebuild it from
+    # the current cart instead of creating a fresh order.
+
+    order = None
+
+
+    if payment_method == Order.PaymentMethod.ONLINE:
+
+        order = (
+            Order.objects.select_for_update()
+            .filter(
+                customer=customer,
+                payment_method=Order.PaymentMethod.ONLINE,
+                payment_status=Order.PaymentStatus.PENDING,
+                status=Order.Status.PLACED,
+            )
+            .order_by("-created_at")
+            .first()
+        )
+
+
+    if order is None:
+
+        order = Order.objects.create(
+            customer=customer,
+            status=Order.Status.PLACED,
+            payment_status=Order.PaymentStatus.PENDING,
+            payment_method=payment_method,
+            total_amount=total_amount,
+            shipping_address=shipping_address,
+        )
+
+    else:
+
+        order.shipping_address = shipping_address
+
+        order.total_amount = total_amount
+
+        # The cached Razorpay order was created against the old
+        # total, so drop it and let /razorpay/create/ mint a new one
+        # for the current amount.
+        order.razorpay_order_id = ""
+
+        order.save(
+            update_fields=[
+                "shipping_address",
+                "total_amount",
+                "razorpay_order_id",
+                "updated_at",
+            ]
+        )
+
+        order.items.all().delete()
 
 
     for cart_item in cart_items:
@@ -68,18 +121,24 @@ def create_order(
             unit_price=cart_item.unit_price,
             subtotal=cart_item.subtotal,
         )
-    Notification.objects.create(
-        notification_type=Notification.NotificationType.NEW_ORDER,
-        title="New Order",
-        message=(
-            f"Order #{str(order.id)[:8].upper()} has been placed "
-            f"for ₹{order.total_amount}."
-        ),
-        order=order,
-    )
 
 
     if payment_method == Order.PaymentMethod.COD:
+
+        # A COD order is real the moment it exists. An ONLINE order
+        # is not: notifying the pharmacist here announced orders that
+        # were never paid for. That notification now fires in
+        # VerifyRazorpayPaymentAPIView, once the payment is verified.
+
+        Notification.objects.create(
+            notification_type=Notification.NotificationType.NEW_ORDER,
+            title="New Order",
+            message=(
+                f"Order #{str(order.id)[:8].upper()} has been placed "
+                f"for ₹{order.total_amount}."
+            ),
+            order=order,
+        )
 
         cart_items.delete()
 
@@ -89,6 +148,10 @@ def create_order(
 
 @transaction.atomic
 def process_order(order):
+
+    # Lock the order row so concurrent "process" calls
+    # cannot both pass the status check below.
+    order = Order.objects.select_for_update().get(pk=order.pk)
 
     if order.status != Order.Status.PLACED:
 
@@ -145,9 +208,14 @@ def process_order(order):
 
         inventories = (
             item.medicine.inventories
+            .select_for_update()
             .filter(
                 is_available=True,
                 stock__gt=0,
+                # Match cart/services.get_available_inventories —
+                # otherwise an expired batch is consumed (FEFO) and
+                # shipped to the customer.
+                expiry_date__gte=timezone.now().date(),
             )
             .order_by("expiry_date")
         )
@@ -193,6 +261,7 @@ def process_order(order):
                 update_fields=[
                     "stock",
                     "is_available",
+                    "updated_at",
                 ]
             )
 

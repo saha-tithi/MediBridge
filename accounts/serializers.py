@@ -7,6 +7,10 @@ from .models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True,
+        allow_blank=False,
+    )
     password = serializers.CharField(
         write_only=True,
         required=True,
@@ -32,7 +36,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         value = value.lower()
 
-        if User.objects.filter(email=value).exists():
+        if User.objects.filter(
+            email__iexact=value
+        ).exists():
             raise serializers.ValidationError(
                 "An account with this email already exists."
             )
@@ -89,12 +95,15 @@ class LoginSerializer(serializers.Serializer):
         # If username authentication fails,
         # try email
         if user is None:
-            try:
-                account = User.objects.get(
-                    email__iexact=identifier
-                )
-            except User.DoesNotExist:
-                account = None
+            # .first() instead of .get() so a pre-existing
+            # duplicate email can never raise
+            # MultipleObjectsReturned (HTTP 500) on login.
+            account = (
+                User.objects
+                .filter(email__iexact=identifier)
+                .order_by("pk")
+                .first()
+            )
 
             if account is not None:
                 user = authenticate(
@@ -134,3 +143,22 @@ class ProfileSerializer(serializers.ModelSerializer):
             "role",
             "created_at",
         )
+
+    def validate_email(self, value):
+        value = value.lower()
+
+        queryset = User.objects.filter(
+            email__iexact=value
+        )
+
+        if self.instance is not None:
+            queryset = queryset.exclude(
+                pk=self.instance.pk
+            )
+
+        if queryset.exists():
+            raise serializers.ValidationError(
+                "An account with this email already exists."
+            )
+
+        return value
