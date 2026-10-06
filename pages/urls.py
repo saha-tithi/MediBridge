@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import login_page, register_page,cart_page,checkout_page,checkout_review_page,order_success_page,order_detail_page,orders_page,profile_page,addresses_page,upload_prescription_page,prescription_results_page,prescriptions_page,pharmacist_overview_page,pharmacist_orders_page,pharmacist_order_detail_page,pharmacist_inventory_page,medicine_detail_page,pharmacist_medicines_page,pharmacist_medicine_detail_page,pharmacist_notifications_page,pharmacist_profile_page
 
-
+#urls
 
 urlpatterns = [
     path("login/", login_page, name="login-page"),
