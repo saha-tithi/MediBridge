@@ -22,6 +22,7 @@ extension so ``url()`` never needs a network round-trip.
 import os
 
 import cloudinary
+import cloudinary.api
 import cloudinary.uploader
 import cloudinary.utils
 from cloudinary.exceptions import NotFound
