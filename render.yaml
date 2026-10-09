@@ -1,0 +1,93 @@
+# Render Blueprint - deploy MediBridge on the free tier.
+#
+# Connect this repo in the Render dashboard ("New" -> "Blueprint") and Render
+# will create the web service and the Postgres database below, then set
+# DATABASE_URL on the service automatically.
+#
+# The *_SECRET/*_KEY/API_SECRET entries are marked `sync: false`: they are NOT
+# stored in this file, and you paste them into the service's Environment tab
+# in the dashboard. Nothing secret lives in git.
+#
+# Free tier caveats worth knowing before you rely on this:
+#   * Web services sleep after ~15 min of inactivity. The first request after
+#     a cold start takes roughly 20-30s. Subsequent ones are fast.
+#   * Free Postgres databases expire 90 days after creation. Export your data
+#     before that, or the database is destroyed.
+#   * No persistent disk is available, which is why uploads go to Cloudinary
+#     (see common/cloudinary_storage.py).
+
+services:
+  - type: web
+    name: medibridge
+    runtime: python
+    plan: free
+    # Oregon is one of the regions the free plan is actually available in.
+    region: oregon
+
+    # Migrations run here, once per build, before the new code goes live.
+    # Render provides DATABASE_URL to the build, so this can reach the DB.
+    buildCommand: >
+      pip install -r requirements.txt
+      && python manage.py migrate --noinput
+      && python manage.py collectstatic --noinput
+
+    # gunicorn is Unix-only (it imports fcntl), so it cannot run on a Windows
+    # dev box. On Render's Linux runtime this is the standard WSGI server.
+    startCommand: >
+      gunicorn config.wsgi:application
+      --bind 0.0.0.0:$PORT
+      --workers 2
+      --timeout 120
+      --access-logfile -
+      --error-logfile -
+
+    envVars:
+      - key: DEBUG
+        value: "False"
+      # Render generates a strong key on first deploy.
+      - key: SECRET_KEY
+        generateValue: true
+
+      # --- set these in the dashboard (Environment tab) ---
+      # ALLOWED_HOSTS must list your service domain, e.g.
+      #   medibridge.onrender.com,.onrender.com
+      - key: ALLOWED_HOSTS
+        sync: false
+      # CSRF_TRUSTED_ORIGINS must list the scheme, e.g.
+      #   https://medibridge.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+
+      # AI prescription OCR. The site works without it - only the OCR
+      # endpoint errors - but you almost certainly want it set.
+      - key: GEMINI_API_KEY
+        sync: false
+
+      # Payments. Until you swap these for live keys, Razorpay is in test
+      # mode and will not move real money.
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+
+      # Transactional email (order confirmations etc.)
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+
+      # Media storage. Uploads (prescriptions + medicine photos) go here.
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+databases:
+  - name: medibridge-db
+    plan: free
