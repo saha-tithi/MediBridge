@@ -4,6 +4,8 @@ __pycache__/
 .env
 db.sqlite3
 media/
+# Output of `manage.py collectstatic`. Regenerated on every Render build.
+staticfiles/
 .idea/
 .vscode/
 

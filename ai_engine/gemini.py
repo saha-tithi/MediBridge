@@ -14,15 +14,16 @@ from config.settings import env
 # GEMINI CONFIGURATION
 # =========================================
 
-# default="" so a missing key reaches the friendly error below.
-# Without it, python-decouple raises UndefinedValueError first
-# and this guard could never run.
+# Read with default="" and validated lazily inside create_client(), NOT here
+# at import time. This module is reached from
+# prescriptions/urls.py -> prescriptions/views.py -> ai_engine.services, so an
+# eager raise above takes the ENTIRE site down - medicine list, cart, admin,
+# every URL - whenever the key is merely unset. A missing AI credential should
+# fail prescription OCR, not the whole application.
+#
+# default="" also avoids python-decouple's UndefinedValueError, which would
+# otherwise fire before this guard could produce a readable message.
 API_KEY = env("GEMINI_API_KEY", default="")
-
-if not API_KEY:
-    raise ValueError(
-        "GEMINI_API_KEY is missing from config/.env"
-    )
 
 
 MODEL_NAME = "gemini-3.6-flash"
@@ -62,6 +63,13 @@ TOTAL_RETRY_BUDGET = 90
 
 
 def create_client():
+    if not API_KEY:
+        # The key comes from config/.env locally, or straight from the process
+        # environment on Render, which has no .env file at all.
+        raise ValueError(
+            "GEMINI_API_KEY is not set. Add it to config/.env for local "
+            "development, or to the service environment on Render."
+        )
     return genai.Client(
         api_key=API_KEY,
         http_options=types.HttpOptions(

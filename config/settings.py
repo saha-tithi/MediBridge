@@ -11,19 +11,26 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 
-from pathlib import Path
-from decouple import Config, RepositoryEnv
+import os
 from datetime import timedelta
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+from decouple import Config, RepositoryEnv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = Config(
-    RepositoryEnv(
-        str(BASE_DIR / "config" / ".env")
-    )
+# Locally this project reads config/.env. Render has no .env file at all -
+# configuration comes from the dashboard's environment variables - and
+# decouple's RepositoryEnv.__init__ raises FileNotFoundError the moment the
+# file is absent. Branching here is what lets the same settings file boot on
+# both a laptop and a Render dyno.
+_ENV_FILE = BASE_DIR / "config" / ".env"
+env = (
+    Config(RepositoryEnv(str(_ENV_FILE)))
+    if _ENV_FILE.is_file()
+    else Config(os.environ)
 )
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
@@ -42,6 +49,20 @@ ALLOWED_HOSTS = [
     ).split(",")
     if host.strip()
 ]
+
+# Django 4+ requires the scheme as well as the origin, and refuses admin
+# POSTs over HTTPS without it.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in env("CSRF_TRUSTED_ORIGINS", default="").split(",")
+    if origin.strip()
+]
+
+# Render terminates TLS at its router and forwards plain HTTP, tagging the
+# request with X-Forwarded-Proto. Django ignores that header unless told to
+# trust it - without this line request.is_secure() is always False and
+# SECURE_SSL_REDIRECT bounces every visitor into an infinite redirect loop.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Application definition
@@ -70,6 +91,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # WhiteNoise serves STATIC_ROOT straight off the app box, so no nginx or
+    # CDN is required. It must sit immediately after SecurityMiddleware.
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -101,16 +125,37 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+# Render provisions Postgres and injects DATABASE_URL automatically, so read
+# that when present. Locally the DB_* values in config/.env are used.
+_DATABASE_URL = env("DATABASE_URL", default="")
+
+if _DATABASE_URL:
+    _db = urlparse(_DATABASE_URL)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            # urlparse leaves credentials percent-encoded, and Render's
+            # generated passwords routinely contain characters that need it.
+            "NAME": unquote((_db.path or "/").lstrip("/")),
+            "USER": unquote(_db.username or ""),
+            "PASSWORD": unquote(_db.password or ""),
+            "HOST": _db.hostname or "",
+            "PORT": str(_db.port or ""),
+            "CONN_MAX_AGE": 60,
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USER"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT"),
+            "CONN_MAX_AGE": 60,
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -156,6 +201,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+CLOUDINARY_CLOUD_NAME = env("CLOUDINARY_CLOUD_NAME", default="")
+CLOUDINARY_API_KEY = env("CLOUDINARY_API_KEY", default="")
+CLOUDINARY_API_SECRET = env("CLOUDINARY_API_SECRET", default="")
+
+# Static files always go through WhiteNoise. User uploads go to Cloudinary
+# whenever this is not a local debug run, because Render's free tier has no
+# persistent disk and wipes the filesystem on every deploy - a local-disk
+# upload in production is a guaranteed lost prescription. Locally we keep the
+# plain filesystem so no Cloudinary account is needed to develop.
+STORAGES = {
+    "default": {
+        "BACKEND": (
+            "common.cloudinary_storage.CloudinaryMediaStorage"
+            if not DEBUG
+            else "django.core.files.storage.FileSystemStorage"
+        ),
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -183,22 +251,33 @@ SIMPLE_JWT = {
 }
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_PORT = env("EMAIL_PORT", cast=int)
-EMAIL_USE_TLS = env("EMAIL_USE_TLS", cast=bool)
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_PORT = env("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", default=True, cast=bool)
 
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
-RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID")
-RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET")
-GEMINI_API_KEY = env("GEMINI_API_KEY")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="")
+RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID", default="")
+RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET", default="")
+GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
 # Production security settings
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # Default on, but env-switchable so a misconfigured proxy can be worked
+    # around without editing code.
+    SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", default=True, cast=bool)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
+
+    # HSTS is opt-in. Once a browser has cached a long HSTS header there is no
+    # practical way to undo it, so this stays off until you deliberately turn
+    # it on. SECURE_HSTS_PRELOAD is intentionally never enabled.
+    SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", default=0, cast=int)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = SECURE_HSTS_SECONDS > 0
+    SECURE_HSTS_PRELOAD = False
+
+# NOTE: SECURE_BROWSER_XSS_FILTER is gone. It was deprecated in Django 4.0 and
+# removed in 5.0; modern browsers ignore X-XSS-Protection anyway.
