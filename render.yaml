@@ -24,17 +24,25 @@ services:
     # Oregon is one of the regions the free plan is actually available in.
     region: oregon
 
-    # Migrations run here, once per build, before the new code goes live.
-    # Render provides DATABASE_URL to the build, so this can reach the DB.
+    # The build container does NOT get DATABASE_URL (Render injects it at
+    # runtime only), so no database command may run here - `migrate` used to
+    # crash the build with "DB_NAME not found". collectstatic is safe: it
+    # never touches the database, and its output in staticfiles/ persists
+    # into the deployed image, so WhiteNoise serves it without re-running.
     buildCommand: >
       pip install -r requirements.txt
-      && python manage.py migrate --noinput
       && python manage.py collectstatic --noinput
 
+    # Migrations run here instead, in the runtime environment where
+    # DATABASE_URL actually exists. This is the container's main process, so
+    # it executes exactly once per boot before gunicorn forks its workers -
+    # there is no race between them.
+    #
     # gunicorn is Unix-only (it imports fcntl), so it cannot run on a Windows
     # dev box. On Render's Linux runtime this is the standard WSGI server.
     startCommand: >
-      gunicorn config.wsgi:application
+      python manage.py migrate --noinput
+      && gunicorn config.wsgi:application
       --bind 0.0.0.0:$PORT
       --workers 2
       --timeout 120

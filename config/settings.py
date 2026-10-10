@@ -128,6 +128,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Render provisions Postgres and injects DATABASE_URL automatically, so read
 # that when present. Locally the DB_* values in config/.env are used.
 _DATABASE_URL = env("DATABASE_URL", default="")
+_DB_NAME = env("DB_NAME", default="")
 
 if _DATABASE_URL:
     _db = urlparse(_DATABASE_URL)
@@ -144,15 +145,37 @@ if _DATABASE_URL:
             "CONN_MAX_AGE": 60,
         }
     }
-else:
+elif _DB_NAME:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": env("DB_NAME"),
+            "NAME": _DB_NAME,
             "USER": env("DB_USER"),
             "PASSWORD": env("DB_PASSWORD"),
             "HOST": env("DB_HOST"),
             "PORT": env("DB_PORT"),
+            "CONN_MAX_AGE": 60,
+        }
+    }
+else:
+    # Neither source is available. This is Render's *build* container: it
+    # does not receive DATABASE_URL (Render injects that at runtime only),
+    # and it has no config/.env either. The build only runs collectstatic,
+    # which never touches the database - but Django still needs a
+    # well-formed DATABASES dict simply to import the settings module.
+    #
+    # Deliberately NOT SQLite. A throwaway SQLite file would let `migrate`
+    # appear to succeed while writing tables to a database nobody will ever
+    # read. Empty connection values instead make any real query fail loudly
+    # with a clear connection error, so a mistake here cannot pass silently.
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "",
+            "USER": "",
+            "PASSWORD": "",
+            "HOST": "",
+            "PORT": "",
             "CONN_MAX_AGE": 60,
         }
     }
