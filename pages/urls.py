@@ -4,6 +4,13 @@ from .views import login_page, register_page,cart_page,checkout_page,checkout_re
 #urls
 
 urlpatterns = [
+    # The bare site root used to 404 - no view was registered for "", so the
+    # first thing anyone saw on visiting the deployed URL was a 404 page.
+    # Render the login page here rather than redirecting, so the link opens
+    # the form immediately with no extra hop. /login/ still works and is what
+    # the rest of the app links to.
+    path("", login_page, name="home-page"),
+
     path("login/", login_page, name="login-page"),
     path("register/", register_page, name="register-page"),
     path("cart/",cart_page,name="cart-page",),

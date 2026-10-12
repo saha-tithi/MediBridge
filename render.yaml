@@ -77,12 +77,19 @@ services:
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
 
-      # Django requires the scheme, and this list is checked strictly, so it
-      # is the exact service URL rather than a wildcard. Render appends a
-      # random suffix to new service subdomains (this one is -6iab); if you
-      # ever delete and recreate the service, update this line to match.
+      # Django requires the scheme, and the origin list is a second line of
+      # defence behind the Referer check.
+      #
+      # Wildcard rather than an exact URL on purpose: Render appends a random
+      # suffix to each new service subdomain (this one is -6iab), so a
+      # hardcoded URL silently becomes wrong every time the service is
+      # recreated - which is exactly how this value went stale before.
+      # Django supports a wildcard subdomain here.
+      #
+      # The CSRF token check still applies regardless, so a page on some
+      # other *.onrender.com host cannot forge a request without the token.
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://medibridge-6iab.onrender.com"
+        value: "https://*.onrender.com"
 
       # AI prescription OCR. The site works without it - only the OCR
       # endpoint errors - but you almost certainly want it set.
