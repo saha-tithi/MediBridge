@@ -68,15 +68,21 @@ services:
           name: medibridge-db
           property: connectionString
 
-      # --- set these in the dashboard (Environment tab) ---
-      # ALLOWED_HOSTS must list your service domain, e.g.
-      #   medibridge.onrender.com,.onrender.com
+      # These two are plain URLs, not secrets, so they live here rather than
+      # behind sync:false - which would mean editing them in a dashboard
+      # section that Render does not even expose for blueprint-managed
+      # services.
+      #
+      # Leading dot = the domain and every subdomain of it.
       - key: ALLOWED_HOSTS
-        sync: false
-      # CSRF_TRUSTED_ORIGINS must list the scheme, e.g.
-      #   https://medibridge.onrender.com
+        value: ".onrender.com"
+
+      # Django requires the scheme, and this list is checked strictly, so it
+      # is the exact service URL rather than a wildcard. Render appends a
+      # random suffix to new service subdomains (this one is -6iab); if you
+      # ever delete and recreate the service, update this line to match.
       - key: CSRF_TRUSTED_ORIGINS
-        sync: false
+        value: "https://medibridge-6iab.onrender.com"
 
       # AI prescription OCR. The site works without it - only the OCR
       # endpoint errors - but you almost certainly want it set.
