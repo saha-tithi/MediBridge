@@ -56,6 +56,18 @@ services:
       - key: SECRET_KEY
         generateValue: true
 
+      # Render does NOT inject DATABASE_URL just because a database exists in
+      # the same blueprint - it must be referenced explicitly. Omitting this
+      # left the service with no database configuration whatsoever, and the
+      # app died on boot with ImproperlyConfigured: Please supply the NAME.
+      #
+      # `connectionString` is Render's private-network URL (not the public
+      # one), which is what a same-region service should use.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: medibridge-db
+          property: connectionString
+
       # --- set these in the dashboard (Environment tab) ---
       # ALLOWED_HOSTS must list your service domain, e.g.
       #   medibridge.onrender.com,.onrender.com
