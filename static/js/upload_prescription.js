@@ -36,8 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const allowedTypes = [
         "image/jpeg",
-        "image/png",
-        "application/pdf"
+        "image/png"
     ];
 
     const maxFileSize = 10 * 1024 * 1024;
@@ -120,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!allowedTypes.includes(file.type)) {
 
                     showError(
-                        "Please upload a JPG, PNG, or PDF file."
+                        "Please upload a JPG or PNG file."
                     );
 
                     resetFile();

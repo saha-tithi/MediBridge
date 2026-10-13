@@ -2,17 +2,22 @@ from rest_framework import serializers
 from .models import Prescription
 
 # Must match what static/js/upload_prescription.js advertises.
+#
+# JPEG and PNG only. PDFs used to be listed here too, but the OCR reads
+# the file with PIL, which cannot decode a PDF - so a PDF passed this
+# validation and then died downstream with "Unable to open prescription
+# image". Advertising a format the pipeline cannot process is worse than
+# not accepting it, so the type is gone from the accept list, the client
+# validation and this server-side gate.
 ALLOWED_CONTENT_TYPES = {
     "image/jpeg",
     "image/png",
-    "application/pdf",
 }
 
 ALLOWED_EXTENSIONS = {
     ".jpg",
     ".jpeg",
     ".png",
-    ".pdf",
 }
 
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
@@ -45,7 +50,7 @@ class PrescriptionUploadSerializer(serializers.ModelSerializer):
             or extension not in ALLOWED_EXTENSIONS
         ):
             raise serializers.ValidationError(
-                "Only JPG, PNG or PDF files are allowed."
+                "Only JPG or PNG files are allowed."
             )
 
         if value.size > MAX_UPLOAD_BYTES:
