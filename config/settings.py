@@ -282,6 +282,17 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="")
+
+# Bound every SMTP attempt. Without this Django passes timeout=None to
+# smtplib, which means "block forever". On Render's free tier outbound
+# traffic to ports 25/465/587 is firewalled, and a dropped packet hangs
+# rather than refuses - so the first checkout hung indefinitely: create_order
+# had already committed the order, then send_order_placed_email blocked the
+# HTTP response before it was ever written, leaving the page frozen with an
+# order that a refresh revealed. A deadline turns that hang into a
+# fast, logged failure.
+EMAIL_TIMEOUT = env("EMAIL_TIMEOUT", default=10, cast=int)
+
 RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID", default="")
 RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET", default="")
 GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
