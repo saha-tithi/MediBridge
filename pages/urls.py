@@ -1,15 +1,24 @@
 from django.urls import path
+from django.views.generic import RedirectView
 from .views import login_page, register_page,cart_page,checkout_page,checkout_review_page,order_success_page,order_detail_page,orders_page,profile_page,addresses_page,upload_prescription_page,prescription_results_page,prescriptions_page,pharmacist_overview_page,pharmacist_orders_page,pharmacist_order_detail_page,pharmacist_inventory_page,medicine_detail_page,pharmacist_medicines_page,pharmacist_medicine_detail_page,pharmacist_notifications_page,pharmacist_profile_page
 
 #urls
 
 urlpatterns = [
     # The bare site root used to 404 - no view was registered for "", so the
-    # first thing anyone saw on visiting the deployed URL was a 404 page.
-    # Render the login page here rather than redirecting, so the link opens
-    # the form immediately with no extra hop. /login/ still works and is what
-    # the rest of the app links to.
-    path("", login_page, name="home-page"),
+    # first thing anyone saw on opening the deployed link was an error page.
+    #
+    # A redirect rather than a second login view on purpose. base.html hides
+    # the navbar by url_name AND runs a JS auth guard that treats only
+    # "/login/" and "/register/" as logged-out pages, bouncing everything
+    # else to /login/. Rendering the form at "" instead would have flashed
+    # the navbar and then bounced - a redirect makes "/login/" the single
+    # login page those two checks already agree on.
+    path(
+        "",
+        RedirectView.as_view(pattern_name="login-page", permanent=True),
+        name="home-page",
+    ),
 
     path("login/", login_page, name="login-page"),
     path("register/", register_page, name="register-page"),
