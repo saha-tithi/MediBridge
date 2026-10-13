@@ -113,6 +113,12 @@ services:
       - key: DEFAULT_FROM_EMAIL
         sync: false
 
+      # Brevo's HTTPS transactional API - this is what actually delivers
+      # from production. Render free blocks outbound SMTP (25/465/587), so
+      # the EMAIL_* credentials above can only ever work off Render.
+      - key: BREVO_API_KEY
+        sync: false
+
       # Media storage. Uploads (prescriptions + medicine photos) go here.
       - key: CLOUDINARY_CLOUD_NAME
         sync: false

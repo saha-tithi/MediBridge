@@ -293,6 +293,18 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="")
 # fast, logged failure.
 EMAIL_TIMEOUT = env("EMAIL_TIMEOUT", default=10, cast=int)
 
+# Brevo's transactional API, spoken to over plain HTTPS.
+#
+# This is the transport that works in production. Render's free tier
+# firewalls outbound 25/465/587, so Django's SMTP backend can never
+# deliver from Render no matter how correct the credentials are - the
+# connection is dropped before authentication starts. HTTPS is not
+# filtered, so an API call gets through.
+#
+# Empty means "use Django's SMTP backend", which keeps local development
+# working against Gmail on a machine that is not behind that firewall.
+BREVO_API_KEY = env("BREVO_API_KEY", default="")
+
 RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID", default="")
 RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET", default="")
 GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
