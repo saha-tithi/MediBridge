@@ -14,7 +14,18 @@ def process_prescription(
     # GET FILE
     # =========================================
 
-    file_path = prescription.prescription.path
+    # Read through the storage API, never via .path. FieldFile.path asks
+    # storage for a local filesystem path, which only FileSystemStorage can
+    # supply: in production the upload lives on Cloudinary and the inherited
+    # Storage.path() raises NotImplementedError("This backend doesn't
+    # support absolute paths"). open().read() works under both - locally it
+    # reads the disk, in production CloudinaryMediaStorage._open() pulls the
+    # bytes down from the CDN.
+    prescription.prescription.open("rb")
+    try:
+        image_bytes = prescription.prescription.read()
+    finally:
+        prescription.prescription.close()
 
 
     # =========================================
@@ -22,7 +33,7 @@ def process_prescription(
     # =========================================
 
     gemini_result = read_medicines_from_image(
-        file_path
+        image_bytes
     )
 
 

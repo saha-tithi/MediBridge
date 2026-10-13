@@ -28,7 +28,7 @@ import cloudinary.utils
 from cloudinary.exceptions import NotFound
 
 from django.conf import settings
-from django.core.files.base import File
+from django.core.files.base import ContentFile
 from django.core.files.storage import Storage
 from django.utils.deconstruct import deconstructible
 from django.utils.functional import cached_property
@@ -79,11 +79,19 @@ class CloudinaryMediaStorage(Storage):
 
     def _open(self, name, mode="rb"):
         # Cloudinary has no "open a file object" API, so pull the delivered
-        # bytes over HTTP. This is only hit for re-reading an upload.
+        # bytes over HTTP. Reached whenever an upload is read back - the
+        # prescription OCR does exactly that before handing the image to
+        # Gemini.
+        #
+        # ContentFile rather than File: response.read() yields bytes, and
+        # File is a wrapper around a file-like object, so File(bytes)
+        # explodes with AttributeError the moment anything calls .read().
+        # That path was unreachable while DEBUG=True routed uploads through
+        # FileSystemStorage, so it went unnoticed until production.
         import urllib.request
 
         with urllib.request.urlopen(self.url(name)) as response:
-            return File(response.read(), name=name)
+            return ContentFile(response.read(), name=name)
 
     def _save(self, name, content):
         """

@@ -1,3 +1,4 @@
+import io
 import json
 import random
 import re
@@ -245,7 +246,7 @@ If no medicine can be identified, return:
 # READ MEDICINES FROM IMAGE
 # =========================================
 
-def read_medicines_from_image(file_path):
+def read_medicines_from_image(image_bytes):
 
     print(
         "Starting Gemini prescription reading..."
@@ -256,11 +257,23 @@ def read_medicines_from_image(file_path):
     # OPEN IMAGE
     # =========================================
 
+    # Takes raw bytes rather than a filesystem path. The caller reads
+    # through Django's storage API, which is the only way to reach an
+    # upload that lives on Cloudinary in production.
+    #
+    # PIL is lazy: Image.open() decodes just the header, so the buffer
+    # has to be explicitly loaded before it can be closed or reused.
+    # convert() alone is not enough - PIL returns self unchanged when the
+    # file is already RGB, leaving the image still pointing at the buffer.
     try:
 
-        image = Image.open(
-            file_path
-        ).convert("RGB")
+        buffer = io.BytesIO(image_bytes)
+
+        image = Image.open(buffer)
+        image.load()
+
+        if image.mode != "RGB":
+            image = image.convert("RGB")
 
     except Exception as error:
 
