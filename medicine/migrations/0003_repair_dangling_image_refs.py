@@ -3,56 +3,74 @@ import os
 from django.db import migrations
 
 
-# The one medicine image that survived, on Cloudinary as
+# Amoxil's image did survive, on Cloudinary as
 # medicines/Amoxicillin_jawtcx.webp.
 #
-# Cloudinary de-duplicates on upload: the *_save_ backend passes
-# unique_filename=True, so storing Amoxicillin a second time produced this
-# suffixed public id rather than overwriting the first. The row that was
-# copied over from the local database still pointed at the original name,
-# which no longer resolves.
+# Cloudinary de-duplicates on upload: the storage backend passes
+# unique_filename=True with overwrite=False, so storing Amoxicillin a
+# second time produced this suffixed public id instead of overwriting
+# the first. The row copied over from the local database still pointed
+# at the original name, which no longer resolves.
 RECOVERED = {
     "Amoxicillin": "medicines/Amoxicillin_jawtcx.webp",
 }
 
+# The other three filenames that came across from the local database and
+# resolve to nothing anywhere: git history holds no media at all, the
+# local media/medicines directory does not exist, and Cloudinary has
+# never held them. Matched without the extension, because the two
+# databases do not agree on what those extensions were.
+LOST = {
+    "Benadryl",
+    "WhatsApp_Image_2026-09-06_at_8.37.26_PM",
+    "image1",
+}
+
 
 def repair_image_references(apps, schema_editor):
-    """Make every medicine image point at a file that actually exists.
+    """Repoint the medicine image that survived and drop the three that did not.
 
-    Four medicines carried an image filename into production, and all four
-    point at nothing. The rows were copied from the local database, where
-    the files had already been lost: media/ is gitignored and has never
-    been committed, and Render's free tier has no persistent disk that
-    could have kept them. The storefront answered by rendering four
+    Four medicines carried an image filename into production. The rows
+    were copied from the local database, where the files had already
+    been lost before deployment: media/ is gitignored and has never been
+    committed, and Render's free tier has no persistent disk that could
+    have kept them. The storefront answered by rendering four
     broken-image icons.
 
-    Only one of the four assets survived, on Cloudinary, and only under a
-    different name. The other three exist nowhere - git history, local
-    disk and Cloudinary have all been checked - so their references are
-    dropped and medicine_list.js draws its pill placeholder instead.
+    This names the affected files rather than clearing anything the
+    backend cannot confirm. It makes no network calls - a migration
+    should not fail because Cloudinary is unreachable - so it cannot
+    tell a lost file from a live one by asking, and guessing would mean
+    deleting an image someone had since uploaded correctly. An explicit
+    list costs nothing and cannot surprise anybody.
 
-    Matching is on the stored filename rather than on the medicine, so
-    this is unaffected by renaming and does nothing on a second run.
+    Matching is on the filename without its extension, and the medicine
+    itself is never named, so renaming does not break it.
     """
     Medicine = apps.get_model("medicine", "Medicine")
 
-    dangling = Medicine.objects.filter(image__isnull=False).exclude(image="")
-
-    for medicine in dangling:
+    for medicine in Medicine.objects.filter(image__isnull=False).exclude(image=""):
         stored = medicine.image.name
 
         if not stored.startswith("medicines/"):
             continue
 
         stem = os.path.splitext(os.path.basename(stored))[0]
-        replacement = RECOVERED.get(stem)
+
+        if stem in RECOVERED:
+            replacement = RECOVERED[stem]
+        elif stem in LOST:
+            replacement = ""
+        else:
+            # Not one of ours - leave it alone.
+            continue
 
         if replacement == stored:
             continue
 
         # An empty string clears the field, which the serializer already
         # returns as null for the medicines that never had an image.
-        medicine.image = replacement or ""
+        medicine.image = replacement
         medicine.save(update_fields=["image"])
 
 
