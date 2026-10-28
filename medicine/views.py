@@ -307,10 +307,14 @@ class PharmacistMedicineListAPIView(
 
     serializer_class = MedicineDetailSerializer
 
-    # Only the pharmacist endpoints whose JS already unwraps
-    # `.results` are paginated — the public/customer list endpoints
-    # must stay bare arrays (see config/settings.py note).
-    pagination_class = DefaultPagination
+    # No pagination: this screen renders its statistics, search and
+    # category/status filters client-side, so it needs the whole
+    # catalogue. With DefaultPagination (page_size=10) the JS read only
+    # `results` and never followed `next`, so every medicine past the
+    # first 10 — alphabetically — was silently invisible and excluded
+    # from the counts. `extractMedicineData` already accepts a bare
+    # array, so returning one is not a contract break.
+    pagination_class = None
 
     permission_classes = [
         IsPharmacistOrAdmin
