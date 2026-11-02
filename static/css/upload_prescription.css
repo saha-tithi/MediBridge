@@ -52,55 +52,6 @@
 }
 
 
-/* CROP NOTICE */
-
-.crop-notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 13px;
-
-    margin-bottom: 24px;
-    padding: 15px 17px;
-
-    background: #effafa;
-    border: 1px solid #ccebea;
-    border-radius: 14px;
-}
-
-.crop-icon {
-    flex-shrink: 0;
-
-    width: 30px;
-    height: 30px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #ffffff;
-    border-radius: 9px;
-
-    color: #168c8c;
-    font-size: 15px;
-}
-
-.crop-notice strong {
-    display: block;
-
-    margin-bottom: 4px;
-
-    color: #183b4f;
-    font-size: 14px;
-}
-
-.crop-notice p {
-    margin: 0;
-
-    color: #617784;
-    font-size: 13px;
-    line-height: 1.55;
-}
-
 
 .upload-area {
     min-height: 250px;
@@ -420,14 +371,6 @@
         border-radius: 18px;
     }
 
-    .crop-notice {
-        padding: 13px;
-    }
-
-    .crop-notice p {
-        font-size: 12px;
-    }
-
     .upload-area {
         min-height: 220px;
         padding: 28px 15px;
@@ -455,15 +398,6 @@
 
     .prescription-intro h1 {
         font-size: 26px;
-    }
-
-    .crop-notice {
-        gap: 9px;
-    }
-
-    .crop-icon {
-        width: 27px;
-        height: 27px;
     }
 
     .upload-area {
