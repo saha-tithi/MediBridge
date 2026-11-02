@@ -342,15 +342,17 @@ function showInventoryError(message) {
    STATISTICS
 ========================================================= */
 
-function updateInventoryStatistics() {
+/*
+ * Combined stock per medicine, summed across all of its batches.
+ *
+ * Inventory stores one row per batch, but "how much of this
+ * medicine do we have" is a per-medicine question. Both the
+ * statistics cards and the In/Low/Out-of-stock filters read this
+ * single function so the two can never disagree.
+ */
+function getMedicineStockTotals() {
 
-    /*
-     * Inventory contains one row per batch.
-     * Statistics should be calculated per medicine,
-     * using the combined stock of all its batches.
-     */
-
-    const medicineStock = {};
+    const totals = {};
 
 
     inventoryData.forEach(function (item) {
@@ -359,19 +361,25 @@ function updateInventoryStatistics() {
             String(item.medicine_id);
 
 
-        if (!medicineStock[medicineId]) {
+        if (!totals[medicineId]) {
 
-            medicineStock[medicineId] = 0;
+            totals[medicineId] = 0;
         }
 
 
-        medicineStock[medicineId] +=
+        totals[medicineId] +=
             Number(item.stock) || 0;
     });
 
 
+    return totals;
+}
+
+
+function updateInventoryStatistics() {
+
     const medicineStocks =
-        Object.values(medicineStock);
+        Object.values(getMedicineStockTotals());
 
 
     const total =
@@ -430,6 +438,14 @@ function renderInventory() {
         inventoryFilter.value;
 
 
+    /*
+     * Combined stock per medicine, used by the In/Low/Out-of-stock
+     * filters below so they agree with the statistics cards.
+     */
+    const medicineStockTotals =
+        getMedicineStockTotals();
+
+
     const filteredItems =
         inventoryData.filter(
             function (item) {
@@ -469,6 +485,20 @@ function renderInventory() {
                     Number(item.stock);
 
 
+                /*
+                 * In/Low/Out-of-stock describe the medicine as a
+                 * whole, so they use combined stock across every
+                 * batch - the same figure the cards show. Testing
+                 * each row on its own listed a medicine as low
+                 * stock whenever any one batch was low, even when
+                 * its total was healthy.
+                 */
+                const totalStock =
+                    medicineStockTotals[
+                        String(item.medicine_id)
+                    ] || 0;
+
+
                 let matchesFilter = true;
 
 
@@ -488,22 +518,22 @@ function renderInventory() {
                 ) {
 
                     matchesFilter =
-                        stock > 10;
+                        totalStock > 10;
 
                 } else if (
                     filter === "LOW_STOCK"
                 ) {
 
                     matchesFilter =
-                        stock > 0 &&
-                        stock <= 10;
+                        totalStock > 0 &&
+                        totalStock <= 10;
 
                 } else if (
                     filter === "OUT_OF_STOCK"
                 ) {
 
                     matchesFilter =
-                        stock === 0;
+                        totalStock === 0;
 
                 } else if (
                     filter === "UNAVAILABLE"
