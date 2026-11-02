@@ -423,6 +423,86 @@ function updateInventoryStatistics() {
         outOfStock;
 }
 
+/*
+ * The batch a customer actually receives.
+ *
+ * orders/services.py drains available, non-expired batches in
+ * expiry_date order (FEFO), so the soonest-expiring sellable batch
+ * is the one being sold right now - and the one whose price applies.
+ * Active inventory shows only that row per medicine.
+ */
+function getCurrentSellingBatchIds() {
+
+    const now = new Date();
+
+    const today =
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0");
+
+
+    const current = {};
+
+
+    inventoryData.forEach(function (item) {
+
+        const stock =
+            Number(item.stock) || 0;
+
+
+        const sellable =
+            stock > 0 &&
+            item.is_available === true &&
+            item.expiry_date &&
+            String(item.expiry_date) >= today;
+
+
+        if (!sellable) {
+
+            return;
+        }
+
+
+        const medicineId =
+            String(item.medicine_id);
+
+
+        if (
+            !current[medicineId] ||
+            String(item.expiry_date) <
+                String(current[medicineId].expiry_date)
+        ) {
+
+            current[medicineId] = item;
+        }
+    });
+
+
+    const ids = {};
+
+
+    Object.keys(current).forEach(function (medicineId) {
+
+        const item =
+            current[medicineId];
+
+
+        if (
+            item.id !== null &&
+            item.id !== undefined
+        ) {
+
+            ids[String(item.id)] = true;
+        }
+    });
+
+
+    return ids;
+}
+
+
 /* =========================================================
    RENDER INVENTORY
 ========================================================= */
@@ -444,6 +524,14 @@ function renderInventory() {
      */
     const medicineStockTotals =
         getMedicineStockTotals();
+
+
+    /*
+     * The single batch per medicine that is actually being sold,
+     * for the Active inventory filter below.
+     */
+    const sellingBatchIds =
+        getCurrentSellingBatchIds();
 
 
     const filteredItems =
@@ -509,9 +597,17 @@ function renderInventory() {
 
                     
 
+                    /*
+                     * Only the batch being sold right now: a medicine
+                     * with several sellable batches shows just its
+                     * current one.
+                     */
                     matchesFilter =
                         stock > 0 &&
-                        item.is_available === true;
+                        item.is_available === true &&
+                        sellingBatchIds[
+                            String(item.id)
+                        ] === true;
 
                 } else if (
                     filter === "IN_STOCK"
