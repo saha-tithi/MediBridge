@@ -283,7 +283,20 @@ function createCartItemHTML(item) {
 
             <div class="cart-item-image">
 
-                <div class="cart-pill-placeholder"></div>
+                ${
+                    item.image
+                        ? `
+                            <img
+                                src="${escapeHTML(item.image)}"
+                                alt="${escapeHTML(
+                                    item.medicine_name || ""
+                                )}"
+                            >
+                        `
+                        : `
+                            <div class="cart-pill-placeholder"></div>
+                        `
+                }
 
             </div>
 

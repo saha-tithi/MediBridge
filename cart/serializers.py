@@ -72,6 +72,13 @@ class CartItemSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    # Null when the medicine has no stored image, so the client can
+    # fall back to its placeholder pill.
+    image = serializers.ImageField(
+        source="medicine.image",
+        read_only=True,
+    )
+
 
 
     class Meta:
@@ -82,6 +89,7 @@ class CartItemSerializer(serializers.ModelSerializer):
             "id",
             "medicine_id",
             "medicine_name",
+            "image",
             "quantity",
             "unit_price",
             "subtotal",

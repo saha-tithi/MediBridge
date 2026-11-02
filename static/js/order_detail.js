@@ -182,9 +182,22 @@ function renderOrderItems(items) {
                                 class="order-item-image"
                             >
 
-                                <div
-                                    class="order-item-pill"
-                                ></div>
+                                ${
+                                    item.image
+                                        ? `
+                                            <img
+                                                src="${escapeHtml(item.image)}"
+                                                alt="${escapeHtml(
+                                                    item.medicine_name || ""
+                                                )}"
+                                            >
+                                        `
+                                        : `
+                                            <div
+                                                class="order-item-pill"
+                                            ></div>
+                                        `
+                                }
 
                             </div>
 

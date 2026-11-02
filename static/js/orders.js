@@ -295,8 +295,20 @@ function renderItemPreview(items) {
 
                         <div class="order-item-icon">
 
-                            <div class="review-pill">
-                            </div>
+                            ${
+                                item.image
+                                    ? `
+                                        <img
+                                            src="${escapeHTML(item.image)}"
+                                            alt="${escapeHTML(
+                                                item.medicine_name || ""
+                                            )}"
+                                        >
+                                    `
+                                    : `
+                                        <div class="review-pill"></div>
+                                    `
+                            }
 
                         </div>
 
