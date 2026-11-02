@@ -517,8 +517,15 @@ function renderInventory() {
                     filter === "IN_STOCK"
                 ) {
 
+                    /*
+                     * The medicine is in stock, but a finished batch
+                     * is not - hide rows with nothing left. Out of
+                     * stock below keeps them, since a spent batch is
+                     * exactly what that filter is for.
+                     */
                     matchesFilter =
-                        totalStock > 10;
+                        totalStock > 10 &&
+                        stock > 0;
 
                 } else if (
                     filter === "LOW_STOCK"
@@ -526,7 +533,8 @@ function renderInventory() {
 
                     matchesFilter =
                         totalStock > 0 &&
-                        totalStock <= 10;
+                        totalStock <= 10 &&
+                        stock > 0;
 
                 } else if (
                     filter === "OUT_OF_STOCK"
