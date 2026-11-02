@@ -230,6 +230,18 @@ async function loadInventory() {
         inventoryData =
             extractData(response);
 
+
+        /*
+         * The API hands back batches in expiry order and appends
+         * medicines with no batches at the end, so the display
+         * order is fixed here once - every filter, search and
+         * statistic below reads from this same array.
+         */
+        inventoryData.sort(
+            compareInventoryRows
+        );
+
+
         updateInventoryStatistics();
 
         renderInventory();
@@ -286,6 +298,61 @@ function extractData(response) {
 
 
     return [];
+}
+
+
+/*
+ * Alphabetical by product name, then earliest expiry first within a
+ * medicine so a medicine's batches stay in the order they are sold
+ * in (FEFO). Case-insensitive so "amoxil" and "Amoxil" sort
+ * together.
+ */
+function compareInventoryRows(a, b) {
+
+    const nameA = String(
+        a.medicine_name || ""
+    ).toLowerCase();
+
+
+    const nameB = String(
+        b.medicine_name || ""
+    ).toLowerCase();
+
+
+    if (nameA < nameB) {
+
+        return -1;
+    }
+
+
+    if (nameA > nameB) {
+
+        return 1;
+    }
+
+
+    const expiryA = String(
+        a.expiry_date || ""
+    );
+
+    const expiryB = String(
+        b.expiry_date || ""
+    );
+
+
+    if (expiryA < expiryB) {
+
+        return -1;
+    }
+
+
+    if (expiryA > expiryB) {
+
+        return 1;
+    }
+
+
+    return 0;
 }
 
 
