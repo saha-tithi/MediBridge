@@ -186,8 +186,8 @@ function renderOrderItems(items) {
                                     item.image
                                         ? `
                                             <img
-                                                src="${escapeHtml(item.image)}"
-                                                alt="${escapeHtml(
+                                                src="${escapeHTML(item.image)}"
+                                                alt="${escapeHTML(
                                                     item.medicine_name || ""
                                                 )}"
                                             >
