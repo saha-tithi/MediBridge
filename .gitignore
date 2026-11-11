@@ -9,3 +9,6 @@ staticfiles/
 .idea/
 .vscode/
 
+
+# Database backups - never commit (contain user data)
+medibridge_backup*.sql
